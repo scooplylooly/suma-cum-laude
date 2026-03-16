@@ -13,7 +13,6 @@ exports.showPetProfile = async (req, res) => {
     let name = req.body.petName;
     let petFound;
     for (pet of pets) {
-        console.log(pet.Name, name);
         if (pet.Name == name) {
             petFound = pet;
             console.log(petFound);
