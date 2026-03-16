@@ -1,7 +1,7 @@
 [
     {
         "type": "cat",
-        "img": "gray-cat.jpg",
+        "img": "gray-cat",
         "Name": "Chappy",
         "breed": "british shorthair mix",
         "gender": "female",
@@ -10,11 +10,12 @@
         "age": "2 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["calm", "affectionate", "shy"]
+        "personality": ["calm", "affectionate", "shy"],
+        "created-by": ""
     },
     {
         "type": "cat",
-        "img": "ginger-cat.jpg",
+        "img": "ginger-cat",
         "Name": "Simba",
         "breed": "domestic short hair",
         "gender": "male",
@@ -23,11 +24,12 @@
         "age": "2 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["playful", "affectionate", "curious"]
+        "personality": ["playful", "affectionate", "curious"],
+        "created-by": ""
     },
     {
         "type": "cat",
-        "img": "black-cat.jpg",
+        "img": "black-cat",
         "Name": "Luna",
         "breed": "bombay mix",
         "gender": "female",
@@ -36,11 +38,12 @@
         "age": "3 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["gentle", "shy", "loyal"]
+        "personality": ["gentle", "shy", "loyal"],
+        "created-by": ""
     },
     {
         "type": "dog",
-        "img": "golden-retriever.jpg",
+        "img": "golden-retriever",
         "Name": "Cooper",
         "breed": "golden retriever",
         "gender": "male",
@@ -49,11 +52,12 @@
         "age": "1 year",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["energetic", "friendly", "intelligent"]
+        "personality": ["energetic", "friendly", "intelligent"],
+        "created-by": ""
     },
     {
         "type": "dog",
-        "img": "shih-tzu.jpg",
+        "img": "shih-tzu",
         "Name": "Coco",
         "breed": "shih tzu",
         "gender": "female",
@@ -62,11 +66,12 @@
         "age": "4 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["sweet", "calm", "affectionate"]
+        "personality": ["sweet", "calm", "affectionate"],
+        "created-by": ""
     },
     {
         "type": "dog",
-        "img": "mixed-breed.jpg",
+        "img": "mixed-breed",
         "Name": "Rocky",
         "breed": "mixed breed",
         "gender": "male",
@@ -75,11 +80,12 @@
         "age": "2 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["loyal", "protective", "energetic"]
+        "personality": ["loyal", "protective", "energetic"],
+        "created-by": ""
     },
     {
         "type": "rabbit",
-        "img": "lop-rabbit.jpg",
+        "img": "lop-rabbit",
         "Name": "Snowball",
         "breed": "holland lop",
         "gender": "female",
@@ -88,11 +94,12 @@
         "age": "1 year",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["gentle", "quiet", "playful"]
+        "personality": ["gentle", "quiet", "playful"],
+        "created-by": ""
     },
     {
         "type": "rabbit",
-        "img": "rex-rabbit.jpg",
+        "img": "rex-rabbit",
         "Name": "Oreo",
         "breed": "rex rabbit",
         "gender": "male",
@@ -101,11 +108,12 @@
         "age": "2 years",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["curious", "friendly", "active"]
+        "personality": ["curious", "friendly", "active"],
+        "created-by": ""
     },
     {
         "type": "bird",
-        "img": "budgie.jpg",
+        "img": "budgie",
         "Name": "Sunny",
         "breed": "budgie",
         "gender": "male",
@@ -114,11 +122,12 @@
         "age": "6 months",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["vocal", "playful", "social"]
+        "personality": ["vocal", "playful", "social"],
+        "created-by": ""
     },
     {
         "type": "bird",
-        "img": "cockatiel.jpg",
+        "img": "cockatiel",
         "Name": "Peach",
         "breed": "cockatiel",
         "gender": "female",
@@ -127,11 +136,12 @@
         "age": "1 year",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["gentle", "affectionate", "quiet"]
+        "personality": ["gentle", "affectionate", "quiet"],
+        "created-by": ""
     },
     {
         "type": "hamster",
-        "img": "syrian-hamster.jpg",
+        "img": "syrian-hamster",
         "Name": "Peanut",
         "breed": "syrian hamster",
         "gender": "male",
@@ -140,11 +150,12 @@
         "age": "4 months",
         "vaccinated": "no",
         "sterilized": "no",
-        "personality": ["active", "curious", "nocturnal"]
+        "personality": ["active", "curious", "nocturnal"],
+        "created-by": ""
     },
     {
         "type": "guinea pig",
-        "img": "abby-guinea.jpg",
+        "img": "abby-guinea",
         "Name": "Mochi",
         "breed": "abyssinian guinea pig",
         "gender": "female",
@@ -153,6 +164,7 @@
         "age": "8 months",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["vocal", "social", "friendly"]
+        "personality": ["vocal", "social", "friendly"],
+        "created-by": ""
     }
 ]

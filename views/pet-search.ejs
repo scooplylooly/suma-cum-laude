@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Adopt Now</title>
+
 </head>
 <body>
+    <%- include('common/header') %>
+    <!-- to include search bar, create listing, approve/view application, check application status -->
+    <section>
     
+    </section>
+    <!-- pets lisings-->
+    <section>
+        <% for(pet of pets){%>
+        <form action="/pet-profile" method="get">
+            <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
+            <h4><%=pet.Name%></h4>
+            <h5><%=pet.breed%></h5>
+            <h5><%=pet.age%></h5>
+            <button type="submit">Adopt Now</button>
+        </form><br>     
+      <%}%>
+    </section>
 </body>
 </html>
