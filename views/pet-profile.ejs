@@ -6,8 +6,11 @@
     <title>Document</title>
 </head>
 <body>
+    <%- include('common/header') %>
+
     <h2>Pet Profile</h2>
-    <%Object.keys(petFound).forEach(key => {%>
+    <div>
+        <%Object.keys(petFound).forEach(key => {%>
         <% if (key != 'type'){%>
         <% if(key == "img") {%>
             <img src="/images/<%=petFound[key] %>.jpg">
@@ -17,8 +20,21 @@
             <h3><%=key%>: <%= petFound[key] %></h3>
         <%}%>
         <%}%>
-    <% })%>
+        <% })%>
+        
+    </div>
+
+    <div>
+        <h2> Interested in  adopting <%=petFound.Name%>? Apply your interest here!</h2>
+        <form>
+            <label>Name: </label>
+            <input type="text">
+        </form>
+    </div>
     
-    <form></form>
+    
+    
+    <%- include('common/footer') %>
+
 </body>
 </html>
