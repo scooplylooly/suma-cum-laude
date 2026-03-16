@@ -7,3 +7,19 @@ exports.displayPets = async (req, res) => {
         pets,
     });
 };
+
+exports.showPetProfile = async (req, res) => {
+    let pets = await listing.getAllPets();
+    let name = req.body.petName;
+    let petFound;
+    for (pet of pets) {
+        console.log(pet.Name, name);
+        if (pet.Name == name) {
+            petFound = pet;
+            console.log(petFound);
+        }
+    }
+    res.render("pet-profile", {
+        petFound,
+    });
+};

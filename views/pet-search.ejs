@@ -15,12 +15,12 @@
     <!-- pets lisings-->
     <section>
         <% for(pet of pets){%>
-        <form action="/pet-profile" method="get">
+        <form action="/AdoptNow" method="post">
             <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.Name%></h4>
             <h5><%=pet.breed%></h5>
             <h5><%=pet.age%></h5>
-            <button type="submit">Adopt Now</button>
+            <button type="submit" name="petName" value="<%=pet.Name%>">Adopt Now</button>
         </form><br>     
       <%}%>
     </section>

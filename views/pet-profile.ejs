@@ -6,6 +6,19 @@
     <title>Document</title>
 </head>
 <body>
+    <h2>Pet Profile</h2>
+    <%Object.keys(petFound).forEach(key => {%>
+        <% if (key != 'type'){%>
+        <% if(key == "img") {%>
+            <img src="/images/<%=petFound[key] %>.jpg">
+        <%}else if (key == "Name"){%>
+            <h2><%= petFound[key] %></h2>
+        <% }else{ %>
+            <h3><%=key%>: <%= petFound[key] %></h3>
+        <%}%>
+        <%}%>
+    <% })%>
     
+    <form></form>
 </body>
 </html>
