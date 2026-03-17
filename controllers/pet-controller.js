@@ -2,7 +2,7 @@ const listing = require("../models/pet-model");
 
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
-    console.log(pets);
+    pets.reverse();
     res.render("pet-search", {
         pets,
     });
@@ -20,5 +20,12 @@ exports.showPetProfile = async (req, res) => {
     }
     res.render("pet-profile", {
         petFound,
+    });
+};
+
+exports.showPetListingForm = async (req, res) => {
+    res.render("pet-create-listing", {
+        errorMsg: "",
+        successMsg: "",
     });
 };

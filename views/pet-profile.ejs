@@ -13,11 +13,11 @@
         <%Object.keys(petFound).forEach(key => {%>
         <% if (key != 'type'){%>
         <% if(key == "img") {%>
-            <img src="/images/<%=petFound[key] %>.jpg">
+            <img src="/images/<%=petFound[key] %>.jpg" style="width: 20;height: 20; border-radius: 10%;">
         <%}else if (key == "Name"){%>
             <h2><%= petFound[key] %></h2>
         <% }else{ %>
-            <h3><%=key%>: <%= petFound[key] %></h3>
+            <h4><%=key%>: <%= petFound[key] %></h4>
         <%}%>
         <%}%>
         <% })%>
@@ -25,10 +25,12 @@
     </div>
 
     <div>
+        <!-- suppose to get user info since they signed in, and then save their username into database for application -->
         <h2> Interested in  adopting <%=petFound.Name%>? Apply your interest here!</h2>
         <form>
-            <label>Name: </label>
-            <input type="text">
+            <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.Name %>!</p>
+            <textarea name="fosterReason" cols="50" rows="5"></textarea> <br><br>
+            <button type="submit">Submit</button>
         </form>
     </div>
     

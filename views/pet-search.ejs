@@ -8,12 +8,17 @@
 </head>
 <body>
     <%- include('common/header') %>
-    <!-- to include search bar, create listing, approve/view application, check application status -->
-    <section>
+    <!-- to include search bar, create listing, approve/view applications, check application status -->
+    <a href="/create-listing"><button>Create Listing</button></a>
+    <a href=""><button>Approve application</button></a>
+    <a href=""><button>Application Status</button></a>
     
+    <section>
+    <br>
     </section>
     <!-- pets lisings-->
     <section>
+    <h2>Adoption Listings</h2>
         <% for(pet of pets){%>
         <form action="/AdoptNow" method="post">
             <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">

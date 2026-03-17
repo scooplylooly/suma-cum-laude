@@ -6,5 +6,5 @@ const petController = require("../controllers/pet-controller");
 //
 router.get("/AdoptNow", petController.displayPets);
 router.post("/AdoptNow", petController.showPetProfile);
-
+router.get("/create-listing", petController.showPetListingForm);
 module.exports = router;

@@ -10,7 +10,6 @@
         "age": "2 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["calm", "affectionate", "shy"],
         "created-by": ""
     },
     {
@@ -24,7 +23,6 @@
         "age": "2 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["playful", "affectionate", "curious"],
         "created-by": ""
     },
     {
@@ -38,7 +36,6 @@
         "age": "3 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["gentle", "shy", "loyal"],
         "created-by": ""
     },
     {
@@ -52,7 +49,6 @@
         "age": "1 year-old",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["energetic", "friendly", "intelligent"],
         "created-by": ""
     },
     {
@@ -66,7 +62,6 @@
         "age": "4 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["sweet", "calm", "affectionate"],
         "created-by": ""
     },
     {
@@ -80,7 +75,6 @@
         "age": "2 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["loyal", "protective", "energetic"],
         "created-by": ""
     },
     {
@@ -94,7 +88,6 @@
         "age": "1 year-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["gentle", "quiet", "playful"],
         "created-by": ""
     },
     {
@@ -108,7 +101,6 @@
         "age": "2 years-old",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "personality": ["curious", "friendly", "active"],
         "created-by": ""
     },
     {
@@ -122,7 +114,6 @@
         "age": "6 months",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["vocal", "playful", "social"],
         "created-by": ""
     },
     {
@@ -136,7 +127,6 @@
         "age": "1 year-old",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["gentle", "affectionate", "quiet"],
         "created-by": ""
     },
     {
@@ -150,7 +140,6 @@
         "age": "4 months",
         "vaccinated": "no",
         "sterilized": "no",
-        "personality": ["active", "curious", "nocturnal"],
         "created-by": ""
     },
     {
@@ -164,7 +153,6 @@
         "age": "8 months",
         "vaccinated": "yes",
         "sterilized": "no",
-        "personality": ["vocal", "social", "friendly"],
         "created-by": ""
     }
 ]
