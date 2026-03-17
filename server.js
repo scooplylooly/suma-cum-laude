@@ -18,14 +18,24 @@ const petRoutes = require("./routes/pet-routes");
 
 server.use("/", petRoutes);
 
-function startServer() {
-    const hostname = "localhost"; // Define server hostname
-    const port = 8000; // Define port number
 
-    // Start the server and listen on the specified hostname and port
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.DB)
+        console.log("MongoDB connected successfully");
+    } catch(error) {
+        console.error("MongoDB connection failed:", error.message);
+        process.exit(1)
+    }
+}
+
+const startServer = () => {
+    const hostname = "localhost"
+    const port = 8000
+
     server.listen(port, hostname, () => {
         console.log(`Server running at http://${hostname}:${port}/`);
     });
 }
 
-startServer();
+connectDB().then(startServer)
