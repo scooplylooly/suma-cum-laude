@@ -18,6 +18,9 @@ const petRoutes = require("./routes/pet-routes");
 
 server.use("/", petRoutes);
 
+const indexRoutes = require("./routes/index-routes");
+server.use('/', indexRoutes);
+
 function startServer() {
     const hostname = "localhost"; // Define server hostname
     const port = 8000; // Define port number
