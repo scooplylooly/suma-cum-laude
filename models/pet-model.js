@@ -84,15 +84,6 @@ exports.getAllPets = function () {
     return Pet.find();
 };
 
-exports.getAllPets = async () => {
-    try {
-        const jsonData = await fs.readFile(petPfFilePath, "utf-8");
-        const data = JSON.parse(jsonData);
-        return data;
-    } catch (error) {
-        console.error("Error reading pet-data.json:", error);
-    }
-};
 
 exports.writeApplyInfo = async (application) => {
     try {
