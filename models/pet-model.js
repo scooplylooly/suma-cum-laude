@@ -1,89 +1,89 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // pet-data schema
 
-const petSchema = new mongoose.Schema({
-    type: {
-      type: String,
-      required: true,
-      enum: ['dog', 'cat', 'rabbit', 'other']
-    },
+const petSchema = new mongoose.Schema(
+    {
+        type: {
+            type: String,
+            required: true,
+            enum: ["dog", "cat", "rabbit", "other"],
+        },
 
-    img: {
-      type: String,
-      default: ''
-    },
+        img: {
+            type: String,
+            default: "",
+        },
 
-    name: {
-      type: String,
-      required: true,
-      trim: true
-    },
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
 
-    breed: {
-      type: String,
-      required: true,
-      trim: true
-    },
+        breed: {
+            type: String,
+            required: true,
+            trim: true,
+        },
 
-    gender: {
-      type: String,
-      enum: ['male', 'female'],
-      required: true
-    },
+        gender: {
+            type: String,
+            enum: ["male", "female"],
+            required: true,
+        },
 
-    description: {
-      type: String,
-      required: true
-    },
+        description: {
+            type: String,
+            required: true,
+        },
 
-    hdbApproved: {
-      type: Boolean,
-      default: false
-    },
+        hdbApproved: {
+            type: Boolean,
+            default: false,
+        },
 
-    age: {
-      type: Number,
-      required: true,
-      min: 0
-    },
+        age: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
 
-    vaccinated: {
-      type: Boolean,
-      default: false
-    },
+        vaccinated: {
+            type: Boolean,
+            default: false,
+        },
 
-    sterilized: {
-      type: Boolean,
-      default: false
-    },
+        sterilized: {
+            type: Boolean,
+            default: false,
+        },
 
-    personality: {
-      type: [String],
-      default: []
-    },
+        personality: {
+            type: [String],
+            default: [],
+        },
 
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      default: null
-    }
-  },
-  {
-    timestamps: true
-})
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null,
+        },
+    },
+    {
+        timestamps: true,
+    },
+);
 
 // Specifying which schema to use
-const Pet = mongoose.model('Pet', petSchema, 'pets-data')
-
+const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 //Methods
 
-exports.getAllPets = function() {
-    return Pet.find()
-}
+exports.getAllPets = function () {
+    return Pet.find();
+};
 
-<<<<<<< HEAD
 exports.getAllPets = async () => {
     try {
         const jsonData = await fs.readFile(petPfFilePath, "utf-8");
@@ -106,5 +106,3 @@ exports.writeApplyInfo = async (application) => {
         console.error("Error writing to apply-for-pet-data.json:", error);
     }
 };
-=======
->>>>>>> main
