@@ -44,8 +44,8 @@ const petSchema = new mongoose.Schema(
             default: false,
         },
 
-        age: {
-            type: Number,
+        dob: {
+            type: String,
             required: true,
             min: 0,
         },
@@ -65,7 +65,12 @@ const petSchema = new mongoose.Schema(
             default: [],
         },
 
-        createdBy: {
+        pid: {
+            type: mongoose.Schema.Types.ObjectId,
+            default: null,
+        },
+
+        uid: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             default: null,
