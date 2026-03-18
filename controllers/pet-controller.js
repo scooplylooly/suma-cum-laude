@@ -74,7 +74,6 @@ exports.applyInterest = async (req, res) => {
             break;
         }
     }
-    console.log("in controller");
     let application = {
         uid: null,
         pid: null,
@@ -82,8 +81,6 @@ exports.applyInterest = async (req, res) => {
         reason: req.body.applyReason,
     };
     try {
-        console.log("in hi");
-
         await listing.writeApplyInfo(application);
         successMsg += "Application successful!";
     } catch (error) {
@@ -101,7 +98,9 @@ exports.applyInterest = async (req, res) => {
 exports.createPetListing = async (req, res) => {
     let type = req.body.type;
     let breed = req.body.breed;
-    const imageFilename = req.file ? req.file.filename : "default-pet.jpg";
+    const imageFilename = req.file
+        ? req.file.filename.replace(".jpg", "")
+        : "default-pet";
     console.log("Saved image as:", imageFilename); // Should be like "pet-1234567890.jpg
     let name = req.body.name;
     let gender = req.body.gender;

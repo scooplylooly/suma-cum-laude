@@ -88,8 +88,13 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 //Methods
 
-exports.getAllPets = function () {
-    return Pet.find().lean();
+// exports.getAllPets = function () {
+//     return Pet.find().lean();
+// };
+exports.getAllPets = async () => {
+    const jsonData = await fs.readFile(petFilePath, "utf-8");
+    data = JSON.parse(jsonData);
+    return data;
 };
 
 exports.writeApplyInfo = async (application) => {
