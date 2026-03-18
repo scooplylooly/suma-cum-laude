@@ -88,21 +88,15 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 //Methods
 
-// exports.getAllPets = function () {
-//     return Pet.find().lean();
+exports.getAllPets = function () {
+    return Pet.find().lean();
+};
+
+// exports.getAllPets = async () => {
+//     const jData = await fs.readFile(petFilePath, "utf-8");
+//     data = JSON.parse(jData);
+//     return data;
 // };
-
-exports.getAllPets = async () => {
-    const jData = await fs.readFile(petFilePath, "utf-8");
-    data = JSON.parse(jData);
-    return data;
-};
-
-exports.getAllApplications = async () => {
-    const jData = await fs.readFile(applyFilePath, "utf-8");
-    data = JSON.parse(jData);
-    return data;
-};
 
 exports.writeApplyInfo = async (application) => {
     try {
@@ -110,7 +104,8 @@ exports.writeApplyInfo = async (application) => {
 
         // Try to read existing file
         try {
-            data = this.getAllApplications();
+            const jsonData = await fs.readFile(applyFilePath, "utf-8");
+            data = JSON.parse(jsonData);
             console.log("existing data", data);
         } catch (readError) {
             // File doesn't exist - start with empty array
@@ -134,7 +129,8 @@ exports.createPetData = async (petInfo) => {
 
         // Try to read existing file
         try {
-            data = this.getAllPets();
+            const jData = await fs.readFile(petFilePath, "utf-8");
+            data = JSON.parse(jData);
             console.log("existing data", data);
         } catch (readError) {
             // File doesn't exist - start with empty array
