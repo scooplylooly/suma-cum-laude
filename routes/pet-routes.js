@@ -7,18 +7,15 @@ const petController = require("../controllers/pet-controller");
 // dont touch-- upload image stuff
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "public/images/"); // Save to public/images
+        cb(null, "public/images/");
     },
     filename: function (req, file, cb) {
-        // Get original extension (e.g., .jpg, .png)
         const ext = path.extname(file.originalname);
-        // Create filename: pet-1234567890.jpg
         const uniqueName = "pet-" + Date.now() + ext;
         cb(null, uniqueName);
     },
 });
 
-// File filter to only allow images
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
         cb(null, true);
@@ -30,7 +27,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    limits: { fileSize: 5 * 1024 * 1024 },
 });
 // dont touch-- upload image stuff
 
