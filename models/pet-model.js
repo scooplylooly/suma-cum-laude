@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
-const fs = require("fs");
-const applyFilePath = require("../data/apply-for-pet-data.json");
+const fs = require("fs").promises;
+const applyFilePath = "data/apply-for-pet-data.json";
+const petFilePath = "data/pets-data.json";
+
 // pet-data schema
 
 const petSchema = new mongoose.Schema(
@@ -87,18 +89,56 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 //Methods
 
 exports.getAllPets = function () {
-    return Pet.find();
+    return Pet.find().lean();
 };
 
 exports.writeApplyInfo = async (application) => {
     try {
-        const jsonData = await fs.readFile(applyFilePath, "utf-8");
-        let data = JSON.parse(jsonData);
-        console.log(data);
+        let data = [];
+
+        // Try to read existing file
+        try {
+            const jsonData = await fs.readFile(applyFilePath, "utf-8");
+            data = JSON.parse(jsonData);
+            console.log("existing data", data);
+        } catch (readError) {
+            // File doesn't exist - start with empty array
+            console.log("No existing file, creating new one");
+            data = [];
+        }
+
         data.push(application);
         const jData = JSON.stringify(data, null, 2);
-        await fs.writeFile(applyFilePath, jData);
+        console.log(applyFilePath, data);
+        await fs.writeFile(applyFilePath, jData, "utf-8");
+        console.log("Application saved successfully");
     } catch (error) {
         console.error("Error writing to apply-for-pet-data.json:", error);
+    }
+};
+
+exports.createPetData = async (petInfo) => {
+    try {
+        let data = [];
+
+        // Try to read existing file
+        try {
+            const jData = await fs.readFile(petFilePath, "utf-8");
+            data = JSON.parse(jData);
+            console.log("existing data", data);
+        } catch (readError) {
+            // File doesn't exist - start with empty array
+            console.log("No existing file, creating new one");
+            data = [];
+        }
+
+        data.push(petInfo);
+        console.log("new", data);
+        const jData = JSON.stringify(data, null, 2);
+        console.log(petFilePath, data);
+        await fs.writeFile(petFilePath, jData, "utf-8");
+        console.log("Listing saved successfully");
+    } catch (error) {
+        console.error("Error writing to pet-data.json:", error);
     }
 };

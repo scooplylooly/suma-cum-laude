@@ -1,8 +1,36 @@
 const listing = require("../models/pet-model");
-
+petPersonalities = [
+    "Affectionate",
+    "Independent",
+    "Playful",
+    "Curious",
+    "Gentle",
+    "Vocal",
+    "Shy",
+    "Bold",
+    "Couch Potato",
+    "Hunter",
+    "Social",
+    "Energetic",
+    "Loyal",
+    "Friendly",
+    "Protective",
+    "Calm",
+    "Smart",
+    "Goofy",
+    "Cuddly",
+    "Adventurous",
+    "Sweet",
+    "Relaxed",
+    "Outgoing",
+    "Loving",
+    "Resilient",
+    "Chatty",
+    "Foodie",
+    "Active",
+];
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
-    console.log(pets);
 
     pets.reverse();
     res.render("pet-search", {
@@ -11,11 +39,10 @@ exports.displayPets = async (req, res) => {
 };
 exports.showPetProfile = async (req, res) => {
     let pets = await listing.getAllPets();
-    console.log(pets);
     let name = req.body.petName;
     let petFound;
     for (pet of pets) {
-        if (pet.Name == name) {
+        if (pet.name == name) {
             petFound = pet;
         }
     }
@@ -30,6 +57,7 @@ exports.showPetListingForm = async (req, res) => {
     res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
+        petPersonalities,
     });
 };
 
@@ -41,18 +69,21 @@ exports.applyInterest = async (req, res) => {
     let petName = req.body.petName;
     let pets = await listing.getAllPets();
     for (let pet of pets) {
-        if (pet.Name == petName) {
+        if (pet.name == petName) {
             petFound = pet;
             break;
         }
     }
-
+    console.log("in controller");
     let application = {
         uid: null,
         pid: null,
+        petName: petName,
         reason: req.body.applyReason,
     };
     try {
+        console.log("in hi");
+
         await listing.writeApplyInfo(application);
         successMsg += "Application successful!";
     } catch (error) {
@@ -65,4 +96,88 @@ exports.applyInterest = async (req, res) => {
         errorMsg: errorMsg,
         successMsg: successMsg,
     });
+};
+
+exports.createPetListing = async (req, res) => {
+    let type = req.body.type;
+    let breed = req.body.breed;
+    const imageFilename = req.file ? req.file.filename : "default-pet.jpg";
+    console.log("Saved image as:", imageFilename); // Should be like "pet-1234567890.jpg
+    let name = req.body.name;
+    let gender = req.body.gender;
+    let desc = req.body.desc;
+    let dob = req.body.dob;
+    let hdbApproved = req.body.hdbApproved;
+    let vaccinated = req.body.vaccinated;
+    let sterilized = req.body.sterilized;
+    let personality = req.body.personality;
+
+    let errorMsg = "";
+    let successMsg = "";
+
+    let missingFields = [];
+
+    if (!type) missingFields.push("Type");
+    if (!breed) missingFields.push("Breed");
+    if (!name) missingFields.push("Name");
+    if (!gender) missingFields.push("Gender");
+    if (!desc) missingFields.push("Description");
+    if (!dob) missingFields.push("Date of Birth");
+
+    if (missingFields.length > 0) {
+        errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
+        return res.render("pet-create-listing", {
+            errorMsg: errorMsg,
+            successMsg: "",
+            petPersonalities,
+            formData: req.body,
+        });
+    }
+
+    // Handle personality array
+    if (!personality) {
+        personality = [];
+    } else if (!Array.isArray(personality)) {
+        personality = [personality];
+    }
+
+    // Create new pet object
+    let newPet = {
+        type: type,
+        img: imageFilename,
+        name: name,
+        breed: breed,
+        gender: gender,
+        description: desc,
+        hdbApproved: hdbApproved,
+        dob: dob,
+        vaccinated: vaccinated,
+        sterilized: sterilized,
+        personality: personality,
+        pid: null,
+        uid: null,
+    };
+
+    try {
+        await listing.createPetData(newPet);
+        successMsg = "Listing created successfully!";
+
+        // Clear form data on success
+        return res.render("pet-create-listing", {
+            errorMsg: "",
+            successMsg: successMsg,
+            petPersonalities,
+            formData: null, // Clear form
+        });
+    } catch (error) {
+        errorMsg = "Error creating pet listing! Please try again.";
+        console.error("Error creating pet listing:", error);
+
+        return res.render("pet-create-listing", {
+            errorMsg: errorMsg,
+            successMsg: "",
+            petPersonalities,
+            formData: req.body, // Send back data to repopulate form
+        });
+    }
 };

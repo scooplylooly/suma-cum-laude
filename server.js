@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const fs = require("fs");
 const path = require("path");
 const server = express();
 
@@ -18,28 +17,27 @@ const petRoutes = require("./routes/pet-routes");
 
 server.use("/", petRoutes);
 
-server.get('/', (req, res) => {
-    res.redirect('/adopt')
-})
-
+server.get("/", (req, res) => {
+    res.redirect("/adopt");
+});
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.DB)
+        await mongoose.connect(process.env.DB);
         console.log("MongoDB connected successfully");
-    } catch(error) {
+    } catch (error) {
         console.error("MongoDB connection failed:", error.message);
-        process.exit(1)
+        process.exit(1);
     }
-}
+};
 
 const startServer = () => {
-    const hostname = "localhost"
-    const port = 8000
+    const hostname = "localhost";
+    const port = 8000;
 
     server.listen(port, hostname, () => {
         console.log(`Server running at http://${hostname}:${port}/`);
     });
-}
+};
 
-connectDB().then(startServer)
+connectDB().then(startServer);

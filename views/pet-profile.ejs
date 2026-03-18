@@ -10,28 +10,42 @@
 
     <h2>Pet Profile</h2>
     <div>
-        <%Object.keys(petFound).forEach(key => {%>
-        <% if (key != 'type' && key != 'uid' && key != 'pid'){%>
+        <%for(key in petFound){%>
+        <% if (key != 'type' && key != 'uid' && key != 'pid' && key != "_id"){%>
         <% if(key == "img") {%>
             <img src="/images/<%=petFound[key] %>.jpg" style="width: 20;height: 20; border-radius: 10%;">
-        <%}else if (key == "Name"){%>
+        <%}else if (key == "name"){%>
             <h2><%= petFound[key] %></h2>
         <%}else if (key == "dob"){%>
             <h4>Date of  Birth: <%= petFound[key] %></h4>
+        <%}else if (petFound[key] == true ){%>
+            <%if (key == 'hdbApproved' ){%>
+                <h4>HDB Aproved : Yes</h4>
+            <%} else{%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : Yes</h4>
+            <% } %>
+        <%}else if (petFound[key] == false ){%>
+            <%if (key == 'hdbApproved' ){%>
+                <h4>HDB Aproved : No</h4>
+            <% }else{ %>
+                <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
+            <%}%>
+        <%}else if (key == 'personality' ){%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
         <% }else{ %>
-            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key][0].toUpperCase() + petFound[key].slice(1) %></h4>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key]%></h4>
         <%}%>
         <%}%>
-        <% })%>
+        <% }%>
         
     </div>
 
     <div>
         <!-- suppose to get user info since they signed in, and then save their username into database for application -->
-        <h2> Interested in  adopting <%=petFound.Name%>? Apply your interest here!</h2>
-        <form action="/pet-profile" method="post">
-            <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.Name %>!</p>
-            <input type="hidden" name="petName" value="<%=petFound.Name%>">
+        <h2> Interested in  adopting <%=petFound.name%>? Apply your interest here!</h2>
+        <form action="/apply-for-pet" method="post">
+            <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.name %>!</p>
+            <input type="hidden" name="petName" value="<%=petFound.name%>">
             <textarea name="applyReason" cols="50" rows="5"></textarea> <br><br>
             <button type="submit">Submit</button>
         </form>
