@@ -88,8 +88,20 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 //Methods
 
-exports.getAllPets = function () {
-    return Pet.find().lean();
+// exports.getAllPets = function () {
+//     return Pet.find().lean();
+// };
+
+exports.getAllPets = async () => {
+    const jData = await fs.readFile(petFilePath, "utf-8");
+    data = JSON.parse(jData);
+    return data;
+};
+
+exports.getAllApplications = async () => {
+    const jData = await fs.readFile(applyFilePath, "utf-8");
+    data = JSON.parse(jData);
+    return data;
 };
 
 exports.writeApplyInfo = async (application) => {
@@ -98,8 +110,7 @@ exports.writeApplyInfo = async (application) => {
 
         // Try to read existing file
         try {
-            const jsonData = await fs.readFile(applyFilePath, "utf-8");
-            data = JSON.parse(jsonData);
+            data = this.getAllApplications();
             console.log("existing data", data);
         } catch (readError) {
             // File doesn't exist - start with empty array
@@ -123,8 +134,7 @@ exports.createPetData = async (petInfo) => {
 
         // Try to read existing file
         try {
-            const jData = await fs.readFile(petFilePath, "utf-8");
-            data = JSON.parse(jData);
+            data = this.getAllPets();
             console.log("existing data", data);
         } catch (readError) {
             // File doesn't exist - start with empty array
