@@ -1,6 +1,6 @@
 [
     {
-        "pid":"",
+        "pid": null,
         "type": "cat",
         "img": "gray-cat",
         "Name": "Chappy",
@@ -8,13 +8,13 @@
         "gender": "female",
         "descrpition": "Gentle and calm gray cat who enjoys quiet cuddles, a lap cat!",
         "HDB-approved": "yes",
-        "age": "2 years-old",
+        "dob": "2023-08-12",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "cat",
         "img": "ginger-cat",
         "Name": "Simba",
@@ -22,13 +22,13 @@
         "gender": "male",
         "descrpition": "Friendly and playful ginger cat who loves chasing laser pointers",
         "HDB-approved": "yes",
-        "age": "2 years-old",
+        "dob": "2023-10-05",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "cat",
         "img": "black-cat",
         "Name": "Luna",
@@ -36,13 +36,13 @@
         "gender": "female",
         "descrpition": "Gentle and calm black cat who enjoys quiet cuddles",
         "HDB-approved": "yes",
-        "age": "3 years-old",
+        "dob": "2022-11-20",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "dog",
         "img": "golden-retriever",
         "Name": "Cooper",
@@ -50,13 +50,13 @@
         "gender": "male",
         "descrpition": "Energetic and friendly golden retriever who loves water and playing fetch",
         "HDB-approved": "no",
-        "age": "1 year-old",
+        "dob": "2024-02-28",
         "vaccinated": "yes",
         "sterilized": "no",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "dog",
         "img": "shih-tzu",
         "Name": "Coco",
@@ -64,13 +64,13 @@
         "gender": "female",
         "descrpition": "Sweet and gentle small dog who enjoys lap time and short walks",
         "HDB-approved": "yes",
-        "age": "4 years-old",
+        "dob": "2021-06-15",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "dog",
         "img": "mixed-breed",
         "Name": "Rocky",
@@ -78,13 +78,13 @@
         "gender": "male",
         "descrpition": "Resilient and loyal mixed breed dog, rescued from the streets, now ready for a loving home",
         "HDB-approved": "no",
-        "age": "2 years-old",
+        "dob": "2023-04-10",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "rabbit",
         "img": "lop-rabbit",
         "Name": "Snowball",
@@ -92,13 +92,13 @@
         "gender": "female",
         "descrpition": "Fluffy white rabbit who loves fresh vegetables and hopping around",
         "HDB-approved": "yes",
-        "age": "1 year-old",
+        "dob": "2024-01-18",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "rabbit",
         "img": "rex-rabbit",
         "Name": "Oreo",
@@ -106,13 +106,13 @@
         "gender": "male",
         "descrpition": "Friendly black and white rabbit with soft velvety fur",
         "HDB-approved": "yes",
-        "age": "2 years-old",
+        "dob": "2023-05-22",
         "vaccinated": "yes",
         "sterilized": "yes",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "bird",
         "img": "budgie",
         "Name": "Sunny",
@@ -120,13 +120,13 @@
         "gender": "male",
         "descrpition": "Colorful talking budgie who loves to sing and mimic sounds",
         "HDB-approved": "yes",
-        "age": "6 months",
+        "dob": "2024-09-30",
         "vaccinated": "yes",
         "sterilized": "no",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "bird",
         "img": "cockatiel",
         "Name": "Peach",
@@ -134,13 +134,13 @@
         "gender": "female",
         "descrpition": "Gentle cockatiel with beautiful peach-colored cheeks, enjoys head scratches",
         "HDB-approved": "yes",
-        "age": "1 year-old",
+        "dob": "2024-03-14",
         "vaccinated": "yes",
         "sterilized": "no",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "hamster",
         "img": "syrian-hamster",
         "Name": "Peanut",
@@ -148,13 +148,13 @@
         "gender": "male",
         "descrpition": "Tiny and active hamster who loves running on his wheel and storing food in his cheeks",
         "HDB-approved": "yes",
-        "age": "4 months",
+        "dob": "2025-01-05",
         "vaccinated": "no",
         "sterilized": "no",
-        "uid": ""
+        "uid": null
     },
     {
-        "pid":"",
+        "pid": null,
         "type": "guinea pig",
         "img": "abby-guinea",
         "Name": "Mochi",
@@ -162,9 +162,9 @@
         "gender": "female",
         "descrpition": "Chatty guinea pig with unique rosette fur pattern, loves fresh veggies",
         "HDB-approved": "yes",
-        "age": "8 months",
+        "dob": "2024-07-19",
         "vaccinated": "yes",
         "sterilized": "no",
-        "uid": ""
+        "uid": null
     }
 ]
