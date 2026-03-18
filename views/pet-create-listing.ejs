@@ -46,6 +46,11 @@
     <%}%>
     <% if (successMsg){ %>
         <h3 style="color: green;"><%=successMsg%></h3>
+        <script>
+            setTimeout(() => {
+                location.href = "/adopt",5000
+                })
+        </script>
     <%}%>
 
 </body>
