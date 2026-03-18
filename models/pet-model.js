@@ -97,6 +97,12 @@ exports.getAllPets = async () => {
     return data;
 };
 
+// exports.getAllPets = async () => {
+//     const jData = await fs.readFile(petFilePath, "utf-8");
+//     data = JSON.parse(jData);
+//     return data;
+// };
+
 exports.writeApplyInfo = async (application) => {
     try {
         let data = [];
