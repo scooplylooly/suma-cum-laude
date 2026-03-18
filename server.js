@@ -18,6 +18,10 @@ const petRoutes = require("./routes/pet-routes");
 
 server.use("/", petRoutes);
 
+server.get('/', (req, res) => {
+    res.redirect('/adopt')
+})
+
 
 const connectDB = async () => {
     try {

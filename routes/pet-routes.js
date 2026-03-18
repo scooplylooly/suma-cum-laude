@@ -4,7 +4,7 @@ const router = express.Router();
 const petController = require("../controllers/pet-controller");
 
 //
-router.get("/adoptNow", petController.displayPets);
+router.get("/adopt", petController.displayPets);
 router.post("/pet-profile", petController.showPetProfile);
 router.post("/pet-profile", petController.applyInterest);
 router.get("/create-listing", petController.showPetListingForm);
