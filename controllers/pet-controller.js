@@ -7,7 +7,6 @@ exports.displayPets = async (req, res) => {
         pets,
     });
 };
-
 exports.showPetProfile = async (req, res) => {
     let pets = await listing.getAllPets();
     let name = req.body.petName;

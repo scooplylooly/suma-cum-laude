@@ -1,9 +1,85 @@
-const fs = require("node:fs/promises");
-const petPfFilePath = "data/pets-data.json";
-const applyFilePath = "data/apply-for-pet-data.json";
+const mongoose = require('mongoose')
 
-exports.getAllPets = async () => {
-    const jsonData = await fs.readFile(petPfFilePath, "utf-8");
-    const data = JSON.parse(jsonData);
-    return data;
-};
+// pet-data schema
+
+const petSchema = new mongoose.Schema({
+    type: {
+      type: String,
+      required: true,
+      enum: ['dog', 'cat', 'rabbit', 'other']
+    },
+
+    img: {
+      type: String,
+      default: ''
+    },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    breed: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: true
+    },
+
+    description: {
+      type: String,
+      required: true
+    },
+
+    hdbApproved: {
+      type: Boolean,
+      default: false
+    },
+
+    age: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+
+    vaccinated: {
+      type: Boolean,
+      default: false
+    },
+
+    sterilized: {
+      type: Boolean,
+      default: false
+    },
+
+    personality: {
+      type: [String],
+      default: []
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null
+    }
+  },
+  {
+    timestamps: true
+})
+
+// Specifying which schema to use
+const Pet = mongoose.model('Pet', petSchema, 'pets-data')
+
+
+//Methods
+
+exports.getAllPets = function() {
+    return Pet.find()
+}
+
