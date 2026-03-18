@@ -2,6 +2,8 @@ const listing = require("../models/pet-model");
 
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
+    console.log(pets);
+
     pets.reverse();
     res.render("pet-search", {
         pets,
@@ -9,6 +11,7 @@ exports.displayPets = async (req, res) => {
 };
 exports.showPetProfile = async (req, res) => {
     let pets = await listing.getAllPets();
+    console.log(pets);
     let name = req.body.petName;
     let petFound;
     for (pet of pets) {
