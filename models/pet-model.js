@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const fs = require("fs");
+const applyFilePath = require("../data/apply-for-pet-data.json");
 // pet-data schema
 
 const petSchema = new mongoose.Schema(
@@ -83,7 +84,6 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 exports.getAllPets = function () {
     return Pet.find();
 };
-
 
 exports.writeApplyInfo = async (application) => {
     try {
