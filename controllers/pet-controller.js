@@ -43,17 +43,17 @@ exports.displayPets = async (req, res) => {
 
 exports.searchPet = async (req,res) => {
     let nameSearched = req.query.nameSearched;
-    let testPets = await listing.getAllPets();
-    testPets.reverse();
+    let allPets = await listing.getAllPets();
+    allPets.reverse();
     let pets = [];
     if (nameSearched!=''){
-        for (let pet of testPets) {
+        for (let pet of allPets) {
             if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())){
                 pets.push(pet)
             }
         }
     }else{
-        pets = testPets
+        pets = allPets
     }
     res.render("pet-search",{
         nameSearched,
@@ -78,6 +78,8 @@ exports.showPetProfile = async (req, res) => {
         console.log(result)
         res.render("pet-profile", {
         petFound: result,
+        errorMsg:undefined,
+        successMsg:undefined
         })
     }
 }
@@ -104,15 +106,18 @@ exports.applyInterest = async (req, res) => {
             petFound = pet;
             break;
         }
-    }
+    };
+    
     let application = {
         uid: null,
         pid: null,
         petName: petName,
         reason: req.body.applyReason,
     };
+
     try {
-        await listing.writeApplyInfo(application);
+        console.log(application)
+        await listing.createNewApplication(application);
         successMsg += "Application successful!";
     } catch (error) {
         errorMsg += "Application failed.";

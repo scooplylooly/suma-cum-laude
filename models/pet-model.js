@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { devNull } = require("os");
 const fs = require("fs").promises;
 const applyFilePath = "data/apply-for-pet-data.json";
 const petFilePath = "data/pets-data.json";
@@ -82,11 +83,55 @@ const petSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
+const applicationSchema = new mongoose.Schema(
+    {
+        uid: {
+        type: mongoose.Schema.Types.ObjectId,
+        //ref: "User", to be added once user schema is ready 
+        default: null
+        },
+        applicationNumber: {
+            type: String,
+            default: () => "APP-" + Date.now()
+        },
+        pid: {
+            type: mongoose.Schema.Types.ObjectId,
+            default: null,
+        },
+        petName: {
+            type: String,
+            required: true,
+        },
+        reason: {
+            type: String,
+            required: true
+        },
+
+    },
+    {
+        timestamps: true,
+    },
+
+);
 
 // Specifying which schema to use
 const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
+const app=mongoose.model("app", applicationSchema, "pet-application-form");
+
 //Methods
+
+exports.checkExistingApplications =  function () {
+    return app.find().lean()
+}
+
+exports.createNewApplication = async function (application) {
+    console.log("Creating application...")
+    const result = await app.create(application)
+    console.log(result)
+    return app.create(application)
+}
+
 
 exports.getAllPets = function () {
     return Pet.find().lean();
