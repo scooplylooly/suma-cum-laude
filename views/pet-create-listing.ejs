@@ -47,11 +47,11 @@
         <h3 style="color: red;"><%=errorMsg%></h3>
     <%}%>
     <% if (successMsg){ %>
-        <h3 style="color: green;"><%=successMsg%></h3>
+        <h3 style="color: green;"><%=successMsg%> Redirecting to listings...</h3>
         <script>
             setTimeout(() => {
-                location.href = "/adopt",5000
-                })
+                location.href = "/adopt"
+                },3000)
         </script>
     <%}%>
     <%- include('common/footer') %>
