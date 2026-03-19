@@ -1,5 +1,5 @@
 const listing = require("../models/pet-model");
-petPersonalities = [
+const petPersonalities = [
     "Affectionate",
     "Independent",
     "Playful",
@@ -33,7 +33,7 @@ petPersonalities = [
 // Query database to get all pets
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
-
+    console.log(pets);
     pets.reverse();
     res.render("pet-search", {
         pets,
@@ -42,20 +42,20 @@ exports.displayPets = async (req, res) => {
 
 //Query database to get specific pet
 exports.showPetProfile = async (req, res) => {
-    let petName = req.body.petName
+    let petName = req.body.petName;
     if (!petName) {
-        res.redirect('/adopt')
-        return
+        res.redirect("/adopt");
+        return;
     } else {
-        let result = await listing.findPet(petName).lean()
-        console.log(result)
+        let result = await listing.findPet(petName);
+        console.log(result);
         res.render("pet-profile", {
-        petFound: result,
-        errorMsg: "",
-        successMsg: "",
-        })
+            petFound: result,
+            errorMsg: "",
+            successMsg: "",
+        });
     }
-}
+};
 
 // applyInterest Mongodb integration
 // exports.applyInterest = async (req, res) => {
@@ -99,6 +99,15 @@ exports.applyInterest = async (req, res) => {
         petFound: petFound,
         errorMsg: errorMsg,
         successMsg: successMsg,
+    });
+};
+
+exports.showPetListingForm = async (req, res) => {
+    return res.render("pet-create-listing", {
+        errorMsg: "",
+        successMsg: "",
+        petPersonalities,
+        formData: null,
     });
 };
 
