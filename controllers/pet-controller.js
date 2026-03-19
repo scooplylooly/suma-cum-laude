@@ -29,6 +29,8 @@ petPersonalities = [
     "Foodie",
     "Active",
 ];
+
+// Query database to get all pets
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
 
@@ -36,21 +38,6 @@ exports.displayPets = async (req, res) => {
     res.render("pet-search", {
         pets,
         nameSearched:''
-    });
-};
-exports.showPetProfile = async (req, res) => {
-    let pets = await listing.getAllPets();
-    let name = req.body.petName;
-    let petFound;
-    for (pet of pets) {
-        if (pet.name == name) {
-            petFound = pet;
-        }
-    }
-    res.render("pet-profile", {
-        petFound,
-        errorMsg: "",
-        successMsg: "",
     });
 };
 
@@ -61,7 +48,7 @@ exports.searchPet = async (req,res) => {
     let pets = [];
     if (nameSearched!=''){
         for (let pet of testPets) {
-            if (pet.name.toLowerCase().includes(nameSearched)){
+            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())){
                 pets.push(pet)
             }
         }
@@ -78,9 +65,32 @@ exports.showPetListingForm = async (req, res) => {
     res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
-        petPersonalities,
-    });
-};
+        })
+    }
+
+exports.showPetProfile = async (req, res) => {
+    let petName = req.body.petName
+    if (!petName) {
+        res.redirect('/adopt')
+        return
+    } else {
+        let result = await listing.findPet(petName).lean()
+        console.log(result)
+        res.render("pet-profile", {
+        petFound: result,
+        })
+    }
+}
+// applyInterest Mongodb integration
+// exports.applyInterest = async (req, res) => {
+//     let errorMsg = "";
+//     let successMsg = "";
+//     let petFound = null;
+
+//     let petName = req.body.petName
+//     let pet = await listing.findPet(petName)
+
+// }
 
 exports.applyInterest = async (req, res) => {
     let errorMsg = "";
