@@ -40,4 +40,5 @@ router.post(
     upload.single("image"),
     petController.createPetListing,
 );
+router.get('/search', petController.searchPet)
 module.exports = router;

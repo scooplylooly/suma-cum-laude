@@ -35,6 +35,7 @@ exports.displayPets = async (req, res) => {
     pets.reverse();
     res.render("pet-search", {
         pets,
+        nameSearched:''
     });
 };
 exports.showPetProfile = async (req, res) => {
@@ -52,6 +53,26 @@ exports.showPetProfile = async (req, res) => {
         successMsg: "",
     });
 };
+
+exports.searchPet = async (req,res) => {
+    let nameSearched = req.query.nameSearched;
+    let testPets = await listing.getAllPets();
+    testPets.reverse();
+    let pets = [];
+    if (nameSearched!=''){
+        for (let pet of testPets) {
+            if (pet.name.toLowerCase().includes(nameSearched)){
+                pets.push(pet)
+            }
+        }
+    }else{
+        pets = testPets
+    }
+    res.render("pet-search",{
+        nameSearched,
+        pets
+    });
+}
 
 exports.showPetListingForm = async (req, res) => {
     res.render("pet-create-listing", {

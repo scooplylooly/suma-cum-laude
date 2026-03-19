@@ -12,19 +12,21 @@
     <a href="/create-listing"><button>Create Listing</button></a>
     <a href=""><button>Approve application</button></a>
     <a href=""><button>Application Status</button></a>
+
     <!-- Searchbar code (Finds names of pets according to what was searched)-->
     <form action="/search" method="get">
-        <input type="text" name="nameSearched" id="nameSearch" style="width:90%" placeholder="Search...">
+        <input type="text" name="nameSearched" id="nameSearch" style="width:90%" placeholder="Search..." value="<%=nameSearched%>">
         <button type="submit">Search</button>
     </form>
-
+    <!--Search Logic-->
+   
     <section>
     <br>
     </section>
     <!-- pets lisings-->
     <section>
     <h2>Adoption Listings</h2>
-        <% for(pet of pets){%>
+        <% for(let pet of pets){%>
         <form action="/pet-profile" method="post">
             <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.name%></h4>
@@ -35,5 +37,6 @@
       <%}%>
     </section>
     <%- include('common/footer') %>
+   
 </body>
 </html>
