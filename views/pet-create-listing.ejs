@@ -3,9 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create Pet Listing</title>
 </head>
 <body>
-    
+    <%- include('common/header') %>
+
+    <h2>Pet Listing Creation</h2>
+    <p>Fill in the form to list your foster in our website!</p>
+    <br>
+    <form action="/create-listing" method="post"  enctype="multipart/form-data">
+        
+        <label for="type_input">Type of Pet: </label>
+        <select id="type_input" name="type" >
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="guinea pig">Guinea pig</option>
+            <option value="bird">Bird</option>
+            <option value="rabbit">Rabbit</option>
+            <option value="hamster">Hamster</option>
+        </select><br><br>
+        <label for="imgToUpload">Select image to upload: </label><input type="file" id="imgToUpload" name="image" accept="image/*"><br><br>
+        <label for="name_input">Name: </label><input type="text" id="name_input" name="name"><br><br>
+        <label for="breed_input">Breed: </label><input type="text" id="breed_input" name="breed"><br><br>
+        <label for="gender_input">Gender: </label><input type="radio" name="gender" value="male" id="gender_input"> Male <input type="radio" name="gender" value="female" id="gender_input"> Female <br><br>
+        <label>How's their personality?</label><br>
+        <% let count = 0 %>
+        <% for(per of petPersonalities){ %>
+            <%if (count == 5){%>
+                <br>
+                <% count = 0 %>
+            <% } %>
+            <input type="checkbox" name="personality" value="<%=per%>"><%=per%>
+            <%count += 1%>
+        <%}%><br><br>
+        <label for="desc_input">Description: </label><br><br><textarea cols="30" rows="5" name="desc" id="desc_input"></textarea><br><br>
+        <label for="dob_input">Date of Birth: </label><input type="date" id="dob_input" name="dob"><br><br>
+        <label for="hdb_input">HDB Approved? </label><input type="radio" name="hdbApproved" value="true" id="hdb_input"> Yes <input type="radio" name="hdbApproved" value="false" id="hdb_input""> No <br><br>
+        <label for="vac_input">Vaccinated? </label><input type="radio" name="vaccinated" value="true" id="vac_input"> Yes <input type="radio" name="vaccinated" value="false" id="vac_input""> No <br><br>
+        <label for="ster_input">Sterilized? </label><input type="radio" name="sterilized" value="true" id="ster_input"> Yes <input type="radio" name="sterilized" value="false" id="ster_input""> No <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <% if (errorMsg){ %>
+        <h3 style="color: red;"><%=errorMsg%></h3>
+    <%}%>
+    <% if (successMsg){ %>
+        <h3 style="color: green;"><%=successMsg%> Redirecting to listings...</h3>
+        <script>
+            setTimeout(() => {
+                location.href = "/adopt"
+                },3000)
+        </script>
+    <%}%>
+    <%- include('common/footer') %>
+
 </body>
 </html>

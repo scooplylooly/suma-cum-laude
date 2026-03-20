@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const fs = require("fs");
 const path = require("path");
 const server = express();
 
@@ -18,17 +17,28 @@ const petRoutes = require("./routes/pet-routes");
 
 server.use("/", petRoutes);
 
-const indexRoutes = require("./routes/index-routes");
-server.use('/', indexRoutes);
+server.get("/", (req, res) => {
+    res.redirect("/adopt");
+});
 
-function startServer() {
-    const hostname = "localhost"; // Define server hostname
-    const port = 8000; // Define port number
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.DB);
+        console.log("MongoDB connected successfully");
+    } catch (error) {
+        console.error("MongoDB connection failed:", error.message);
+        process.exit(1);
+    }
+};
 
-    // Start the server and listen on the specified hostname and port
+const startServer = () => {
+    const hostname = "localhost";
+    const port = 8000;
+
     server.listen(port, hostname, () => {
         console.log(`Server running at http://${hostname}:${port}/`);
     });
-}
+};
 
-startServer();
+connectDB().then(startServer);
+// startServer();
