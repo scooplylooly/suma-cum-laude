@@ -1,0 +1,14 @@
+{
+  "Yi Ting": {
+    "userName": "Yi Ting",
+    "email": "tyt@gmail.com",
+    "DOB": "2025-10-09",
+    "password": "test"
+  },
+  "charlene": {
+    "userName": "charlene",
+    "email": "charlene@gmail.com",
+    "DOB": "2025-08-07",
+    "password": "test1"
+  }
+}
