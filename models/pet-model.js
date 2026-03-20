@@ -122,14 +122,6 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 // Pet Methods
 
-exports.createNewApplication = async function (application) {
-    console.log("Creating application...")
-    const result = await app.create(application)
-    console.log(result)
-    return app.create(application)
-}
-
-
 exports.getAllPets = function () {
     return Pet.find().lean();
 };
@@ -137,10 +129,6 @@ exports.getAllPets = function () {
 exports.findPet = function (petName) {
     return Pet.findOne({ name: petName }).lean();
 };
-
-// exports.writeApplyInfo = function (application) {
-//     return Pet.create(application)
-// }
 
 exports.writeApplyInfo = async (application) => {
     try {
@@ -202,4 +190,8 @@ const Application = mongoose.model("Application", applicationSchema, "pet-applic
 // Application Methods
 exports.checkExistingApplications =  function () {
     return Application.find().lean()
+}
+
+exports.createNewApplication = async function (application) {
+    return Application.create(application)
 }
