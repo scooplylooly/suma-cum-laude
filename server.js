@@ -14,7 +14,7 @@ server.set("view engine", "ejs");
 
 dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
-const indexRoutes = require("./routes/index-routes")
+const indexRoutes = require("./routes/index-routes");
 
 server.use("/", indexRoutes)
 server.use("/", petRoutes);
