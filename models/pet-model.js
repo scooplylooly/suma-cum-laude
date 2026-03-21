@@ -142,8 +142,8 @@ exports.getAllPets = function () {
 };
 
 exports.findPet = function (petName) {
-    return Pet.findOne({ name:petName })
-}
+    return Pet.findOne({ name: petName }).lean();
+};
 
 // exports.writeApplyInfo = function (application) {
 //     return Pet.create(application)

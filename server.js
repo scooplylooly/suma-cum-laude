@@ -51,3 +51,4 @@ const startServer = () => {
 };
 
 connectDB().then(startServer);
+startServer();
