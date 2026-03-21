@@ -75,7 +75,7 @@ const petSchema = new mongoose.Schema(
 
         uid: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "users",
             default: null,
         },
     },
@@ -87,7 +87,7 @@ const applicationSchema = new mongoose.Schema(
     {
         uid: {
         type: mongoose.Schema.Types.ObjectId,
-        //ref: "User", to be added once user schema is ready 
+        ref: "users",
         default: null
         },
         applicationNumber: {
@@ -133,6 +133,10 @@ exports.createNewApplication = async function (application) {
 }
 
 
+exports.getMyPets = function (uid) {
+    return Pet.find({uid}).lean()
+}
+
 exports.getAllPets = function () {
     return Pet.find().lean();
 };
@@ -145,30 +149,30 @@ exports.findPet = function (petName) {
 //     return Pet.create(application)
 // }
 
-exports.writeApplyInfo = async (application) => {
-    try {
-        let data = [];
+// exports.writeApplyInfo = async (application) => {
+//     try {
+//         let data = [];
 
-        // Try to read existing file
-        try {
-            const jsonData = await fs.readFile(applyFilePath, "utf-8");
-            data = JSON.parse(jsonData);
-            console.log("existing data", data);
-        } catch (readError) {
-            // File doesn't exist - start with empty array
-            console.log("No existing file, creating new one");
-            data = [];
-        }
+//         // Try to read existing file
+//         try {
+//             const jsonData = await fs.readFile(applyFilePath, "utf-8");
+//             data = JSON.parse(jsonData);
+//             console.log("existing data", data);
+//         } catch (readError) {
+//             // File doesn't exist - start with empty array
+//             console.log("No existing file, creating new one");
+//             data = [];
+//         }
 
-        data.push(application);
-        const jData = JSON.stringify(data, null, 2);
-        console.log(applyFilePath, data);
-        await fs.writeFile(applyFilePath, jData, "utf-8");
-        console.log("Application saved successfully");
-    } catch (error) {
-        console.error("Error writing to apply-for-pet-data.json:", error);
-    }
-};
+//         data.push(application);
+//         const jData = JSON.stringify(data, null, 2);
+//         console.log(applyFilePath, data);
+//         await fs.writeFile(applyFilePath, jData, "utf-8");
+//         console.log("Application saved successfully");
+//     } catch (error) {
+//         console.error("Error writing to apply-for-pet-data.json:", error);
+//     }
+// };
 
 exports.createPetData = async (petInfo) => {
     try {

@@ -109,7 +109,7 @@ exports.applyInterest = async (req, res) => {
     };
     
     let application = {
-        uid: null,
+        uid: req.session.user?._id ?? null,
         pid: null,
         petName: petName,
         reason: req.body.applyReason,
@@ -130,6 +130,22 @@ exports.applyInterest = async (req, res) => {
         successMsg: successMsg,
     });
 };
+
+exports.showPetListingForm = async (req, res) => {
+    return res.render("pet-create-listing", {
+        errorMsg: "",
+        successMsg: "",
+        petPersonalities,
+        formData: null,
+    });
+};
+
+exports.viewListings = async (req,res) => {
+    const uid = req.session.user?._id??null
+    const pets = await listing.getMyPets(uid)
+    res.render('pet-listings',{pets})
+
+}
 
 exports.createPetListing = async (req, res) => {
     let type = req.body.type;
@@ -190,7 +206,7 @@ exports.createPetListing = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         pid: null,
-        uid: null,
+        uid: req.session.user?._id ?? null,
     };
 
     try {

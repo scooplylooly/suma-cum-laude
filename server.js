@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const server = express();
+const session = require('express-session');
 
 server.use(express.urlencoded({ extended: true }));
 
@@ -14,7 +15,16 @@ server.set("view engine", "ejs");
 
 dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
+const indexRoutes = require("./routes/index-routes");
 
+server.use(session( {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized:false,
+    cookie:{secure:false}
+}));
+
+server.use("/", indexRoutes)
 server.use("/", petRoutes);
 
 server.get("/", (req, res) => {

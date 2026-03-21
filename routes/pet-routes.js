@@ -41,4 +41,6 @@ router.post(
     petController.createPetListing,
 );
 router.get('/search', petController.searchPet)
+router.get('/view-listings', petController.viewListings)
 module.exports = router;
+
