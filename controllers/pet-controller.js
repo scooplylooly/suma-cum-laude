@@ -125,6 +125,12 @@ exports.showPetListingForm = async (req, res) => {
     });
 };
 
+exports.viewListings = async (req, res) => {
+    const uid = req.session.user?._id ?? null;
+    const pets = await listing.getMyPets(uid);
+    res.render("pet-listings", { pets });
+};
+
 exports.createPetListing = async (req, res) => {
     let type = req.body.type;
     let breed = req.body.breed;
