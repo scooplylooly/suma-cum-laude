@@ -6,8 +6,12 @@
     <title>Document</title>
 </head>
 <body>
-    
-    <h2>Adoption Listings</h2>
+    <%- include('common/header') %>
+    <a href="/create-listing"><button>Create Listing</button></a>
+    <a href=""><button>Approve application</button></a>
+    <a href=""><button>Application Status</button></a>
+    <a href="/view-listings"><button>View Listings</button></a>
+     <h2>Adoption Listings</h2>
         <% for(let pet of pets){%>
         <form action="/pet-profile" method="post">
             <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
