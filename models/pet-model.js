@@ -5,7 +5,6 @@ const applyFilePath = "data/apply-for-pet-data.json";
 const petFilePath = "data/pets-data.json";
 
 // pet-data schema
-
 const petSchema = new mongoose.Schema(
     {
         type: {
@@ -83,6 +82,8 @@ const petSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
+
+// Application Schema
 const applicationSchema = new mongoose.Schema(
     {
         uid: {
@@ -114,24 +115,12 @@ const applicationSchema = new mongoose.Schema(
 
 );
 
-// Specifying which schema to use
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Pet Schema Definition
 const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
-const app=mongoose.model("app", applicationSchema, "pet-application-form");
-
-//Methods
-
-exports.checkExistingApplications =  function () {
-    return app.find().lean()
-}
-
-exports.createNewApplication = async function (application) {
-    console.log("Creating application...")
-    const result = await app.create(application)
-    console.log(result)
-    return app.create(application)
-}
-
+// Pet Methods
 
 exports.getMyPets = function (uid) {
     return Pet.find({uid}).lean()
@@ -199,3 +188,18 @@ exports.createPetData = async (petInfo) => {
         console.error("Error writing to pet-data.json:", error);
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Application Schema definition
+const Application = mongoose.model("Application", applicationSchema, "pet-application-form");
+
+
+// Application Methods
+exports.checkExistingApplications =  function () {
+    return Application.find().lean()
+}
+
+exports.createNewApplication = async function (application) {
+    return Application.create(application)
+}

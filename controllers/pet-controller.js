@@ -84,16 +84,6 @@ exports.showPetProfile = async (req, res) => {
         });
     }
 };
-// applyInterest Mongodb integration
-// exports.applyInterest = async (req, res) => {
-//     let errorMsg = "";
-//     let successMsg = "";
-//     let petFound = null;
-
-//     let petName = req.body.petName
-//     let pet = await listing.findPet(petName)
-
-// }
 
 exports.applyInterest = async (req, res) => {
     let errorMsg = "";
@@ -101,13 +91,7 @@ exports.applyInterest = async (req, res) => {
     let petFound = null;
 
     let petName = req.body.petName;
-    let pets = await listing.getAllPets();
-    for (let pet of pets) {
-        if (pet.name == petName) {
-            petFound = pet;
-            break;
-        }
-    };
+    let pet = await listing.findPet(petName).lean()
     
     let application = {
         uid: req.session.user?._id ?? null,
@@ -117,16 +101,16 @@ exports.applyInterest = async (req, res) => {
     };
 
     try {
-        console.log(application)
         await listing.createNewApplication(application);
-        successMsg += "Application successful!";
+        console.log(application)
+        successMsg += "Application successful!"
     } catch (error) {
         errorMsg += "Application failed.";
         console.error("Error when applying", error);
     }
 
     res.render("pet-profile", {
-        petFound: petFound,
+        petFound: pet,
         errorMsg: errorMsg,
         successMsg: successMsg,
     });
