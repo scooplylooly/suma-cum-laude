@@ -33,42 +33,47 @@ const petPersonalities = [
 // Query database to get all pets
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
+    const user = req.session.user;
     console.log(pets);
     pets.reverse();
     res.render("pet-search", {
         pets,
-        nameSearched:''
+        nameSearched: "",
+        user,
     });
 };
 
-exports.searchPet = async (req,res) => {
+exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
     allPets.reverse();
     let pets = [];
-    if (nameSearched!=''){
+    if (nameSearched != "") {
         for (let pet of allPets) {
-            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())){
-                pets.push(pet)
+            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())) {
+                pets.push(pet);
             }
         }
-    }else{
-        pets = allPets
+    } else {
+        pets = allPets;
     }
-    res.render("pet-search",{
+    res.render("pet-search", {
         nameSearched,
-        pets
+        pets,
     });
-}
+};
 
 exports.showPetListingForm = async (req, res) => {
+    const user = req.session.user;
     res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
-        })
-    }
+        user,
+    });
+};
 
 exports.showPetProfile = async (req, res) => {
+    const user = req.session.user;
     let petName = req.body.petName;
     if (!petName) {
         res.redirect("/adopt");
@@ -77,10 +82,10 @@ exports.showPetProfile = async (req, res) => {
         let result = await listing.findPet(petName);
         console.log(result);
         res.render("pet-profile", {
-
             petFound: result,
             errorMsg: "",
             successMsg: "",
+            user,
         });
     }
 };
@@ -88,11 +93,11 @@ exports.showPetProfile = async (req, res) => {
 exports.applyInterest = async (req, res) => {
     let errorMsg = "";
     let successMsg = "";
-    let petFound = null;
+    // let petFound = null;
 
     let petName = req.body.petName;
-    let pet = await listing.findPet(petName).lean()
-    
+    let pet = await listing.findPet(petName).lean();
+
     let application = {
         uid: req.session.user?._id ?? null,
         pid: null,
@@ -102,8 +107,8 @@ exports.applyInterest = async (req, res) => {
 
     try {
         await listing.createNewApplication(application);
-        console.log(application)
-        successMsg += "Application successful!"
+        console.log(application);
+        successMsg += "Application successful!";
     } catch (error) {
         errorMsg += "Application failed.";
         console.error("Error when applying", error);
@@ -132,6 +137,7 @@ exports.viewListings = async (req, res) => {
 };
 
 exports.createPetListing = async (req, res) => {
+    const user = req.session.user;
     let type = req.body.type;
     let breed = req.body.breed;
     const imageFilename = req.file
@@ -190,7 +196,7 @@ exports.createPetListing = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         pid: null,
-        uid: req.session.user?._id ?? null,
+        uid: user ? user._id : null,
     };
 
     try {

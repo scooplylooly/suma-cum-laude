@@ -10,6 +10,7 @@
 
     <h2>Pet Profile</h2>
     <div>
+        
         <%for(key in petFound){%>
         <% if (key != 'type' && key != 'uid' && key != 'pid' && key != "_id"){%>
         <% if(key == "img") {%>
@@ -46,6 +47,7 @@
         <form action="/apply-for-pet" method="post">
             <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.name %>!</p>
             <input type="hidden" name="petName" value="<%=petFound.name%>">
+            <input type="hidden" name="uid" value="<%=uid%>">
             <textarea name="applyReason" cols="50" rows="5"></textarea> <br><br>
             <button type="submit">Submit</button>
         </form>

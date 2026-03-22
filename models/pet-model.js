@@ -67,11 +67,6 @@ const petSchema = new mongoose.Schema(
             default: [],
         },
 
-        pid: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null,
-        },
-
         uid: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "users",
@@ -87,13 +82,13 @@ const petSchema = new mongoose.Schema(
 const applicationSchema = new mongoose.Schema(
     {
         uid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        default: null
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users",
+            default: null,
         },
         applicationNumber: {
             type: String,
-            default: () => "APP-" + Date.now()
+            default: () => "APP-" + Date.now(),
         },
         pid: {
             type: mongoose.Schema.Types.ObjectId,
@@ -105,14 +100,12 @@ const applicationSchema = new mongoose.Schema(
         },
         reason: {
             type: String,
-            required: true
+            required: true,
         },
-
     },
     {
         timestamps: true,
     },
-
 );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,8 +116,8 @@ const Pet = mongoose.model("Pet", petSchema, "pets-data");
 // Pet Methods
 
 exports.getMyPets = function (uid) {
-    return Pet.find({uid}).lean()
-}
+    return Pet.find({ uid }).lean();
+};
 
 exports.getAllPets = function () {
     return Pet.find().lean();
@@ -163,43 +156,55 @@ exports.findPet = function (petName) {
 //     }
 // };
 
-exports.createPetData = async (petInfo) => {
+// exports.createPetData = async (petInfo) => {
+//     try {
+//         let data = [];
+
+//         // Try to read existing file
+//         try {
+//             const jData = await fs.readFile(petFilePath, "utf-8");
+//             data = JSON.parse(jData);
+//             console.log("existing data", data);
+//         } catch (readError) {
+//             // File doesn't exist - start with empty array
+//             console.log("No existing file, creating new one");
+//             data = [];
+//         }
+
+//         data.push(petInfo);
+//         console.log("new", data);
+//         const jData = JSON.stringify(data, null, 2);
+//         console.log(petFilePath, data);
+//         await fs.writeFile(petFilePath, jData, "utf-8");
+//         console.log("Listing saved successfully");
+//     } catch (error) {
+//         console.error("Error writing to pet-data.json:", error);
+//     }
+// };
+
+exports.createPetData = function (pet) {
     try {
-        let data = [];
-
-        // Try to read existing file
-        try {
-            const jData = await fs.readFile(petFilePath, "utf-8");
-            data = JSON.parse(jData);
-            console.log("existing data", data);
-        } catch (readError) {
-            // File doesn't exist - start with empty array
-            console.log("No existing file, creating new one");
-            data = [];
-        }
-
-        data.push(petInfo);
-        console.log("new", data);
-        const jData = JSON.stringify(data, null, 2);
-        console.log(petFilePath, data);
-        await fs.writeFile(petFilePath, jData, "utf-8");
+        Pet.create(pet);
         console.log("Listing saved successfully");
-    } catch (error) {
-        console.error("Error writing to pet-data.json:", error);
+    } catch (err) {
+        console.error("Error writing to pet-data.json:", err);
     }
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Application Schema definition
-const Application = mongoose.model("Application", applicationSchema, "pet-application-form");
-
+const Application = mongoose.model(
+    "Application",
+    applicationSchema,
+    "pet-application-form",
+);
 
 // Application Methods
-exports.checkExistingApplications =  function () {
-    return Application.find().lean()
-}
+exports.checkExistingApplications = function () {
+    return Application.find().lean();
+};
 
 exports.createNewApplication = async function (application) {
-    return Application.create(application)
-}
+    return Application.create(application);
+};
