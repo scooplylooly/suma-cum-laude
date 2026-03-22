@@ -126,6 +126,10 @@ exports.getAllPets = function () {
 exports.findPet = function (petName) {
     return Pet.findOne({ name: petName }).lean();
 };
+// temporary findpet using uid
+exports.findPet2 = function (pid) {
+    return Pet.findOne({ _id: pid }).lean();
+};
 
 // exports.writeApplyInfo = function (application) {
 //     return Pet.create(application)
@@ -187,7 +191,16 @@ exports.createPetData = function (pet) {
         Pet.create(pet);
         console.log("Listing saved successfully");
     } catch (err) {
-        console.error("Error writing to pet-data.json:", err);
+        console.error("Error writing to db:", err);
+    }
+};
+
+exports.deletePetData = function (pid) {
+    try {
+        Pet.deleteOne(pid);
+        console.log("Listing deleted successfully");
+    } catch (err) {
+        console.error("Error writing to db:", err);
     }
 };
 

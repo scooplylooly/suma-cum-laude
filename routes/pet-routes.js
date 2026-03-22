@@ -40,7 +40,10 @@ router.post(
     upload.single("image"),
     petController.createPetListing,
 );
-router.get('/search', petController.searchPet)
-router.get('/view-listings', petController.viewListings)
+router.get("/search", petController.searchPet);
+router.get("/view-listings", petController.viewListings);
+router.get("/edit-listing", petController.showPetlistingProfile);
+router.post("/edit-listing", petController.changePetlistingProfile);
+router.get("/update-details", petController.updatePetProfile);
+router.post("/update-details", petController.petUpdated);
 module.exports = router;
-

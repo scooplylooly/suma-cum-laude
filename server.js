@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const server = express();
-const session = require('express-session');
+const session = require("express-session");
 
 server.use(express.urlencoded({ extended: true }));
 
@@ -17,14 +17,20 @@ dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
 const indexRoutes = require("./routes/index-routes");
 
-server.use(session( {
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized:false,
-    cookie:{secure:false}
-}));
+server.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false },
+    }),
+);
+server.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
 
-server.use("/", indexRoutes)
+server.use("/", indexRoutes);
 server.use("/", petRoutes);
 
 server.get("/", (req, res) => {

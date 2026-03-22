@@ -131,9 +131,36 @@ exports.showPetListingForm = async (req, res) => {
 };
 
 exports.viewListings = async (req, res) => {
-    const uid = req.session.user?._id ?? null;
-    const pets = await listing.getMyPets(uid);
-    res.render("pet-listings", { pets });
+    const user = req.session.user;
+    console.log("SESSION USER:", user);
+
+    if (!user) {
+        return res.send(
+            `
+            <h2>Session expired! Redirecting to sign in page...</h2>
+            <script>
+             setTimeout(() => {
+                location.href = "/sign-in"
+                },2000)
+            </script>
+            `,
+        );
+    }
+
+    const uid = user._id;
+    const pets = await listing.getMyPets(uid).lean();
+    let petFound = [];
+    for (pet of pets) {
+        if (pet.uid == uid) {
+            petFound.push(pet);
+        }
+    }
+
+    res.render("view-user-listings", {
+        pets,
+        user,
+        petFound,
+    });
 };
 
 exports.createPetListing = async (req, res) => {
@@ -221,4 +248,54 @@ exports.createPetListing = async (req, res) => {
             formData: req.body, // Send back data to repopulate form
         });
     }
+};
+
+exports.showPetlistingProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPet2(pid);
+    console.log(pid);
+
+    res.render("edit-pet-listing", {
+        pet,
+        successMsg: "",
+        errorMsg: "",
+    });
+};
+
+exports.changePetlistingProfile = async (req, res) => {
+    let choice = req.body.listing_change;
+    const pid = req.query.pid;
+    let pet = await listing.findPet2(pid);
+    let success = "";
+    let fail = "";
+    if (!choice) {
+        fail = "Please select an option!";
+    }
+    if (choice == "delete") {
+        try {
+            await listing.deletePetData(pid);
+            success = `${pet.name} has been withdrawn from your listing!`;
+        } catch (err) {
+            console.error("Trouble deleting pet", err);
+            fail = "Error deleting pet";
+        }
+    }
+
+    res.render("edit-pet-listing", {
+        pet,
+        successMsg: success,
+        errorMsg: fail,
+    });
+};
+
+exports.updatePetProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPet2(pid);
+    red.render("update-pet-details", { pet, petPersonalities });
+};
+
+exports.petUpdated = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPet2(pid);
+    red.render("update-pet-details", { pet });
 };

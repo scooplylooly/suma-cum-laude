@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%=pet.name%> details </title>
+</head>
+<body>
+    <a href="/view-listings"><button>Back</button></a>
+    <h2>Current details for <%=pet.name%>:</h2>
+    <form method="post" action="/edit-listing">
+        <%for(key in pet){%>
+        <% if (key != 'type' && key != 'uid' && key != 'pid' && key != "_id"){%>
+        <% if(key == "img") {%>
+            <img src="/images/<%=pet[key] %>.jpg" style="width: 20;height: 20; border-radius: 10%;">
+        <%}else if (key == "name"){%>
+            <h2><%= pet[key] %></h2>
+        <%}else if (key == "dob"){%>
+            <h4>Date of  Birth: <%= pet[key] %></h4>
+        <%}else if (pet[key] == true ){%>
+            <%if (key == 'hdbApproved' ){%>
+                <h4>HDB Aproved : Yes</h4>
+            <%} else{%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : Yes</h4>
+            <% } %>
+        <%}else if (pet[key] == false ){%>
+            <%if (key == 'hdbApproved' ){%>
+                <h4>HDB Aproved : No</h4>
+            <% }else{ %>
+                <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
+            <%}%>
+        <%}else if (key == 'personality' ){%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=pet[key].join(', ')%></h4>
+        <% }else{ %>
+            <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= pet[key] ? pet[key][0].toUpperCase() + pet[key].slice(1): 'N/A' %></h4>
+        <%}%>
+        <%}%>
+        <% }%>
+        <br>
+        What do you want to do?<br>
+        <input type="radio" name="listing_change" value="delete">Withdraw Listing <br>
+        <a href="/update-details?pid=<%=pet._id%>"><input type="radio">Edit Listing <br></a>
+        <button type="submit">Submit</button>
+    </form>
+    <% if (successMsg){ %>
+        <h3 style="color: green;"><%=successMsg%> Redirecting to your listings...</h3>
+        <script>
+            setTimeout(() => {
+                location.href = "/view-listings"
+                },3000)
+        </script>
+    <%}%>
+    <% if (errorMsg){ %>
+        <h3 style="color: red;"><%=errorMsg%></h3>
+    <%}%>
+</body>
+</html>
