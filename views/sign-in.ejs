@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" type="text/css" href="./style/sign-in.css">
+</head>
+<body>
+    
+    <div id="form">
+        <form action="/sign-in" method="post">
+            Username: <input type="text" name="userName" value="<%= userName %>"> <br><br>
+            Password: <input type="password" name="password" value="<%= password %>" > <br><br>
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+
+    <% if (errors.length > 0){ %>
+        <ul style="color: red">
+            <% errors.forEach(error => { %>
+                <li><%- error %></li>
+        <% }) %>
+        </ul>
+    <% }; %>
+
+    <% if (success) { %>
+        <p style="color:#c97d4e;">
+        Successful sign-in. <br>
+        Time to find your dream companion / BFF!
+        </p>
+        <script>
+            setTimeout(() => {
+                window.location.href = "/pets";
+            },2000)
+        </script>
+    <% } %>
+    
+</body>
+</html>

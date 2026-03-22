@@ -14,7 +14,9 @@ server.set("view engine", "ejs");
 
 dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
+const indexRoutes = require("./routes/index-routes");
 
+server.use("/", indexRoutes);
 server.use("/", petRoutes);
 
 server.get("/", (req, res) => {
@@ -41,5 +43,3 @@ const startServer = () => {
 };
 
 connectDB().then(startServer);
-
-// startServer();
