@@ -7,34 +7,47 @@
     <link rel="stylesheet" type="text/css" href="./style/sign-in.css">
 </head>
 <body>
+    <header>
+        <h1>Placeholder Title</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/sign-up">Sign Up</a>
+        </nav>
+    </header>
     
-    <div id="form">
-        <form action="/sign-in" method="post">
-            Username: <input type="text" name="userName" value="<%= userName %>"> <br><br>
-            Password: <input type="password" name="password" value="<%= password %>" > <br><br>
-            <button type="submit">Log in</button>
-        </form>
-    </div>
+    <main class="login-page">
+        <div id="form" class="login-card">
+            <h2>Welcome!</h2>
+            <p class="subtitle">Sign in to find your companion!</p>
+            <form action="/sign-in" method="post" class="login-form">
+                Username: <input type="text" name="userName" value="<%= userName %>"> <br><br>
+                Password: <input type="password" name="password" value="<%= password %>" > <br><br>
+                <button type="submit">Log in</button>
+            </form>
+            <p class="signup-link">Don't have an account?
+                <a href="/sign-up">Create an account</a>
+            </p>
+        </div>
 
-    <% if (errors.length > 0){ %>
-        <ul style="color: red">
-            <% errors.forEach(error => { %>
-                <li><%- error %></li>
-        <% }) %>
-        </ul>
-    <% }; %>
+        <% if (errors.length > 0){ %>
+            <ul style="color: red">
+                <% errors.forEach(error => { %>
+                    <li><%- error %></li>
+            <% }) %>
+            </ul>
+        <% }; %>
 
-    <% if (success) { %>
-        <p style="color:#c97d4e;">
-        Successful sign-in. <br>
-        Time to find your dream companion / BFF!
-        </p>
-        <script>
-            setTimeout(() => {
-                window.location.href = "/adopt";
-            },2000)
-        </script>
-    <% } %>
-    
+        <% if (success) { %>
+            <p style="color:#c97d4e;">
+            Successful sign-in. <br>
+            Time to find your dream companion / BFF!
+            </p>
+            <script>
+                setTimeout(() => {
+                    window.location.href = "/adopt";
+                },2000)
+            </script>
+        <% } %>
+    </main>
 </body>
 </html>
