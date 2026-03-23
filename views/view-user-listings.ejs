@@ -7,7 +7,12 @@
 </head>
 <body>
     <%- include('common/header') %>
+    <a href="/create-listing"><button>Create Listing</button></a>
+    <%if(petFound.length<1){%>
+        <h4>No listing found.</h4>
+    <%}else{%>
      <h2>Your Listings</h2>
+     Make changes to your listing here!<br><br>
         <% for(let pet of petFound){%>
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
         <h4><%=pet.name%></h4>
@@ -16,6 +21,8 @@
         <a href="/edit-listing?pid=<%=pet._id%>"><button>Make <b>changes</b> to listing</button></a>
         <a href="/"><button>View Applications</button></a>
         <br><br>
+        <%}%>
       <%}%>
+    <%- include('common/footer') %>
 </body>
 </html>

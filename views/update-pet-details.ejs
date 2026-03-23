@@ -3,62 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update <%=pet.name%> destails</title>
+    <title>Update <%= pet.name %> details</title>
 </head>
-<body>
-    <%- include('common/header') %>
 
-    <h2>Pet Listing Creation</h2>
-    <p>Fill in the form to list your foster in our website!</p>
-    <br>
-    <form action="/update-details" method="post"  enctype="multipart/form-data">
-        
-        <label for="type_input">Type of Pet: </label>
-        <select id="type_input" name="type" >
-            <option hidden>--Chose a type--</option>
-            <option value="dog" <%=pet.type == dog ? 'selected':null%>>Dog</option>
-            <option value="cat"<%=pet.type == cat ? 'selected':null%>>Cat</option>
-            <option value="guinea pig"<%=pet.type == guinea pig ? 'selected':null%>>Guinea pig</option>
-            <option value="bird"<%=pet.type == bird ? 'selected':null%>>Bird</option>
-            <option value="rabbit"<%=pet.type == rabbit ? 'selected':null%>>Rabbit</option>
-            <option value="hamster"<%=pet.type == hamster ? 'selected':null%>>Hamster</option>
-        </select><br><br>
-        <label for="imgToUpload">Select image to upload: </label><input type="file" id="imgToUpload" name="image" accept="image/*"><br><br>
-        <label for="name_input">Name: </label><input type="text" id="name_input" name="name"><%=pet.name%><br><br>
-        <label for="breed_input">Breed: </label><input type="text" id="breed_input" name="breed"><%=pet.breed%><br><br>
-        <label for="gender_input">Gender: </label><input type="radio" name="gender" value="male" id="gender_input"<%=pet.gender == male ? 'selected':null%>> Male
-        <input type="radio" name="gender" value="female" id="gender_input"<%=pet.gender == female ? 'selected':null%>> Female <br><br>
-        <label>How's their personality?</label><br>
-        <% let count = 0 %>
-        <% for(per of petPersonalities){ %>
-            <%if (count == 5){%>
-                <br>
-                <% count = 0 %>
+<body>
+
+    <%- include('common/header') %>
+        <h2>Update Pet Listing</h2>
+        <p><i>Edit your pet’s details below.</i></p>
+
+        <form action="/update-pet" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="pid" value="<%= pet._id %>">
+            <!-- TYPE -->
+            <label>Type of Pet:</label>
+            <select name="type">
+                <option hidden>--Choose a type--</option>
+                <option value="dog" <%= pet.type == 'dog' ? 'selected' : '' %>>Dog</option>
+                <option value="cat" <%= pet.type == 'cat' ? 'selected' : '' %>>Cat</option>
+                <option value="guinea pig" <%= pet.type == 'guinea pig' ? 'selected' : '' %>>Guinea Pig</option>
+                <option value="bird" <%= pet.type == 'bird' ? 'selected' : '' %>>Bird</option>
+                <option value="rabbit" <%= pet.type == 'rabbit' ? 'selected' : '' %>>Rabbit</option>
+                <option value="hamster" <%= pet.type == 'hamster' ? 'selected' : '' %>>Hamster</option>
+                <option value="other" <%= pet.type == 'other' ? 'selected' : '' %>>Other</option>
+            </select>
+            <br><br>
+
+            <!-- IMAGE -->
+            <label>Select image to upload:</label>
+            <input type="file" name="image" accept="image/*">
+            <br><br>
+
+            <!-- NAME -->
+            <label>Name:</label>
+            <input type="text" name="name" value="<%= pet.name %>">
+            <br><br>
+
+            <!-- BREED -->
+            <label>Breed:</label>
+            <input type="text" name="breed" value="<%= pet.breed %>">
+            <br><br>
+
+            <!-- GENDER -->
+            <label>Gender:</label>
+            <input type="radio" name="gender" value="male"
+                <%= pet.gender == 'male' ? 'checked' : '' %>> Male
+
+            <input type="radio" name="gender" value="female"
+                <%= pet.gender == 'female' ? 'checked' : '' %>> Female
+            <br><br>
+
+            <!-- PERSONALITY -->
+            <label>Their personality:</label><br>
+
+            <% let count = 0; %>
+            <% for (let per of petPersonalities) { %>
+
+                <% if (count === 5) { %>
+                    <br>
+                    <% count = 0; %>
+                <% } %>
+
+                <input type="checkbox" name="personality" value="<%= per %>"
+                <%= pet.personality.includes(per.toLowerCase()) ? 'checked' : '' %>>
+                <%=per[0].toUpperCase() + per.slice(1)%>
+
+                <% count++; %>
             <% } %>
-            <input type="checkbox" name="personality" value="<%=per%>" <%=pet.personality == per ? 'checked':null%>><%=per%>
-            <%count += 1%>
-        <%}%><br><br>
-        <label for="desc_input">Description: </label><br><br><textarea cols="30" rows="5" name="desc" id="desc_input"></textarea><%=pet.description%><br><br>
-        <label for="dob_input">Date of Birth: </label><input type="date" id="dob_input" name="dob"><br><br>
-        <label for="hdb_input">HDB Approved? </label><input type="radio" name="hdbApproved" value="true" id="hdb_input" <%=pet.hdbApproved == true ? 'selected':null%>> Yes 
-        <input type="radio" name="hdbApproved" value="false" id="hdb_input" <%=pet.hdbApproved == false ? 'selected':null%>> No <br><br>
-        <label for="vac_input">Vaccinated? </label><input type="radio" name="vaccinated" value="true" id="vac_input"<%=pet.vaccinated == true ? 'selected':null%>> Yes 
-        <input type="radio" name="vaccinated" value="false" id="vac_input" <%=pet.vaccinated == false ? 'selected':null%>> No <br><br>
-        <label for="ster_input">Sterilized? </label><input type="radio" name="sterilized" value="true" id="ster_input" <%=pet.sterilized == true ? 'selected':null%>> Yes 
-        <input type="radio" name="sterilized" value="false" id="ster_input"<%=pet.sterilized == false ? 'selected':null%>> No <br><br>
-        <button type="submit">Submit</button>
-    </form>
-    <% if (errorMsg){ %>
-        <h3 style="color: red;"><%=errorMsg%></h3>
-    <%}%>
-    <% if (successMsg){ %>
-        <h3 style="color: green;"><%=successMsg%> Redirecting to your listings...</h3>
-        <script>
-            setTimeout(() => {
-                location.href = "/view-listings"
-                },3000)
-        </script>
-    <%}%>
+
+            <br><br>
+
+            <!-- DESCRIPTION -->
+            <label>Description:</label><br>
+            <textarea name="desc" rows="5" cols="30"><%= pet.description %></textarea>
+            <br><br>
+
+            <!-- DOB -->
+            <label>Date of Birth:</label>
+            <input type="date" name="dob" value="<%= pet.dob %>">
+            <br><br>
+
+            <!-- HDB -->
+            <label>HDB Approved?</label>
+            <input type="radio" name="hdbApproved" value="true"
+                <%= pet.hdbApproved ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="hdbApproved" value="false"
+                <%= !pet.hdbApproved ? 'checked' : '' %>> No
+            <br><br>
+
+            <!-- VACCINATED -->
+            <label>Vaccinated?</label>
+            <input type="radio" name="vaccinated" value="true"
+                <%= pet.vaccinated ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="vaccinated" value="false"
+                <%= !pet.vaccinated ? 'checked' : '' %>> No
+            <br><br>
+
+            <!-- STERILIZED -->
+            <label>Sterilized?</label>
+            <input type="radio" name="sterilized" value="true"
+                <%= pet.sterilized ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="sterilized" value="false"
+                <%= !pet.sterilized ? 'checked' : '' %>> No
+            <br><br>
+
+            <button type="submit">Update</button>
+
+        </form>
+
+        <!-- ERROR -->
+        <% if (errorMsg) { %>
+            <h3 style="color: red;"><%= errorMsg %></h3>
+        <% } %>
+
+        <!-- SUCCESS -->
+        <% if (successMsg) { %>
+            <h3 style="color: green;">
+                <%= successMsg %> Redirecting to your listings...
+            </h3>
+
+            <script>
+                setTimeout(() => {
+                    window.location.href = "/view-listings";
+                }, 3000);
+            </script>
+        <% } %>
+
     <%- include('common/footer') %>
+
 </body>
 </html>

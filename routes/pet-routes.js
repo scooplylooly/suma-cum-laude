@@ -43,7 +43,9 @@ router.post(
 router.get("/search", petController.searchPet);
 router.get("/view-listings", petController.viewListings);
 router.get("/edit-listing", petController.showPetlistingProfile);
-router.post("/edit-listing", petController.changePetlistingProfile);
-router.get("/update-details", petController.updatePetProfile);
-router.post("/update-details", petController.petUpdated);
+
+router.get("/update-pet", petController.updatePetProfile);
+router.post("/update-pet", upload.single("image"), petController.petUpdated);
+router.get("/delete-pet", petController.deletePetProfile);
+router.post("/delete-pet", petController.petDeleted);
 module.exports = router;

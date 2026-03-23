@@ -9,13 +9,9 @@
 <body>
     <%- include('common/header') %>
     <h3>Welcome <%=user.userName%>!</h3>
-    <!-- to include search bar, create listing, approve application/view Listings, check application status -->
-    <a href="/create-listing"><button>Create Listing</button></a>
-    <a href=""><button>Application Status</button></a>
-    <a href="/view-listings"><button>View Your Listings</button></a>
-
     <!-- Searchbar code (Finds names of pets according to what was searched)-->
     <form action="/search" method="get">
+        <p>Start searching for your dream pet!</p>
         <input type="text" name="nameSearched" id="nameSearch" style="width:90%" placeholder="Search..." value="<%=nameSearched%>">
         <button type="submit">Search</button>
     </form>

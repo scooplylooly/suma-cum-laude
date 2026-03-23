@@ -1,6 +1,6 @@
 {
-  "userName": "admin_user",
-  "email": "admin_user@gmail.com",
-  "DOB": "1998-11-19",
-  "password": "1234"
+  "userName": "normal_user",
+  "email": "normal_user@gmail.com",
+  "DOB": "1991-02-20",
+  "password": "4567"
 }

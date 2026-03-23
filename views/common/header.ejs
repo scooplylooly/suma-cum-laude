@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="./style/index.css" />
+    </head>
+    <body>
+        <header>
+            <h1>web name</h1>
+            <nav>
+                <a href="/">Home</a>
+                <% if(!user){ %>
+                    <a href="/sign-up">Register</a>
+                    <a href="/sign-in">Log in</a>
+                <%}else{%>
+                    <a href="/adopt">Search Listings</a>
+                    <a href="">Application Status</a>
+                    <a href="/view-listings">View Your Listings</a>
+                    <a href="">User Profile</a>
+
+                    <%if (user._id == '69c0095e226ed8af0fa8d239'){ %>
+                        <a href="">Admin Page</a>
+                    <%}%>
+                <%}%>
+            </nav>
+        </header>
+    </body>
 </html>

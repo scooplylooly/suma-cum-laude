@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const { devNull } = require("os");
+const path = require("path");
 const fs = require("fs").promises;
-const applyFilePath = "data/apply-for-pet-data.json";
-const petFilePath = "data/pets-data.json";
+// const applyFilePath = "data/apply-for-pet-data.json";
+// const petFilePath = "data/pets-data.json";
 
 // pet-data schema
 const petSchema = new mongoose.Schema(
@@ -10,7 +11,15 @@ const petSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true,
-            enum: ["dog", "cat", "rabbit", "other"],
+            enum: [
+                "dog",
+                "cat",
+                "rabbit",
+                "hamster",
+                "bird",
+                "guinea pig",
+                "other",
+            ],
         },
 
         img: {
@@ -195,15 +204,51 @@ exports.createPetData = function (pet) {
     }
 };
 
-exports.deletePetData = function (pid) {
+exports.deleteImage = async function (img) {
     try {
-        Pet.deleteOne(pid);
-        console.log("Listing deleted successfully");
+        const imagePath = path.join(
+            __dirname,
+            "..",
+            "public",
+            "images",
+            img + ".jpg",
+        );
+        await fs.unlink(imagePath);
+        console.log("Image deleted successfully");
     } catch (err) {
-        console.error("Error writing to db:", err);
+        console.error("Error deleting image:", err);
+    }
+};
+exports.deletePetData = async function (pid, img) {
+    try {
+        const result = await Pet.deleteOne({
+            _id: new mongoose.Types.ObjectId(pid),
+        });
+        await this.deleteImage(img);
+        console.log("Delete result:", result);
+
+        return result;
+    } catch (err) {
+        console.error("Error deleting from db:", err);
     }
 };
 
+exports.updatePetData = async function (pid, pet) {
+    try {
+        const result = await Pet.updateOne(
+            {
+                _id: new mongoose.Types.ObjectId(pid),
+            },
+            { $set: pet },
+        );
+
+        console.log("Update result:", result);
+
+        return result;
+    } catch (err) {
+        console.error("Error updating in db:", err);
+    }
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Application Schema definition

@@ -6,6 +6,8 @@
     <title>Registration</title>
 </head>
 <body>
+    <%- include('common/header') %>
+
     <form action="/sign-up" method="post">
         User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
         Email: <input type="email" name="email" value="<%= email %>"> <br><br>
@@ -37,6 +39,7 @@
             </script>
             
     <% } %>
-
+    <%- include('common/footer') %>
+    
 </body>
 </html>
