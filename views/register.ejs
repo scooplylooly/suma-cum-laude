@@ -28,6 +28,7 @@
                 <button type="submit">Register</button> <br><br>
             </form>
             <p>Already have an account? <a href="/login">Login</a></p>
+
             <% if (errors.length > 0){ %>
                 <ul class="error-list">
                     <% errors.forEach(error => { %>
@@ -35,25 +36,22 @@
                 <% }); %>
                 </ul>
         <% } %>
-    
+            <% if(success){ %>
+                <p class="success-message">
+                    Thank you for your registration. <br>
+                    Please login before exploring your companion options. <br>
+                    Redirecting to login page...
+                </p>
 
-        <% if(success){ %>
-            <p class="success-message">
-                Thank you for your registration. <br>
-                Please login before exploring your companion options. <br>
-                Redirecting to login page...
-            </p>
+                <script>
+                    setTimeout(()=> {
+                        window.location.href = "/login";
+                    }, 1000)
+                </script>
+                
+            <% } %>
 
-            <script>
-                setTimeout(()=> {
-                    window.location.href = "/login";
-                }, 1000)
-            </script>
-            
-         <% } %>
         </div>
-
-
     </main>
     <%- include('common/footer') %>
 </body>
