@@ -4,26 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="./style/sign-up.css">
 </head>
 <body>
-    <%- include('common/header') %>
 
-    <form action="/sign-up" method="post">
-        User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
-        Email: <input type="email" name="email" value="<%= email %>"> <br><br>
-        DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
-        Password: <input type="password" name="password" value="<%= password %>" > <br><br>
-        Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
-        <button type="submit">Register</button> <br><br>
-    </form>
+    <header>
+         <h1>Placeholder Title</h1>
+        <nav>
+            <a href="/index.html">Home</a>
+        </nav>
+    </header>
 
-    <% if (errors.length > 0){ %>
-        <ul style="color: red">
-            <% errors.forEach(error => { %>
-                <li><%- error %></li>
-        <% }); %>
-        </ul>
-    <% } %>
+    <main class="signup-page">
+        <div id="form" class="signup-card">
+            <form action="/sign-up" method="post">
+                User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
+                Email: <input type="email" name="email" value="<%= email %>"> <br><br>
+                DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
+                Password: <input type="password" name="password" value="<%= password %>" > <br><br>
+                Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
+                <button type="submit">Register</button> <br><br>
+            </form>
+        </div>
+
+        <% if (errors.length > 0){ %>
+            <ul style="color: red">
+                <% errors.forEach(error => { %>
+                    <li><%- error %></li>
+            <% }); %>
+            </ul>
+        <% } %>
 
         <% if(success){ %>
             <p style="color:#c97d4e">
@@ -38,8 +48,10 @@
                 }, 2000)
             </script>
             
-    <% } %>
-    <%- include('common/footer') %>
-    
+         <% } %>
+
+        <%- include('common/footer') %>
+
+    </main>
 </body>
 </html>
