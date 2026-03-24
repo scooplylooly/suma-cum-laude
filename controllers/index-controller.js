@@ -70,3 +70,28 @@ exports.handleRegister = async (req, res) => {
     }
     res.render("sign-up", { userName,email, DOB, password, password2, errors, success: errors.length === 0});
 };
+
+exports.showLister = (req, res) => {
+    res.render("apply-lister", userName, password, password2, errors = [])
+}
+
+exports.handleLister = async (req, res) => {
+    let userNameL = (req.body.userNameL ?? "").trim()
+    let passwordL = (req.body.passwordL ?? "").trim()
+    let password2L = (req.body.password2L ?? "").trim()
+
+    let errors = []
+    if (!userNameL) {
+        errors.push("Username is required")
+    }
+
+    if (!passwordL) {
+        errors.push("Password is required")
+    }
+
+    if (!password2L || passwordL !== password2L) {
+        errors.push("Passwords do not match")
+    }
+
+    res.render("apply-lister", {userNameL, passwordL, password2L})
+}
