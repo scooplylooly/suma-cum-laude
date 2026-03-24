@@ -14,7 +14,7 @@ header {
     align-items: center;
 }
 
-header h1 {
+/* header h1 {
     color: white;
     margin: 0;
 }
@@ -24,13 +24,13 @@ header nav a {
     text-decoration: none;
     margin-left: 20px;
     font-size: 16px;
-}
+} */
 
-header nav a:hover {
+/* header nav a:hover {
     text-decoration: underline;
-}
+} */
 
-.signup-page {
+.delete-page {
     min-height: calc(100vh - 160px);
     display: flex;
     justify-content: center;
@@ -38,7 +38,7 @@ header nav a:hover {
     padding: 60px 20px;
 }
 
-.signup-card {
+.delete-card {
     background-color: white;
     width: 100%;
     max-width: 420px;
@@ -48,40 +48,38 @@ header nav a:hover {
     text-align: center;
 }
 
-.signup-card h2 {
+.delete-card h2 {
     margin-top: 0;
     font-size: 32px;
     color: #c97d4e;
 }
 
 .subtitle {
-    margin-bottom: 30px;
-    font-size: 17px;
-    color: #555;
+    color: red;
 }
 
-.signup-form {
+.delete-form {
     display: flex;
     flex-direction: column;
     text-align: left;
 }
 
-.signup-form input {
+.delete-form input {
     padding: 12px;
-    margin-bottom: 0.5px;
+    margin-bottom: 20px;
     border: 1px solid #d8c3b5;
     border-radius: 8px;
     font-size: 16px;
     font-family: inherit;
 }
 
-.signup-form input:focus {
+.delete-form input:focus {
     outline: none;
     border-color: #c97d4e;
     box-shadow: 0 0 0 2px rgba(201, 125, 78, 0.15);
 }
 
-.signup-form button {
+.delete-form button {
     background-color: #c97d4e;
     color: white;
     border: none;
@@ -93,36 +91,15 @@ header nav a:hover {
     transition: background-color 0.2s ease;
 }
 
-.signup-form button:hover {
+.delete-form button:hover {
     background-color: #b86d3e;
 }
 
-.error-list {
+.err-message {
     margin-top: 20px;
     padding-left: 20px;
     color: red;
     text-align: left;
-}
-
-.success-message {
-    margin-top: 20px;
-    color: #c97d4e;
-    font-size: 16px;
-}
-
-.signup-link {
-    margin-top: 25px;
-    font-size: 15px;
-}
-
-.signup-link a {
-    color: #333;
-    text-decoration: none;
-}
-
-.signup-link a:hover {
-    color: #c97d4e;
-    text-decoration: underline;
 }
 
 footer {
