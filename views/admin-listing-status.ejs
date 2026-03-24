@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Update Listing Status</title>
+    </head>
+    <body>
+        <%- include('common/header') %>
+        <form action="/admin-change-listings-status" method="post">
+            <h2>Update Listing Status</h2>
+            <img src="/images/<%= petFound.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= petFound.Name%>">
+            <p>Listing Name: <%= petFound.name %></p>
+            <%if (petFound.approved){%>
+                <h3 style="color: green;">Current Status: Approved</h3>
+            <%}else{%>
+                <h3 style="color: orange;">Current Status: Pending</h3>
+            <%}%>
+
+            <input type="hidden" name="pid" value="<%= petFound._id %>" />
+            <button type="submit" name="action" value="approve">Approve</button>
+            <button type="submit" name="action" value="reject">Reject</button>
+        </form>
+        <%- include('common/footer') %>
+    </body>
+</html>
