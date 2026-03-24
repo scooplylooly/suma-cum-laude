@@ -8,6 +8,8 @@
 <body>
     <%- include('common/header') %>
     <h2>Admin - Pet Listings</h2>
+    <a href="/create-listing"><button>Create Listing</button></a><br>
+
     <form action="/admin-listings" method="post">
       Pick a Status:
       <select name="status">

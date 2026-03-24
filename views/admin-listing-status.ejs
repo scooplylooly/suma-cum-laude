@@ -9,8 +9,37 @@
         <%- include('common/header') %>
         <form action="/admin-change-listings-status" method="post">
             <h2>Update Listing Status</h2>
-            <img src="/images/<%= petFound.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= petFound.Name%>">
-            <p>Listing Name: <%= petFound.name %></p>
+            <%for(key in petFound){%>
+            <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
+            <% if(key == "img") {%>
+                <img src="/images/<%=petFound[key]%>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= petFound.name%>">
+            <%}else if (key == "name"){%>
+                <h2><%= petFound[key] %></h2>
+            <%}else if (key == "dob"){%>
+                <h4>Date of  Birth: <%= petFound[key] %></h4>
+            <%}else if (petFound[key] == true ){%>
+                <%if (key == 'hdbApproved' ){%>
+                    <h4>HDB Aproved : Yes</h4>
+                <%} else{%>
+                <h4><%=key[0].toUpperCase() + key.slice(1)%> : Yes</h4>
+                <% } %>
+            <%}else if (petFound[key] == false ){%>
+                <%if (key == 'hdbApproved' ){%>
+                    <h4>HDB Aproved : No</h4>
+                <% }else{ %>
+                    <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
+                <%}%>
+            <%}else if (key == 'personality' ){%>
+                <%if (key == []){%>
+                <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
+                <%}else{%>
+                <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
+                <%}%>
+            <% }else{ %>
+                <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= petFound[key] ? petFound[key][0].toUpperCase() + petFound[key].slice(1): 'N/A' %></h4>
+            <%}%>
+            <%}%>
+            <% }%>
             <%if (petFound.approved){%>
                 <h3 style="color: green;">Current Status: Approved</h3>
             <%}else{%>
