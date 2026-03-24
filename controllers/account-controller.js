@@ -1,4 +1,4 @@
-const indexModel = require("../models/account-model");
+const accountModel = require("../models/account-model");
 
 exports.showLogin = (req, res) => {
     res.render("sign-in", { userName: '', password: '', errors: [], success: false });
@@ -16,7 +16,7 @@ exports.handleLogin = async (req, res) => {
         errors.push("Password is required");
     }
     if (errors.length === 0) {
-        const user = await indexModel.authenticateUser(userName, password);
+        const user = await accountModel.authenticateUser(userName, password);
         if (!user) {
             errors.push("Invalid username or password. <br> Try <a href='/sign-up'>registering</a> first.");
             return res.render("sign-in", {userName, password, errors, success: false});
@@ -62,7 +62,7 @@ exports.handleRegister = async (req, res) => {
 
     if (errors.length === 0) {
         try {
-            const result = await indexModel.registerUser(userName, email, DOB, password);
+            const result = await accountModel.registerUser(userName, email, DOB, password);
 
         } catch (error) {
             errors.push(error.message);

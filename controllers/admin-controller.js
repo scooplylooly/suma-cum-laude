@@ -1,5 +1,5 @@
 const e = require("express");
-const indexModel = require("../models/index-model");
+const accountModel = require("../models/account-model");
 const petModel = require("../models/pet-model");
 
 exports.showAdminPage = async (req, res) => {
