@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
-    <link rel="stylesheet" type="text/css" href="./style/sign-up.css">
+    <link rel="stylesheet" type="text/css" href="./style/register.css">
 </head>
 <body>
 
@@ -15,11 +15,11 @@
         </nav>
     </header>
 
-    <main class="signup-page">
-        <div id="form" class="signup-card">
+    <main class="register-page">
+        <div id="form" class="register-card">
             <h2>User Registration</h2>
             <p class="subtitle">Please create an account to use our services.</p>
-            <form action="/register" method="post" class="signup-form">
+            <form action="/register" method="post" class="register-form">
                 User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
                 Email: <input type="email" name="email" value="<%= email %>"> <br><br>
                 DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
@@ -27,8 +27,7 @@
                 Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
                 <button type="submit">Register</button> <br><br>
             </form>
-        </div>
-
+            <p>Already have an account? <a href="/login">Login</a></p>
             <% if (errors.length > 0){ %>
                 <ul class="error-list">
                     <% errors.forEach(error => { %>
@@ -41,17 +40,19 @@
         <% if(success){ %>
             <p class="success-message">
                 Thank you for your registration. <br>
-                Please sign-in before exploring your companion options. <br>
-                Redirecting to sign-in...
+                Please login before exploring your companion options. <br>
+                Redirecting to login page...
             </p>
 
             <script>
                 setTimeout(()=> {
-                    window.location.href = "/sign-in";
-                }, 2000)
+                    window.location.href = "/login";
+                }, 1000)
             </script>
             
          <% } %>
+        </div>
+
 
     </main>
     <%- include('common/footer') %>
