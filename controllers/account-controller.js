@@ -1,4 +1,4 @@
-const indexModel = require("../models/index-model");
+const indexModel = require("../models/account-model");
 
 exports.showLogin = (req, res) => {
     res.render("sign-in", { userName: '', password: '', errors: [], success: false });
