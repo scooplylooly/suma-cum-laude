@@ -103,3 +103,16 @@ footer {
     color: #888;
     font-size: 14px;
 }
+.item {
+    margin: 10px;
+    background-color: #f0e0d0;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+.container-flex {
+    display: grid;
+    /* Creates 3 columns of equal width (1 fraction of available space) */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; /* Adds space between boxes */
+}

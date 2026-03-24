@@ -89,12 +89,12 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
-    let petName = req.body.petName;
-    if (!petName) {
+    let pid = req.query.pid;
+    if (!pid) {
         res.redirect("/adopt");
         return;
     } else {
-        let result = await listing.findPet(petName);
+        let result = await listing.findPetById(pid);
         console.log(result);
         res.render("pet-profile", {
             petFound: result,
@@ -217,6 +217,7 @@ exports.createPetListing = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: user ? user._id : null,
+        approved: false, // New listings start as unapproved
     };
 
     try {
@@ -276,7 +277,7 @@ exports.viewListings = async (req, res) => {
 };
 exports.showPetlistingProfile = async (req, res) => {
     const pid = req.query.pid;
-    let pet = await listing.findPet2(pid).lean();
+    let pet = await listing.findPetById(pid).lean();
     console.log(pid);
 
     res.render("edit-pet-listing", {
@@ -288,7 +289,7 @@ exports.showPetlistingProfile = async (req, res) => {
 
 exports.changePetlistingProfile = async (req, res) => {
     const pid = req.query.pid;
-    let pet = await listing.findPet2(pid);
+    let pet = await listing.findPetById(pid);
     res.render("edit-pet-listing", {
         pet,
     });
@@ -296,7 +297,7 @@ exports.changePetlistingProfile = async (req, res) => {
 
 exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
-    let pet = await listing.findPet2(pid);
+    let pet = await listing.findPetById(pid);
     res.render("update-pet-details", {
         pet,
         petPersonalities,
@@ -316,7 +317,7 @@ exports.petUpdated = async (req, res) => {
         return res.status(400).send("Pet ID is missing");
     }
 
-    let pet = await listing.findPet2(pid);
+    let pet = await listing.findPetById(pid);
 
     // Check if pet exists
     if (!pet) {
@@ -406,6 +407,7 @@ exports.petUpdated = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: pet.uid || null,
+        approved: false, // Reset approval status on update
     };
 
     console.log("Updating pet with data:", newPet);
@@ -437,7 +439,7 @@ exports.petUpdated = async (req, res) => {
         }
 
         // Fetch the updated pet data to display
-        const updatedPet = await listing.findPet2(pid);
+        const updatedPet = await listing.findPetById(pid);
 
         return res.render("pet-create-listing", {
             errorMsg: "",
@@ -476,12 +478,12 @@ exports.petUpdated = async (req, res) => {
 };
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
-    let pet = await listing.findPet2(pid);
+    let pet = await listing.findPetById(pid);
     res.render("delete-pet-profile", { pet, errorMsg: "" });
 };
 exports.petDeleted = async (req, res) => {
     const pid = req.body.pid;
-    let pet = await listing.findPet2(pid);
+    let pet = await listing.findPetById(pid);
     console.log("pet", pet);
     console.log("PID RECEIVED:", pid);
     let fail = "";
@@ -490,7 +492,7 @@ exports.petDeleted = async (req, res) => {
 
         console.log("deleted");
         return res.send(`
-            <h3 style="color: green;"> Pet has been withdrawn from your listing! Redirecting to your listings...</h3>
+            <h3 style="color: green;"> Pet has been withdrawn from listing! Redirecting...</h3>
             <script>
                 setTimeout(() => {
                     location.href = "/view-listings"

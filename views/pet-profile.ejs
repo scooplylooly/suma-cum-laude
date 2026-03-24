@@ -12,7 +12,7 @@
     <div>
         
         <%for(key in petFound){%>
-        <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'){%>
+        <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
         <% if(key == "img") {%>
             <img src="/images/<%=petFound[key]%>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= petFound.name%>">
         <%}else if (key == "name"){%>
@@ -52,6 +52,7 @@
             <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.name %>!</p>
             <input type="hidden" name="petName" value="<%=petFound.name%>">
             <input type="hidden" name="uid" value="<%=user._id%>">
+            <input type="hidden" name="pid" value="<%=petFound._id%>">
             <textarea name="applyReason" cols="50" rows="5"></textarea> <br><br>
             <button type="submit">Submit</button>
         </form>

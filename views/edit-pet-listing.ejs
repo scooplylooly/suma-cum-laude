@@ -12,7 +12,7 @@
     <%for(key in pet){%>
     <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'){%>
     <% if(key == "img") {%>
-        <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.name%>">
+    <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.name%>">
     <%}else if (key == "name"){%>
         <h2><%= pet[key] %></h2>
     <%}else if (key == "dob"){%>

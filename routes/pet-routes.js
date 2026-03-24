@@ -32,7 +32,7 @@ const upload = multer({
 // dont touch-- upload image stuff
 
 router.get("/adopt", petController.displayPets);
-router.post("/pet-profile", petController.showPetProfile);
+router.get("/pet-profile", petController.showPetProfile);
 router.post("/apply-for-pet", petController.applyInterest);
 router.get("/create-listing", petController.showPetListingForm);
 router.post(
