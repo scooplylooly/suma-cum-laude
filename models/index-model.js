@@ -1,13 +1,9 @@
 const fs = require("node:fs/promises");
-const path = require("path");
-const filePath = "data/user-profiles.json";
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
+// create schema for user profiles 
 const usersSchema = new mongoose.Schema({
-        id: {
-            type: String,
-            required: [true, 'A user must have an id']
-        },
         userName : {
             type: String,
             required: [true, 'A user must have a user name']
@@ -28,52 +24,40 @@ const usersSchema = new mongoose.Schema({
 
     const users = mongoose.model('users', usersSchema, 'users');
 
+    // checks if user exists in DB; additional check if password is correct before logging user in.
+    // returns user if is true
 async function authenticateUser(userName, password) {
     const user = await users.findOne({userName: userName})
 
     if (!user) return null;
-    if (user.password!== password) {
-        return null
-    };
 
-    return user;
-};
-
-function createId(userName, DOB) {
-    const formattedName = userName.replaceAll(' ', '').toLowerCase();
-    const formattedDOB = DOB.replaceAll('-', '');
-    return formattedName + formattedDOB;
+    let match = await bcrypt.compare(password, user.password);
+    if (match) {
+        return user;
+    } else {
+        return null;
+    }
 };
 
 async function registerUser(userName, email, DOB, password) {
-    let newUser = {
-                id: createId(userName, DOB),
-                userName,
-                email,
-                DOB,
-                password
-            };
     
+    // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({userName: userName})){
         throw new Error("Username already exists"); 
 
     } else {
-        // create new user profile + add to user schema
+        let hashedPassword = await bcrypt.hash(password, 10);
+        let newUser = {
+                    userName,
+                    email,
+                    DOB,
+                    password: hashedPassword // hashes the password for security
+                };
+        // create new user profile + add to users schema
         await addUser(newUser);
-        const data = {
-                userName, email, DOB, password
-        };
-        // writes new user to json file
-        await writeUsers(data);
     }
 };
 
-async function writeUsers(users) {
-    await fs.writeFile(
-        filePath,
-        JSON.stringify(users, null, 2)
-    );
-}
 
 async function addUser(user) {
     return await users.create(user);
