@@ -30,7 +30,7 @@
         </div>
 
         <% if (errors.length > 0){ %>
-            <ul style="color: red">
+            <ul class="error-list">
                 <% errors.forEach(error => { %>
                     <li><%- error %></li>
             <% }) %>
@@ -38,7 +38,7 @@
         <% }; %>
 
         <% if (success) { %>
-            <p style="color:#c97d4e;">
+            <p class="success-message">
             Successful sign-in. <br>
             Time to find your dream companion / BFF!
             </p>

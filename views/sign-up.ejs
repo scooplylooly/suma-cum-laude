@@ -17,7 +17,9 @@
 
     <main class="signup-page">
         <div id="form" class="signup-card">
-            <form action="/sign-up" method="post">
+            <h2>User Registration</h2>
+            <p class="subtitle">Please create an account to use our services.</p>
+            <form action="/sign-up" method="post" class="signup-form">
                 User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
                 Email: <input type="email" name="email" value="<%= email %>"> <br><br>
                 DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
@@ -27,19 +29,20 @@
             </form>
         </div>
 
-        <% if (errors.length > 0){ %>
-            <ul style="color: red">
-                <% errors.forEach(error => { %>
+            <% if (errors.length > 0){ %>
+                <ul class="error-list">
+                    <% errors.forEach(error => { %>
                     <li><%- error %></li>
-            <% }); %>
-            </ul>
+                <% }); %>
+                </ul>
         <% } %>
+    
 
         <% if(success){ %>
-            <p style="color:#c97d4e">
-            Thank you for your registration. <br>
-            Please sign-in before exploring your companion options. <br>
-            Redirecting to sign-in...
+            <p class="success-message">
+                Thank you for your registration. <br>
+                Please sign-in before exploring your companion options. <br>
+                Redirecting to sign-in...
             </p>
 
             <script>
@@ -50,8 +53,7 @@
             
          <% } %>
 
-        <%- include('common/footer') %>
-
     </main>
+    <%- include('common/footer') %>
 </body>
 </html>
