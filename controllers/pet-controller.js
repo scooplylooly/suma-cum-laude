@@ -429,11 +429,10 @@ exports.petUpdated = async (req, res) => {
 exports.viewApplications = async (req,res) => {
     let pid = req.query.pid
     const user = req.session.user
-    let applications = await listing.findApplication(pid)
+    let applications = await listing.findApplicationByPet(pid)
     let pet = await listing.findPetById(pid)
     let petName = pet.name
-    let count = 0
-    res.render('view-applications',{applications,petName,user,count})
+    res.render('view-applications',{applications,petName,user})
 }
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
@@ -466,3 +465,35 @@ exports.petDeleted = async (req, res) => {
         });
     }
 };
+exports.approveApp = async (req,res) => {
+    const appID = req.query.application
+    const value = 'approved'
+    const petID = req.query.petID
+    const petName = req.query.petName
+    const user = req.session.user
+
+    try{
+        await listing.updateApplicationbyID(appID,value)
+        await listing.updatePetStatusbyID(petID, true)
+        console.log('Success!')
+    }catch(error) {
+        console.log(error)
+    }
+    let applications = await listing.findApplicationByPet(petID)
+    console.log(petID)
+    console.log(appID)
+    for (let application of applications) {
+        console.log("checking:", application._id.toString(), "vs", appID)
+
+        if (application._id.toString() != appID) {
+            console.log("denying:", application._id)
+
+            await listing.updateApplicationbyID(application._id,'denied')
+        }
+    }
+    applications = await listing.findApplicationByPet(petID)
+    res.render('view-applications', {applications,user,petName})
+
+
+
+}

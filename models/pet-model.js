@@ -295,6 +295,25 @@ exports.createNewApplication = async function (application) {
     return Application.create(application);
 };
 
-exports.findApplication = async function (petID) {
-    return Application.find({pid: petID})
+exports.findApplicationByPet = async function (petID) {
+    return Application.find({pid: new mongoose.Types.ObjectId(petID)}).lean()
 }
+exports.findApplicationByID = async function (ID) {
+    return Application.findOne({_id:ID})
+};
+exports.updateApplicationbyID = async function (ID,value) {
+    try{
+        await Application.updateOne({_id: ID}, {$set: {status: value}})
+        return 'Success!'
+    }catch(error){
+        return error
+    }
+};
+exports.updatePetStatusbyID = async function (pid,value) {
+    try{
+        await Pet.updateOne({_id:pid}, {$set: {approved: value}})
+        return "Pet Adopted"
+    }catch(error){
+        return error
+    }
+};
