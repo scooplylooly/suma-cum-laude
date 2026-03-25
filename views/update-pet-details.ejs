@@ -4,125 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update <%= pet.name %> details</title>
+    <link rel="stylesheet" href="/style/create-listing.css">
 </head>
 
 <body>
-
     <%- include('common/header') %>
-        <h2>Update Pet Listing</h2>
-        <p><i>Edit your pet’s details below.</i></p>
 
-        <form action="/update-pet" method="post" enctype="multipart/form-data">
+    <main class="create-listing-page">
+
+        <section class="page-hero">
+            <h2>Update Pet Listing</h2>
+            <p>Edit your pet’s details below.</p>
+        </section>
+
+        <form action="/update-pet" method="post" enctype="multipart/form-data" class="listing-form">
             <input type="hidden" name="pid" value="<%= pet._id %>">
+
             <!-- TYPE -->
-            <label>Type of Pet:</label>
-            <select name="type">
-                <option hidden>--Choose a type--</option>
-                <option value="dog" <%= pet.type == 'dog' ? 'selected' : '' %>>Dog</option>
-                <option value="cat" <%= pet.type == 'cat' ? 'selected' : '' %>>Cat</option>
-                <option value="guinea pig" <%= pet.type == 'guinea pig' ? 'selected' : '' %>>Guinea Pig</option>
-                <option value="bird" <%= pet.type == 'bird' ? 'selected' : '' %>>Bird</option>
-                <option value="rabbit" <%= pet.type == 'rabbit' ? 'selected' : '' %>>Rabbit</option>
-                <option value="hamster" <%= pet.type == 'hamster' ? 'selected' : '' %>>Hamster</option>
-                <option value="other" <%= pet.type == 'other' ? 'selected' : '' %>>Other</option>
-            </select>
-            <br><br>
+            <div class="form-group">
+                <label>Type of Pet:</label>
+                <select name="type">
+                    <option hidden>--Choose a type--</option>
+                    <option value="dog" <%= pet.type == 'dog' ? 'selected' : '' %>>Dog</option>
+                    <option value="cat" <%= pet.type == 'cat' ? 'selected' : '' %>>Cat</option>
+                    <option value="guinea pig" <%= pet.type == 'guinea pig' ? 'selected' : '' %>>Guinea Pig</option>
+                    <option value="bird" <%= pet.type == 'bird' ? 'selected' : '' %>>Bird</option>
+                    <option value="rabbit" <%= pet.type == 'rabbit' ? 'selected' : '' %>>Rabbit</option>
+                    <option value="hamster" <%= pet.type == 'hamster' ? 'selected' : '' %>>Hamster</option>
+                    <option value="other" <%= pet.type == 'other' ? 'selected' : '' %>>Other</option>
+                </select>
+            </div>
 
             <!-- IMAGE -->
-            <label>Select image to upload:</label>
-            <input type="file" name="image" accept="image/*">
-            <br><br>
+            <div class="form-group">
+                <label>Select image to upload:</label>
+                <input type="file" name="image" accept="image/*">
+            </div>
 
             <!-- NAME -->
-            <label>Name:</label>
-            <input type="text" name="name" value="<%= pet.name %>">
-            <br><br>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="name" value="<%= pet.name %>">
+            </div>
 
             <!-- BREED -->
-            <label>Breed:</label>
-            <input type="text" name="breed" value="<%= pet.breed %>">
-            <br><br>
+            <div class="form-group">
+                <label>Breed:</label>
+                <input type="text" name="breed" value="<%= pet.breed %>">
+            </div>
 
             <!-- GENDER -->
-            <label>Gender:</label>
-            <input type="radio" name="gender" value="male"
-                <%= pet.gender == 'male' ? 'checked' : '' %>> Male
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="radio-group">
+                    <label class="choice">
+                        <input type="radio" name="gender" value="male"
+                        <%= pet.gender == 'male' ? 'checked' : '' %>> Male
+                    </label>
 
-            <input type="radio" name="gender" value="female"
-                <%= pet.gender == 'female' ? 'checked' : '' %>> Female
-            <br><br>
+                    <label class="choice">
+                        <input type="radio" name="gender" value="female"
+                        <%= pet.gender == 'female' ? 'checked' : '' %>> Female
+                    </label>
+                </div>
+            </div>
 
             <!-- PERSONALITY -->
-            <label>Their personality:</label><br>
-
-            <% let count = 0; %>
-            <% for (let per of petPersonalities) { %>
-
-                <% if (count === 5) { %>
-                    <br>
-                    <% count = 0; %>
-                <% } %>
-
-                <input type="checkbox" name="personality" value="<%= per %>"
-                <%= pet.personality.includes(per.toLowerCase()) ? 'checked' : '' %>>
-                <%=per[0].toUpperCase() + per.slice(1)%>
-
-                <% count++; %>
-            <% } %>
-
-            <br><br>
+            <div class="form-group full-width">
+                <label>Their personality:</label>
+                <div class="checkbox-group">
+                    <% for (let per of petPersonalities) { %>
+                        <label class="choice">
+                            <input type="checkbox" name="personality" value="<%= per %>"
+                            <%= pet.personality.includes(per.toLowerCase()) ? 'checked' : '' %>>
+                            <%= per[0].toUpperCase() + per.slice(1) %>
+                        </label>
+                    <% } %>
+                </div>
+            </div>
 
             <!-- DESCRIPTION -->
-            <label>Description:</label><br>
-            <textarea name="desc" rows="5" cols="30"><%= pet.description %></textarea>
-            <br><br>
+            <div class="form-group full-width">
+                <label>Description:</label>
+                <textarea name="desc"><%= pet.description %></textarea>
+            </div>
 
             <!-- DOB -->
-            <label>Date of Birth:</label>
-            <input type="date" name="dob" value="<%= pet.dob %>">
-            <br><br>
+            <div class="form-group">
+                <label>Date of Birth:</label>
+                <input type="date" name="dob" value="<%= pet.dob %>">
+            </div>
 
             <!-- HDB -->
-            <label>HDB Approved?</label>
-            <input type="radio" name="hdbApproved" value="true"
-                <%= pet.hdbApproved ? 'checked' : '' %>> Yes
+            <div class="form-group">
+                <label>HDB Approved?</label>
+                <div class="radio-group">
+                    <label class="choice">
+                        <input type="radio" name="hdbApproved" value="true"
+                        <%= pet.hdbApproved ? 'checked' : '' %>> Yes
+                    </label>
 
-            <input type="radio" name="hdbApproved" value="false"
-                <%= !pet.hdbApproved ? 'checked' : '' %>> No
-            <br><br>
+                    <label class="choice">
+                        <input type="radio" name="hdbApproved" value="false"
+                        <%= !pet.hdbApproved ? 'checked' : '' %>> No
+                    </label>
+                </div>
+            </div>
 
             <!-- VACCINATED -->
-            <label>Vaccinated?</label>
-            <input type="radio" name="vaccinated" value="true"
-                <%= pet.vaccinated ? 'checked' : '' %>> Yes
+            <div class="form-group">
+                <label>Vaccinated?</label>
+                <div class="radio-group">
+                    <label class="choice">
+                        <input type="radio" name="vaccinated" value="true"
+                        <%= pet.vaccinated ? 'checked' : '' %>> Yes
+                    </label>
 
-            <input type="radio" name="vaccinated" value="false"
-                <%= !pet.vaccinated ? 'checked' : '' %>> No
-            <br><br>
+                    <label class="choice">
+                        <input type="radio" name="vaccinated" value="false"
+                        <%= !pet.vaccinated ? 'checked' : '' %>> No
+                    </label>
+                </div>
+            </div>
 
             <!-- STERILIZED -->
-            <label>Sterilized?</label>
-            <input type="radio" name="sterilized" value="true"
-                <%= pet.sterilized ? 'checked' : '' %>> Yes
+            <div class="form-group">
+                <label>Sterilized?</label>
+                <div class="radio-group">
+                    <label class="choice">
+                        <input type="radio" name="sterilized" value="true"
+                        <%= pet.sterilized ? 'checked' : '' %>> Yes
+                    </label>
 
-            <input type="radio" name="sterilized" value="false"
-                <%= !pet.sterilized ? 'checked' : '' %>> No
-            <br><br>
+                    <label class="choice">
+                        <input type="radio" name="sterilized" value="false"
+                        <%= !pet.sterilized ? 'checked' : '' %>> No
+                    </label>
+                </div>
+            </div>
 
-            <button type="submit">Update</button>
+            <div class="form-actions">
+                <button type="submit">Update</button>
+            </div>
 
         </form>
 
         <!-- ERROR -->
         <% if (errorMsg) { %>
-            <h3 style="color: red;"><%= errorMsg %></h3>
+            <h3 class="message error"><%= errorMsg %></h3>
         <% } %>
 
         <!-- SUCCESS -->
         <% if (successMsg) { %>
-            <h3 style="color: green;">
-                <%= successMsg %> Redirecting...
-            </h3>
+            <h3 class="message success"><%= successMsg %> Redirecting...</h3>
 
             <script>
                 setTimeout(() => {
@@ -131,7 +165,8 @@
             </script>
         <% } %>
 
-    <%- include('common/footer') %>
+    </main>
 
+    <%- include('common/footer') %>
 </body>
 </html>

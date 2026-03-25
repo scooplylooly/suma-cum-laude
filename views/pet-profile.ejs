@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./style/pet-profile.css">
     <title><%=petFound.name%>'s Profile</title>
 </head>
 <body>
@@ -14,7 +15,7 @@
         <%for(key in petFound){%>
         <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
         <% if(key == "img") {%>
-            <img src="/images/<%=petFound[key]%>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= petFound.name%>">
+          <img src="/images/<%=petFound[key]%>.jpg" alt="<%= petFound.name%>">
         <%}else if (key == "name"){%>
             <h2><%= petFound[key] %></h2>
         <%}else if (key == "dob"){%>
@@ -58,7 +59,7 @@
         </form>
     </div>
     <% if (errorMsg){ %>
-        <h3 style="color: red;"><<%=errorMsg%></h3>
+        <h3 style="color: red;"><%=errorMsg%></h3>
     <%}%>
     <% if (successMsg){ %>
         <h3 style="color: green;"><%=successMsg%></h3>
