@@ -11,10 +11,12 @@
             <nav>
                 <a href="/">Home</a>
                 <!--if user session does not exist, nav bar shows this-->
+                 <%if(user.role == 'admin'){%>
+                    <a href="/admin-page">Admin page</a>
+                <%}%>
                 <% if(!user){ %> 
                     <a href="/register">Register</a>
                     <a href="/login">Log in</a>
-                
                 <!--else other functions in nav bar-->
                 <%}else{%>
                     <a href="/adopt">Search Listings</a>
@@ -22,10 +24,8 @@
                     <a href="/view-listings">View Your Listings</a>
                     <a href="/profile">Account</a>
                     <a href="/logout">Log out</a>
-                <% if (user._id.toString() === '69c0095e226ed8af0fa8d239'){ %>
-                    <a href="/admin-page">Admin Page</a>
-                <% } %>
                 <%}%>
+               
             </nav>
         </header>
     </body>

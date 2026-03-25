@@ -39,18 +39,6 @@ exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
     pets.reverse();
-    if (!user) {
-        return res.send(
-            `
-            <h2>Session expired! Redirecting to sign in page...</h2>
-            <script>
-             setTimeout(() => {
-                location.href = "/sign-in"
-                },2000)
-            </script>
-            `,
-        );
-    }
     res.render("pet-search", {
         pets,
         nameSearched: "",
@@ -166,19 +154,6 @@ exports.createPetListing = async (req, res) => {
     let successMsg = "";
 
     let missingFields = [];
-
-    if (!user) {
-        return res.send(
-            `
-            <h2>Session expired! Redirecting to sign in page...</h2>
-            <script>
-             setTimeout(() => {
-                location.href = "/sign-in"
-                },2000)
-            </script>
-            `,
-        );
-    }
     if (!type) missingFields.push("Type");
     if (!breed) missingFields.push("Breed");
     if (!name) missingFields.push("Name");
@@ -246,19 +221,6 @@ exports.createPetListing = async (req, res) => {
 exports.viewListings = async (req, res) => {
     const user = req.session.user;
     console.log("SESSION USER:", user);
-
-    if (!user) {
-        return res.send(
-            `
-            <h2>Session expired! Redirecting to sign in page...</h2>
-            <script>
-             setTimeout(() => {
-                location.href = "/sign-in"
-                },2000)
-            </script>
-            `,
-        );
-    }
 
     const uid = user._id;
     const pets = await listing.getMyPets(uid).lean();
@@ -354,19 +316,6 @@ exports.petUpdated = async (req, res) => {
     let errorMsg = "";
     let successMsg = "";
     let missingFields = [];
-
-    if (!user) {
-        return res.send(
-            `
-            <h2>Session expired! Redirecting to sign in page...</h2>
-            <script>
-             setTimeout(() => {
-                location.href = "/sign-in"
-                },2000)
-            </script>
-            `,
-        );
-    }
 
     if (!type || type === "--Choose a type--") missingFields.push("Type");
     if (!breed) missingFields.push("Breed");
