@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Manage FAQs</title>
+    <link rel="stylesheet" type="text/css" href="/style/faqindex.css">
 </head>
 <body>
-    
+    <%- include("../common/header")  %>
+    <main>
+        <div class="admin-header">
+        <h1>Manage Frequently Asked Questions</h1>
+        <a href="/faq/new" class="btn-add">Add FAQ</a>
+        </div>
+
+        <section class="faq-container">
+            <% faqs.forEach(faq => { %>
+             <article class="faq-card">
+                <h3 class="faq-question"><%= faq.question  %></h3>
+                <p class="faq-answer"><%= faq.answer  %></p>
+                <div class="admin-actions">
+                    <a href="/faq/<%= faq._id %>/edit" class="btn-edit">Edit</a>
+                </div>
+             </article>
+            <% }) %>
+        </section>
+    </main>
 </body>
 </html>

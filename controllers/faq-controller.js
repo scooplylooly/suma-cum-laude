@@ -6,3 +6,9 @@ exports.listFaqs = async (req, res) => {
     console.log(faqs)
     res.render('faq/faqindex', {faqs})
 }
+
+exports.adminFaqs = async (req, res) => {
+    let faqs = await FAQ.getAllFaqs()
+    console.log(faqs)
+    res.render('faq/adminfaqindex', {faqs})
+}
