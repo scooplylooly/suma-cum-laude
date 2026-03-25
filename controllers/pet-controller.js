@@ -53,7 +53,7 @@ exports.searchPet = async (req, res) => {
     let pets = [];
     if (nameSearched != "") {
         for (let pet of allPets) {
-            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())) {
+            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())||pet.type.toLowerCase().includes(nameSearched.toLowerCase())||pet.breed.toLowerCase().includes(nameSearched.toLowerCase())) {
                 pets.push(pet);
             }
         }
