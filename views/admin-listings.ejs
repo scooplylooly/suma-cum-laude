@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Incoming Listings</title>
+    <link rel="stylesheet" href="/style/admin-listings.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="admin-listings-page">
+        <section class="page-hero">
+            <h2>Admin - Pet Listings</h2>
+            <p>Review, filter, and manage all pet listings in one place.</p>
+        </section>
+
+        <div class="top-actions">
+            <a href="/create-listing" class="top-link">
+                <button type="button">Create Listing</button>
+            </a>
+        </div>
+
+        <form action="/admin-listings" method="post" class="filter-form">
+            <label for="status">Pick a Status:</label>
+            <select name="status" id="status">
+                <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
+                <option value="pending" <%= selectedStatus === "pending" ? "selected" : "" %>>Pending</option>
+                <option value="approved" <%= selectedStatus === "approved" ? "selected" : "" %>>Approved</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <% if (pets.length < 1) { %>
+            <h4 class="empty-state">No listings found.</h4>
+        <% } else { %>
+            <h3>
+                <%= selectedStatus === "pending" ? "Pending" : selectedStatus === "approved" ? "Approved" : "All" %> Listings
+            </h3>
+
+            <div class="container-flex">
+                <% for (let listing of pets) { %>
+                    <div class="item">
+                        <img src="/images/<%= listing.img %>.jpg" alt="<%= listing.name %>">
+
+                        <h4><%= listing.name %></h4>
+                        <p><span>Breed:</span> <%= listing.breed[0].toUpperCase() + listing.breed.slice(1) %></p>
+                        <p><span>Date Of Birth:</span> <%= listing.dob %></p>
+
+                        <% if (!listing.approved) { %>
+                            <p class="status pending">Status: Pending</p>
+                        <% } else { %>
+                            <p class="status approved">Status: Approved</p>
+                        <% } %>
+
+                        <div class="card-actions">
+                            <a href="/admin-change-listings-status?pid=<%= listing._id %>">
+                                <button type="button">Update Status</button>
+                            </a>
+                            <a href="/update-pet?pid=<%= listing._id %>">
+                                <button type="button">Update Listing</button>
+                            </a>
+                            <a href="/delete-pet?pid=<%= listing._id %>">
+                                <button type="button">Delete Listing</button>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+
+    <%- include('common/footer') %>
+</body>
+</html>

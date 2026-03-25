@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View your Listings</title>
+    <link rel="stylesheet" type="text/css" href="./style/view-listings.css">
+
+</head>
+<body>
+    <%- include('common/header') %>
+    <a href="/create-listing"><button>Create Listing</button></a>
+    <%if(petFound.length<1){%>
+        <h4>No listing found.</h4>
+    <%}else{%>
+     <h2>Your Listings</h2>
+     <h3>Make changes to your listing here!</h3>
+        <div class="container-flex">
+        <% for(let pet of petFound){%>
+        <div class="item">
+        <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
+        <h4><%=pet.name%></h4>
+        <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+        <h5>Date Of Birth: <%=pet.dob%></h5>
+        <h5>Approved: <%=pet.approved ? 'Yes' : 'No'%></h5>
+        <a href="/edit-listing?pid=<%=pet._id%>"><button>Edit Listing</button></a>
+        <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
+        </div>
+        <%}%>
+        </div>
+      <%}%>
+    <%- include('common/footer') %>
+</body>
+</html>

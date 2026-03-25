@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw <%= pet.name %> listing</title>
+    <link rel="stylesheet" href="/style/admin-update-status.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="status-page">
+        <form action="/delete-pet" method="post" class="status-form">
+
+            <h2>Withdraw Listing</h2>
+            <p class="subtitle">Are you sure you want to withdraw this listing?</p>
+
+            <div class="pet-card">
+                <img src="/images/<%= pet.img %>.jpg" alt="<%= pet.name %>">
+
+                <h3><%= pet.name %></h3>
+
+                <p><span>Breed:</span> <%= pet.breed[0].toUpperCase() + pet.breed.slice(1) %></p>
+                <p><span>Date Of Birth:</span> <%= pet.dob %></p>
+            </div>
+
+            <input type="hidden" name="pid" value="<%= pet._id %>">
+
+            <div class="form-actions">
+                <button type="submit" class="reject-btn">Confirm Withdrawal</button>
+            </div>
+
+        </form>
+
+        <% if (errorMsg) { %>
+            <h3 class="message error"><%= errorMsg %></h3>
+        <% } %>
+
+    </main>
+
+    <%- include('common/footer') %>
+</body>
+</html>

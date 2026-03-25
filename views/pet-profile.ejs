@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./style/pet-profile.css">
     <title><%=petFound.name%>'s Profile</title>
 </head>
 <body>
@@ -12,9 +13,9 @@
     <div>
         
         <%for(key in petFound){%>
-        <% if (key != 'type' && key != 'uid' && key != 'pid' && key != "_id"){%>
+        <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
         <% if(key == "img") {%>
-            <img src="/images/<%=petFound[key] %>.jpg" style="width: 20;height: 20; border-radius: 10%;">
+          <img src="/images/<%=petFound[key]%>.jpg" alt="<%= petFound.name%>">
         <%}else if (key == "name"){%>
             <h2><%= petFound[key] %></h2>
         <%}else if (key == "dob"){%>
@@ -32,7 +33,11 @@
                 <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
             <%}%>
         <%}else if (key == 'personality' ){%>
+            <%if (key == []){%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
+            <%}else{%>
             <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
+            <%}%>
         <% }else{ %>
             <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= petFound[key] ? petFound[key][0].toUpperCase() + petFound[key].slice(1): 'N/A' %></h4>
         <%}%>
@@ -47,13 +52,14 @@
         <form action="/apply-for-pet" method="post">
             <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.name %>!</p>
             <input type="hidden" name="petName" value="<%=petFound.name%>">
-            <input type="hidden" name="uid" value="<%=uid%>">
+            <input type="hidden" name="uid" value="<%=user._id%>">
+            <input type="hidden" name="pid" value="<%=petFound._id%>">
             <textarea name="applyReason" cols="50" rows="5"></textarea> <br><br>
             <button type="submit">Submit</button>
         </form>
     </div>
     <% if (errorMsg){ %>
-        <h3 style="color: red;"><<%=errorMsg%></h3>
+        <h3 style="color: red;"><%=errorMsg%></h3>
     <%}%>
     <% if (successMsg){ %>
         <h3 style="color: green;"><%=successMsg%></h3>

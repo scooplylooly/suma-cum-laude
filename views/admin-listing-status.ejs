@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Listing Status</title>
+    <link rel="stylesheet" href="/style/admin-update-status.css" />
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="status-page">
+        <form action="/admin-change-listings-status" method="post" class="status-form">
+            <h2>Update Listing Status</h2>
+
+            <div class="pet-card">
+                <% for (key in petFound) { %>
+                    <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key !== '__v' && key != 'approved') { %>
+
+                        <% if (key == "img") { %>
+                            <img src="/images/<%= petFound[key] %>.jpg" alt="<%= petFound.name %>">
+                        <% } else if (key == "name") { %>
+                            <h3><%= petFound[key] %></h3>
+                        <% } else if (key == "dob") { %>
+                            <p><span>Date of Birth:</span> <%= petFound[key] %></p>
+                        <% } else if (petFound[key] == true) { %>
+                            <% if (key == 'hdbApproved') { %>
+                                <p><span>HDB Approved:</span> Yes</p>
+                            <% } else { %>
+                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> Yes</p>
+                            <% } %>
+                        <% } else if (petFound[key] == false) { %>
+                            <% if (key == 'hdbApproved') { %>
+                                <p><span>HDB Approved:</span> No</p>
+                            <% } else { %>
+                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> No</p>
+                            <% } %>
+                        <% } else if (key == 'personality') { %>
+                            <% if (petFound[key].length === 0) { %>
+                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> N/A</p>
+                            <% } else { %>
+                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> <%= petFound[key].join(', ') %></p>
+                            <% } %>
+                        <% } else { %>
+                            <p>
+                                <span><%= key[0].toUpperCase() + key.slice(1) %>:</span>
+                                <%= petFound[key] ? petFound[key][0].toUpperCase() + petFound[key].slice(1) : 'N/A' %>
+                            </p>
+                        <% } %>
+
+                    <% } %>
+                <% } %>
+
+                <% if (petFound.approved) { %>
+                    <p class="current-status approved">Current Status: Approved</p>
+                <% } else { %>
+                    <p class="current-status pending">Current Status: Pending</p>
+                <% } %>
+            </div>
+
+            <input type="hidden" name="pid" value="<%= petFound._id %>" />
+
+            <div class="form-actions">
+                <button type="submit" name="action" value="approve" class="approve-btn">Approve</button>
+                <button type="submit" name="action" value="reject" class="reject-btn">Reject</button>
+            </div>
+        </form>
+    </main>
+
+    <%- include('common/footer') %>
+</body>
+</html>

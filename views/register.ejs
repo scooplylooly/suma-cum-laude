@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="./style/register.css">
+</head>
+<body>
+
+    <header>
+         <h1>Placeholder Title</h1>
+        <nav>
+            <a href="/index.html">Home</a>
+        </nav>
+    </header>
+
+    <main class="register-page">
+        <div id="form" class="register-card">
+            <h2>User Registration</h2>
+            <p class="subtitle">Please create an account to use our services.</p>
+            <form action="/register" method="post" class="register-form">
+                User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
+                Email: <input type="email" name="email" value="<%= email %>"> <br><br>
+                DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
+                Password: <input type="password" name="password" value="<%= password %>" > <br><br>
+                Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
+                <%if(user.role == 'admin'){%>
+                    role:<br>
+                    <select name="role" required>
+                        <option hidden>--select a role--</option>
+                        <option value="user">User</option>
+                        <option value="lister">Lister</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                <%}%><br><br>
+                <button type="submit">Register</button> <br><br>
+            </form>
+            <p>Already have an account? <a href="/login">Login</a></p>
+
+            <% if (errors.length > 0){ %>
+                <ul class="error-list">
+                    <% errors.forEach(error => { %>
+                    <li><%- error %></li>
+                <% }); %>
+                </ul>
+        <% } %>
+            <% if(success){ %>
+                <p class="success-message">
+                    Thank you for your registration. <br>
+                    Please login before exploring your companion options. <br>
+                    Redirecting to login page...
+                </p>
+
+                <script>
+                    setTimeout(()=> {
+                        window.location.href = "/login";
+                    }, 1000)
+                </script>
+                
+            <% } %>
+            
+        </div>
+    </main>
+    <%- include('common/footer') %>
+</body>
+</html>

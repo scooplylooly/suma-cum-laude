@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%=pet.name%> details </title>
+</head>
+<body>
+    <%- include('common/header') %>
+    <a href="/view-listings"><button>Back</button></a>
+    <h2>Current details for <%=pet.name%>:</h2>
+    <%for(key in pet){%>
+    <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'){%>
+    <% if(key == "img") {%>
+    <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.name%>">
+    <%}else if (key == "name"){%>
+        <h2><%= pet[key] %></h2>
+    <%}else if (key == "dob"){%>
+        <h4>Date of  Birth: <%= pet[key] %></h4>
+    <%}else if (pet[key] == true ){%>
+        <%if (key == 'hdbApproved' ){%>
+            <h4>HDB Aproved : Yes</h4>
+        <%} else{%>
+        <h4><%=key[0].toUpperCase() + key.slice(1)%> : Yes</h4>
+        <% } %>
+    <%}else if (pet[key] == false ){%>
+        <%if (key == 'hdbApproved' ){%>
+            <h4>HDB Aproved : No</h4>
+        <% }else{ %>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
+        <%}%>
+    <%}else if (key == 'personality' ){%>
+         <%if (key == []){%>
+        <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
+        <%}else{%>
+        <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=pet[key].join(', ')%></h4>
+        <%}%>
+    <% }else{ %>
+        <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= pet[key] ? pet[key][0].toUpperCase() + pet[key].slice(1): 'N/A' %></h4>
+    <%}%>
+    <%}%>
+    <% }%>
+    <br>
+    <h2>What do you want to do?</h2>
+    <a href="/update-pet?pid=<%=pet._id%>"><button>Edit Listing </button><br></a>
+    <a href="/delete-pet?pid=<%=pet._id%>"><button>Withdraw Listing</button>  <br><br></a>
+    <%- include('common/footer') %>
+
+</body>
+</html>

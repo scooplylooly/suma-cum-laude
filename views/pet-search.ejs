@@ -3,41 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./style/search-pet.css">
     <title>Adopt Now</title>
 
 </head>
 <body>
     <%- include('common/header') %>
     <h3>Welcome <%=user.userName%>!</h3>
-    <!-- to include search bar, create listing, approve/view applications, check application status -->
-     <a href="/apply-lister"><button>Apply Lister</button></a>
-    <a href="/create-listing"><button>Create Listing</button></a>
-    <a href=""><button>Approve application</button></a>
-    <a href=""><button>Application Status</button></a>
-    <a href="/view-listings">View Listings</a>
-
     <!-- Searchbar code (Finds names of pets according to what was searched)-->
     <form action="/search" method="get">
+        <p>Start searching for your dream pet!</p>
         <input type="text" name="nameSearched" id="nameSearch" style="width:90%" placeholder="Search..." value="<%=nameSearched%>">
         <button type="submit">Search</button>
     </form>
     <!--Search Logic-->
    
-    <section>
-    <br>
-    </section>
     <!-- pets lisings-->
     <section>
+    <%if(pets.length > 0){%>
     <h2>Adoption Listings</h2>
-        <% for(let pet of pets){%>
-        <form action="/pet-profile" method="post">
-            <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
+    <div class="container-flex">
+    <% for(let pet of pets){%>
+        <%if (pet.approved){%>
+        <div class="item"> 
+        <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.name%></h4>
             <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
             <h5>Date Of Birth: <%=pet.dob%></h5>
-            <button type="submit" name="petName" value="<%=pet.name%>">Adopt Now</button>
-        </form><br>     
-      <%}%>
+            <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
+        </div>
+        <%}%>
+        <%}%>
+    <%} else { %>
+        <p>No pets found matching your search criteria.</p>
+    <% } %>
+    </div>
     </section>
     <%- include('common/footer') %>
    

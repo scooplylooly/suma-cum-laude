@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-const { devNull } = require("os");
+const { devNull, type } = require("os");
+const path = require("path");
 const fs = require("fs").promises;
-const applyFilePath = "data/apply-for-pet-data.json";
-const petFilePath = "data/pets-data.json";
+// const applyFilePath = "data/apply-for-pet-data.json";
+// const petFilePath = "data/pets-data.json";
 
 // pet-data schema
 const petSchema = new mongoose.Schema(
@@ -10,7 +11,15 @@ const petSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true,
-            enum: ["dog", "cat", "rabbit", "other"],
+            enum: [
+                "dog",
+                "cat",
+                "rabbit",
+                "hamster",
+                "bird",
+                "guinea pig",
+                "other",
+            ],
         },
 
         img: {
@@ -72,6 +81,10 @@ const petSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        approved: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
@@ -86,12 +99,18 @@ const applicationSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        userName: {
+            type: String,
+            ref: "users",
+            default: null
+        },
         applicationNumber: {
             type: String,
             default: () => "APP-" + Date.now(),
         },
         pid: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Pets",
             default: null,
         },
         petName: {
@@ -102,6 +121,11 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        status: {
+            type: String,
+            enum: ['pending','approved','denied'],
+            default: 'pending'
+        }
     },
     {
         timestamps: true,
@@ -114,17 +138,21 @@ const applicationSchema = new mongoose.Schema(
 const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 // Pet Methods
-
+// get pets by user id
 exports.getMyPets = function (uid) {
     return Pet.find({ uid }).lean();
 };
-
+// get all pets
 exports.getAllPets = function () {
     return Pet.find().lean();
 };
-
+// finding pet by name
 exports.findPet = function (petName) {
     return Pet.findOne({ name: petName }).lean();
+};
+// finding pet by ID
+exports.findPetById = function (pid) {
+    return Pet.findOne({ _id: pid }).lean();
 };
 
 // exports.writeApplyInfo = function (application) {
@@ -187,10 +215,68 @@ exports.createPetData = function (pet) {
         Pet.create(pet);
         console.log("Listing saved successfully");
     } catch (err) {
-        console.error("Error writing to pet-data.json:", err);
+        console.error("Error writing to db:", err);
     }
 };
 
+exports.deleteImage = async function (img) {
+    try {
+        const imagePath = path.join(
+            __dirname,
+            "..",
+            "public",
+            "images",
+            img + ".jpg",
+        );
+        await fs.unlink(imagePath);
+        console.log("Image deleted successfully");
+    } catch (err) {
+        console.error("Error deleting image:", err);
+    }
+};
+exports.deletePetData = async function (pid, img) {
+    try {
+        const result = await Pet.deleteOne({
+            _id: new mongoose.Types.ObjectId(pid),
+        });
+        await this.deleteImage(img);
+        console.log("Delete result:", result);
+
+        return result;
+    } catch (err) {
+        console.error("Error deleting from db:", err);
+    }
+};
+
+exports.updatePetData = async function (pid, pet) {
+    try {
+        const result = await Pet.updateOne(
+            {
+                _id: new mongoose.Types.ObjectId(pid),
+            },
+            { $set: pet },
+        );
+
+        console.log("Update result:", result);
+
+        return result;
+    } catch (err) {
+        console.error("Error updating in db:", err);
+    }
+};
+exports.updatePetApproval = async function (pid, approved) {
+    try {
+        const result = await Pet.updateOne(
+            {
+                _id: new mongoose.Types.ObjectId(pid),
+            },
+            { $set: { approved: approved } },
+        );
+        return result;
+    } catch (err) {
+        console.error("Error updating approval in db:", err);
+    }
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Application Schema definition
@@ -207,4 +293,27 @@ exports.checkExistingApplications = function () {
 
 exports.createNewApplication = async function (application) {
     return Application.create(application);
+};
+
+exports.findApplicationByPet = async function (petID) {
+    return Application.find({pid: new mongoose.Types.ObjectId(petID)}).lean()
+}
+exports.findApplicationByID = async function (ID) {
+    return Application.findOne({_id:ID})
+};
+exports.updateApplicationbyID = async function (ID,value) {
+    try{
+        await Application.updateOne({_id: ID}, {$set: {status: value}})
+        return 'Success!'
+    }catch(error){
+        return error
+    }
+};
+exports.updatePetStatusbyID = async function (pid,value) {
+    try{
+        await Pet.updateOne({_id:pid}, {$set: {approved: value}})
+        return "Pet Adopted"
+    }catch(error){
+        return error
+    }
 };

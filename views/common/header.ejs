@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="./style/index.css" />
+    </head>
+    <body>
+        <header>
+            <h1>web name</h1>
+            <nav>
+                <a href="/adopt">Home</a>
+                <!--if user session does not exist, nav bar shows this-->
+                <% if(!user){ %> 
+                    <a href="/register">Register</a>
+                    <a href="/login">Log in</a>
+                <!--else other functions in nav bar-->
+                <%}else{%>
+                    <a href="">Application Status</a>
+                    <a href="/view-listings">View Your Listings</a>
+                    <a href="/profile">Profile</a>
+                    <a href="/">Faq</a>
+                    <a href="/logout">Log out</a>
+                <%}%>
+                <%if(user.role == 'admin'){%>
+                    <a href="/admin-page">Admin page</a>
+                <%}%>
+            </nav>
+        </header>
+    </body>
 </html>

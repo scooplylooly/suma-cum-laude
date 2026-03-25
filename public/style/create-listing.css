@@ -1,0 +1,160 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    
+}
+
+.create-listing-page {
+    max-width: 900px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+}
+
+.page-hero {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.page-hero h2 {
+    margin: 0 0 10px;
+    color: #c97d4e;
+    font-size: 36px;
+}
+
+.page-hero p {
+    margin: 0;
+    color: #6a4b37;
+    font-size: 17px;
+    text-align: center;
+}
+
+.listing-form {
+    background-color: #fdfaf6;
+    border: 1px solid #ead8c8;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #7a4c2f;
+    font-size: 16px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #d8bca5;
+    border-radius: 10px;
+    background-color: white;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #c97d4e;
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal;
+    color: #444;
+}
+
+.choice input {
+    margin: 0;
+}
+
+.form-actions {
+    margin-top: 24px;
+    text-align: center;
+}
+
+button {
+    font-family: inherit;
+    font-size: 15px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid #caa98e;
+    background-color: #f4e4d4;
+    color: #5c4332;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ecd6c3;
+}
+
+.message {
+    max-width: 900px;
+    margin: 18px auto 0;
+    padding: 14px 16px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.message.error {
+    background-color: #fde7e5;
+    color: #b54a3f;
+}
+
+.message.success {
+    background-color: #e4f5e7;
+    color: #3f8a4e;
+}
+
+@media (max-width: 700px) {
+    .create-listing-page {
+        margin-top: 25px;
+        padding: 0 14px;
+    }
+
+    .page-hero h2 {
+        font-size: 30px;
+    }
+
+    .listing-form {
+        padding: 20px 16px;
+    }
+
+    .radio-group,
+    .checkbox-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

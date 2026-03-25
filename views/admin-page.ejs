@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Page</title>
+        <link rel="stylesheet" type="text/css" href="./style/admin-page.css" />
+    </head>
+    <body>
+        <%- include('common/header') %>
+
+        <main class="admin-page">
+            <section class="admin-hero">
+                <h2>Admin Page</h2>
+                <p>
+                    Welcome to the admin page. Here you can manage users,
+                    listings, FAQs and applications.
+                </p>
+            </section>
+
+            <!-- Admin functionalities can be added here -->
+            <section class="admin-grid">
+                <div class="admin-card">
+                    <a href="/admin-listings">
+                        <button>Manage Listings</button>
+                    </a>
+                    <p>
+                        Review, approve, reject, edit, or delete pet listings.
+                    </p>
+                </div>
+                <!-- listings are those that are pending approval/approved from admin, 
+            and will be displayed in the order they were created (oldest to newest) 
+            for admin to review and approve/reject listings. can edit and delete them too-->
+
+                <div class="admin-card">
+                    <a href="/admin-users">
+                        <button>Manage Users</button>
+                    </a>
+                    <p>
+                        View user information and update or remove accounts if
+                        needed.
+                    </p>
+                </div>
+                <!-- will see all users info in the db and can edit/delete users if needed -->
+
+                <div class="admin-card">
+                    <a href="/">
+                        <button>Manage Listers</button>
+                    </a>
+                    <p>
+                        Approve or reject users who applied to become listers.
+                    </p>
+                </div>
+                <!-- will see all listers that have applied to be listers and can approve/reject them -->
+
+                <div class="admin-card">
+                    <a href="/">
+                        <button>Manage Pet Applications</button>
+                    </a>
+                    <p>
+                        Handle submitted pet adoption applications and review
+                        their details.
+                    </p>
+                </div>
+                <!-- will see all applications for pets that have been submitted by users and can approve/reject them. can edit and delete them too-->
+
+                <div class="admin-card">
+                    <a href="/">
+                        <button>Manage FAQ</button>
+                    </a>
+                    <p>
+                        Review get questions from users, approve and answer them
+                        and it will be posted in FAQs
+                    </p>
+                </div>
+                <!-- will see all meet-ups that have been scheduled by users and can approve/reject them. can edit and delete them too-->
+            </section>
+        </main>
+
+        <%- include('common/footer') %>
+    </body>
+</html>
