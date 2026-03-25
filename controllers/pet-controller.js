@@ -1,124 +1,116 @@
+const { configDotenv } = require("dotenv");
 const listing = require("../models/pet-model");
-const petPersonalities = [
-    "Affectionate",
-    "Independent",
-    "Playful",
-    "Curious",
-    "Gentle",
-    "Vocal",
-    "Shy",
-    "Bold",
-    "Couch Potato",
-    "Hunter",
-    "Social",
-    "Energetic",
-    "Loyal",
-    "Friendly",
-    "Protective",
-    "Calm",
-    "Smart",
-    "Goofy",
-    "Cuddly",
-    "Adventurous",
-    "Sweet",
-    "Relaxed",
-    "Outgoing",
-    "Loving",
-    "Resilient",
-    "Chatty",
-    "Foodie",
-    "Active",
-];
+const path = require("path");
 
+// ... rest of your code
+const petPersonalities = [
+    "affectionate",
+    "independent",
+    "playful",
+    "curious",
+    "gentle",
+    "vocal",
+    "shy",
+    "bold",
+    "couch potato",
+    "hunter",
+    "social",
+    "energetic",
+    "loyal",
+    "friendly",
+    "protective",
+    "calm",
+    "smart",
+    "goofy",
+    "cuddly",
+    "adventurous",
+    "sweet",
+    "relaxed",
+    "outgoing",
+    "loving",
+    "resilient",
+    "chatty",
+    "foodie",
+    "active",
+];
+petPersonalities.sort();
 // Query database to get all pets
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
-    console.log(pets);
+    const user = req.session.user;
     pets.reverse();
     res.render("pet-search", {
         pets,
-        nameSearched:''
+        nameSearched: "",
+        user,
     });
 };
 
-exports.searchPet = async (req,res) => {
+exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
     allPets.reverse();
     let pets = [];
-    if (nameSearched!=''){
+    if (nameSearched != "") {
         for (let pet of allPets) {
-            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())){
-                pets.push(pet)
+            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())) {
+                pets.push(pet);
             }
         }
-    }else{
-        pets = allPets
+    } else {
+        pets = allPets;
     }
-    res.render("pet-search",{
+    res.render("pet-search", {
         nameSearched,
-        pets
+        pets,
     });
-}
+};
 
 exports.showPetListingForm = async (req, res) => {
+    const user = req.session.user;
     res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
-        })
-    }
+        user,
+    });
+};
 
 exports.showPetProfile = async (req, res) => {
-    let petName = req.body.petName;
-    if (!petName) {
+    const user = req.session.user;
+    let pid = req.query.pid;
+    if (!pid) {
         res.redirect("/adopt");
         return;
     } else {
-        let result = await listing.findPet(petName);
+        let result = await listing.findPetById(pid);
         console.log(result);
         res.render("pet-profile", {
-
             petFound: result,
             errorMsg: "",
             successMsg: "",
+            user,
         });
     }
 };
-// applyInterest Mongodb integration
-// exports.applyInterest = async (req, res) => {
-//     let errorMsg = "";
-//     let successMsg = "";
-//     let petFound = null;
-
-//     let petName = req.body.petName
-//     let pet = await listing.findPet(petName)
-
-// }
 
 exports.applyInterest = async (req, res) => {
     let errorMsg = "";
     let successMsg = "";
-    let petFound = null;
+    // let petFound = null;
 
     let petName = req.body.petName;
-    let pets = await listing.getAllPets();
-    for (let pet of pets) {
-        if (pet.name == petName) {
-            petFound = pet;
-            break;
-        }
-    };
-    
+    let pet = await listing.findPet(petName).lean();
+
     let application = {
-        uid: null,
+        uid: req.session.user?._id ?? null,
         pid: null,
         petName: petName,
         reason: req.body.applyReason,
     };
 
     try {
-        console.log(application)
         await listing.createNewApplication(application);
+        console.log(application);
         successMsg += "Application successful!";
     } catch (error) {
         errorMsg += "Application failed.";
@@ -126,7 +118,7 @@ exports.applyInterest = async (req, res) => {
     }
 
     res.render("pet-profile", {
-        petFound: petFound,
+        petFound: pet,
         errorMsg: errorMsg,
         successMsg: successMsg,
     });
@@ -142,6 +134,7 @@ exports.showPetListingForm = async (req, res) => {
 };
 
 exports.createPetListing = async (req, res) => {
+    const user = req.session.user;
     let type = req.body.type;
     let breed = req.body.breed;
     const imageFilename = req.file
@@ -161,7 +154,6 @@ exports.createPetListing = async (req, res) => {
     let successMsg = "";
 
     let missingFields = [];
-
     if (!type) missingFields.push("Type");
     if (!breed) missingFields.push("Breed");
     if (!name) missingFields.push("Name");
@@ -199,8 +191,8 @@ exports.createPetListing = async (req, res) => {
         vaccinated: vaccinated === "true" ? true : false,
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
-        pid: null,
-        uid: null,
+        uid: user ? user._id : null,
+        approved: false, // New listings start as unapproved
     };
 
     try {
@@ -223,6 +215,244 @@ exports.createPetListing = async (req, res) => {
             successMsg: "",
             petPersonalities,
             formData: req.body, // Send back data to repopulate form
+        });
+    }
+};
+exports.viewListings = async (req, res) => {
+    const user = req.session.user;
+    console.log("SESSION USER:", user);
+
+    const uid = user._id;
+    const pets = await listing.getMyPets(uid).lean();
+    let petFound = [];
+    for (pet of pets) {
+        if (pet.uid == uid) {
+            petFound.push(pet);
+        }
+    }
+
+    res.render("view-user-listings", {
+        pets,
+        user,
+        petFound,
+    });
+};
+exports.showPetlistingProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPetById(pid).lean();
+    console.log(pid);
+
+    res.render("edit-pet-listing", {
+        pet,
+        successMsg: "",
+        errorMsg: "",
+    });
+};
+
+exports.changePetlistingProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPetById(pid);
+    res.render("edit-pet-listing", {
+        pet,
+    });
+};
+
+exports.updatePetProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPetById(pid);
+    res.render("update-pet-details", {
+        pet,
+        petPersonalities,
+        errorMsg: "",
+        successMsg: "",
+        formData: req.query, // Send back data to repopulate form
+    });
+};
+
+exports.petUpdated = async (req, res) => {
+    const user = req.session.user;
+    const pid = req.body.pid;
+    console.log("PID RECEIVED:", pid);
+
+    // Validate pid exists
+    if (!pid) {
+        return res.status(400).send("Pet ID is missing");
+    }
+
+    let pet = await listing.findPetById(pid);
+
+    // Check if pet exists
+    if (!pet) {
+        return res.status(404).send("Pet not found");
+    }
+
+    let type = req.body.type;
+    let breed = req.body.breed;
+
+    // Store old image name before creating newPet object
+    const oldImageName = pet.img;
+
+    // Handle image filename - multer saves as "pet-1234567890.jpg"
+    let imageFilename = oldImageName;
+    if (req.file) {
+        // Remove .jpg extension to store just the base name
+        imageFilename = req.file.filename.replace(".jpg", "");
+        console.log("New image uploaded:", req.file.filename);
+        console.log("Stored as:", imageFilename);
+    }
+
+    console.log("Old image:", oldImageName);
+    console.log("New image filename:", imageFilename);
+
+    let name = req.body.name;
+    let gender = req.body.gender;
+    let desc = req.body.desc;
+    let dob = req.body.dob;
+    let hdbApproved = req.body.hdbApproved;
+    let vaccinated = req.body.vaccinated;
+    let sterilized = req.body.sterilized;
+    let personality = req.body.personality;
+
+    let errorMsg = "";
+    let successMsg = "";
+    let missingFields = [];
+
+    if (!type || type === "--Choose a type--") missingFields.push("Type");
+    if (!breed) missingFields.push("Breed");
+    if (!name) missingFields.push("Name");
+    if (!gender) missingFields.push("Gender");
+    if (!desc) missingFields.push("Description");
+    if (!dob) missingFields.push("Date of Birth");
+
+    if (missingFields.length > 0) {
+        errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
+        return res.render("pet-create-listing", {
+            errorMsg: errorMsg,
+            successMsg: "",
+            pet: pet,
+            petPersonalities: petPersonalities,
+            formData: req.body,
+        });
+    }
+
+    // Handle personality array
+    if (!personality) {
+        personality = [];
+    } else if (!Array.isArray(personality)) {
+        personality = [personality];
+    }
+
+    // Create updated pet object
+    let newPet = {
+        type: type,
+        img: imageFilename,
+        name: name,
+        breed: breed,
+        gender: gender,
+        description: desc,
+        hdbApproved: hdbApproved === "true" ? true : false,
+        dob: dob,
+        vaccinated: vaccinated === "true" ? true : false,
+        sterilized: sterilized === "true" ? true : false,
+        personality: personality,
+        uid: pet.uid || null,
+        approved: false, // Reset approval status on update
+    };
+
+    console.log("Updating pet with data:", newPet);
+
+    try {
+        // Update pet data in database
+        const updateResult = await listing.updatePetData(pid, newPet);
+        console.log("Update result:", updateResult);
+
+        if (updateResult.modifiedCount === 0) {
+            console.log("No changes were made to the pet listing");
+        }
+
+        successMsg = "Listing updated successfully!";
+
+        // Only delete old image if a new image was uploaded and old image exists
+        if (req.file && oldImageName && oldImageName !== "default-pet") {
+            try {
+                await listing.deleteImage(oldImageName);
+                console.log("Old image deleted successfully:", oldImageName);
+            } catch (deleteError) {
+                console.error(
+                    "Error deleting old image (non-critical):",
+                    deleteError,
+                );
+            }
+        } else {
+            console.log("Keeping old image (no new upload)");
+        }
+
+        // Fetch the updated pet data to display
+        const updatedPet = await listing.findPetById(pid);
+
+        return res.render("pet-create-listing", {
+            errorMsg: "",
+            successMsg: successMsg,
+            pet: updatedPet,
+            petPersonalities: petPersonalities,
+            formData: null,
+        });
+    } catch (error) {
+        errorMsg = "Error updating pet listing! Please try again.";
+        console.error("Error updating pet listing:", error);
+        console.error("Error stack:", error.stack);
+
+        // If there was an error and a new file was uploaded, clean it up
+        if (req.file) {
+            try {
+                const fs = require("fs");
+                const filePath = "public/images/" + req.file.filename;
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                    console.log("Cleaned up uploaded file after error");
+                }
+            } catch (cleanupError) {
+                console.error("Error cleaning up file:", cleanupError);
+            }
+        }
+
+        return res.render("pet-create-listing", {
+            errorMsg: errorMsg,
+            successMsg: "",
+            petPersonalities: petPersonalities,
+            pet: pet,
+            formData: req.body,
+        });
+    }
+};
+exports.deletePetProfile = async (req, res) => {
+    const pid = req.query.pid;
+    let pet = await listing.findPetById(pid);
+    res.render("delete-pet-profile", { pet, errorMsg: "" });
+};
+exports.petDeleted = async (req, res) => {
+    const pid = req.body.pid;
+    let pet = await listing.findPetById(pid);
+    console.log("pet", pet);
+    console.log("PID RECEIVED:", pid);
+    let fail = "";
+    try {
+        await listing.deletePetData(pid, pet.img);
+
+        console.log("deleted");
+        return res.send(`
+            <h3 style="color: green;"> Pet has been withdrawn from listing! Redirecting...</h3>
+            <script>
+                setTimeout(() => {
+                    location.href = "/view-listings"
+                    },3000)
+            </script>`);
+    } catch (err) {
+        console.error("Trouble deleting pet", err);
+        fail = "Error deleting pet";
+        res.render("delete-pet-profile", {
+            pet,
+            errorMsg: fail,
         });
     }
 };

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update <%= pet.name %> details</title>
+</head>
+
+<body>
+
+    <%- include('common/header') %>
+        <h2>Update Pet Listing</h2>
+        <p><i>Edit your pet’s details below.</i></p>
+
+        <form action="/update-pet" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="pid" value="<%= pet._id %>">
+            <!-- TYPE -->
+            <label>Type of Pet:</label>
+            <select name="type">
+                <option hidden>--Choose a type--</option>
+                <option value="dog" <%= pet.type == 'dog' ? 'selected' : '' %>>Dog</option>
+                <option value="cat" <%= pet.type == 'cat' ? 'selected' : '' %>>Cat</option>
+                <option value="guinea pig" <%= pet.type == 'guinea pig' ? 'selected' : '' %>>Guinea Pig</option>
+                <option value="bird" <%= pet.type == 'bird' ? 'selected' : '' %>>Bird</option>
+                <option value="rabbit" <%= pet.type == 'rabbit' ? 'selected' : '' %>>Rabbit</option>
+                <option value="hamster" <%= pet.type == 'hamster' ? 'selected' : '' %>>Hamster</option>
+                <option value="other" <%= pet.type == 'other' ? 'selected' : '' %>>Other</option>
+            </select>
+            <br><br>
+
+            <!-- IMAGE -->
+            <label>Select image to upload:</label>
+            <input type="file" name="image" accept="image/*">
+            <br><br>
+
+            <!-- NAME -->
+            <label>Name:</label>
+            <input type="text" name="name" value="<%= pet.name %>">
+            <br><br>
+
+            <!-- BREED -->
+            <label>Breed:</label>
+            <input type="text" name="breed" value="<%= pet.breed %>">
+            <br><br>
+
+            <!-- GENDER -->
+            <label>Gender:</label>
+            <input type="radio" name="gender" value="male"
+                <%= pet.gender == 'male' ? 'checked' : '' %>> Male
+
+            <input type="radio" name="gender" value="female"
+                <%= pet.gender == 'female' ? 'checked' : '' %>> Female
+            <br><br>
+
+            <!-- PERSONALITY -->
+            <label>Their personality:</label><br>
+
+            <% let count = 0; %>
+            <% for (let per of petPersonalities) { %>
+
+                <% if (count === 5) { %>
+                    <br>
+                    <% count = 0; %>
+                <% } %>
+
+                <input type="checkbox" name="personality" value="<%= per %>"
+                <%= pet.personality.includes(per.toLowerCase()) ? 'checked' : '' %>>
+                <%=per[0].toUpperCase() + per.slice(1)%>
+
+                <% count++; %>
+            <% } %>
+
+            <br><br>
+
+            <!-- DESCRIPTION -->
+            <label>Description:</label><br>
+            <textarea name="desc" rows="5" cols="30"><%= pet.description %></textarea>
+            <br><br>
+
+            <!-- DOB -->
+            <label>Date of Birth:</label>
+            <input type="date" name="dob" value="<%= pet.dob %>">
+            <br><br>
+
+            <!-- HDB -->
+            <label>HDB Approved?</label>
+            <input type="radio" name="hdbApproved" value="true"
+                <%= pet.hdbApproved ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="hdbApproved" value="false"
+                <%= !pet.hdbApproved ? 'checked' : '' %>> No
+            <br><br>
+
+            <!-- VACCINATED -->
+            <label>Vaccinated?</label>
+            <input type="radio" name="vaccinated" value="true"
+                <%= pet.vaccinated ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="vaccinated" value="false"
+                <%= !pet.vaccinated ? 'checked' : '' %>> No
+            <br><br>
+
+            <!-- STERILIZED -->
+            <label>Sterilized?</label>
+            <input type="radio" name="sterilized" value="true"
+                <%= pet.sterilized ? 'checked' : '' %>> Yes
+
+            <input type="radio" name="sterilized" value="false"
+                <%= !pet.sterilized ? 'checked' : '' %>> No
+            <br><br>
+
+            <button type="submit">Update</button>
+
+        </form>
+
+        <!-- ERROR -->
+        <% if (errorMsg) { %>
+            <h3 style="color: red;"><%= errorMsg %></h3>
+        <% } %>
+
+        <!-- SUCCESS -->
+        <% if (successMsg) { %>
+            <h3 style="color: green;">
+                <%= successMsg %> Redirecting...
+            </h3>
+
+            <script>
+                setTimeout(() => {
+                    window.location.href = "/view-listings";
+                }, 3000);
+            </script>
+        <% } %>
+
+    <%- include('common/footer') %>
+
+</body>
+</html>

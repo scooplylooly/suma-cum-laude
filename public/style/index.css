@@ -1,0 +1,118 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #c97d4e;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    color: white;
+    margin: 0;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+#auth a {
+    color: #333;
+}
+
+#auth a:hover {
+    color: #c97d4e;
+}
+
+image {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+#images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#images img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+main {
+    padding: 60px 40px;
+}
+
+main h2 {
+    font-size: 36px;
+    color: #c97d4e;
+    text-align: center;
+}
+
+main h3 {
+    text-align: center;
+}
+
+main p {
+    font-size: 18px;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+    text-align: justify;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+footer {
+    text-align: left;
+    padding: 20px;
+    background-color: #f0e0d0;
+    color: #888;
+    font-size: 14px;
+}
+.item {
+    margin: 10px;
+    background-color: #f0e0d0;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+.container-flex {
+    display: grid;
+    /* Creates 3 columns of equal width (1 fraction of available space) */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; /* Adds space between boxes */
+}

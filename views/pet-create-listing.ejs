@@ -15,12 +15,14 @@
         
         <label for="type_input">Type of Pet: </label>
         <select id="type_input" name="type" >
+            <option hidden>--Chose a type--</option>
             <option value="dog">Dog</option>
             <option value="cat">Cat</option>
             <option value="guinea pig">Guinea pig</option>
             <option value="bird">Bird</option>
             <option value="rabbit">Rabbit</option>
             <option value="hamster">Hamster</option>
+            <option value="other">Other</option>
         </select><br><br>
         <label for="imgToUpload">Select image to upload: </label><input type="file" id="imgToUpload" name="image" accept="image/*"><br><br>
         <label for="name_input">Name: </label><input type="text" id="name_input" name="name"><br><br>
@@ -33,7 +35,7 @@
                 <br>
                 <% count = 0 %>
             <% } %>
-            <input type="checkbox" name="personality" value="<%=per%>"><%=per%>
+            <input type="checkbox" name="personality" value="<%=per%>"><%=per[0].toUpperCase() + per.slice(1)%>
             <%count += 1%>
         <%}%><br><br>
         <label for="desc_input">Description: </label><br><br><textarea cols="30" rows="5" name="desc" id="desc_input"></textarea><br><br>
@@ -50,11 +52,10 @@
         <h3 style="color: green;"><%=successMsg%> Redirecting to listings...</h3>
         <script>
             setTimeout(() => {
-                location.href = "/adopt"
+                location.href = "/view-listings";
                 },3000)
         </script>
     <%}%>
     <%- include('common/footer') %>
-
 </body>
 </html>

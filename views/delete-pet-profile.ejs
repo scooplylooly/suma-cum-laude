@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw <%=pet.name%> listing</title>
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <h2>Are you sure you want to withdraw this listing?</h2>
+    <form action="/delete-pet" method="post">
+        <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
+        <h4><%=pet.name%></h4>
+        <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+        <h5>Date Of Birth: <%=pet.dob%></h5>
+        <input type="hidden" name="pid" value="<%=pet._id%>">
+        <button type="submit">Confirm</button>
+    </form>
+    <% if (errorMsg){ %>
+        <h3 style="color: red;"><%=errorMsg%></h3>
+    <%}%>
+    <%- include('common/footer') %>
+
+</body>
+</html>

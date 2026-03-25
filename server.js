@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const server = express();
+const session = require("express-session");
 
 server.use(express.urlencoded({ extended: true }));
 
@@ -14,8 +15,25 @@ server.set("view engine", "ejs");
 
 dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
+const accountRoutes = require("./routes/account-routes");
+const adminRoutes = require("./routes/admin-routes");
 
+server.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false },
+    }),
+);
+server.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
+
+server.use("/", accountRoutes);
 server.use("/", petRoutes);
+server.use("/", adminRoutes);
 
 server.get("/", (req, res) => {
     res.redirect("/adopt");
@@ -41,5 +59,3 @@ const startServer = () => {
 };
 
 connectDB().then(startServer);
-
-// startServer();

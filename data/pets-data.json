@@ -11,8 +11,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["calm", "affectionate", "shy"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "cat",
@@ -26,8 +25,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["playful", "affectionate", "curious"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "cat",
@@ -41,8 +39,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["gentle", "shy", "loyal"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "dog",
@@ -56,8 +53,7 @@
         "vaccinated": true,
         "sterilized": false,
         "personality": ["energetic", "friendly", "intelligent"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "dog",
@@ -71,8 +67,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["sweet", "calm", "affectionate"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "dog",
@@ -86,8 +81,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["loyal", "protective", "energetic"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "rabbit",
@@ -101,8 +95,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["gentle", "quiet", "playful"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "rabbit",
@@ -116,8 +109,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["curious", "friendly", "active"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "bird",
@@ -131,8 +123,7 @@
         "vaccinated": true,
         "sterilized": false,
         "personality": ["vocal", "playful", "social"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "bird",
@@ -146,8 +137,7 @@
         "vaccinated": true,
         "sterilized": false,
         "personality": ["gentle", "affectionate", "quiet"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "hamster",
@@ -161,8 +151,7 @@
         "vaccinated": false,
         "sterilized": false,
         "personality": ["active", "curious", "nocturnal"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "guinea pig",
@@ -176,8 +165,7 @@
         "vaccinated": true,
         "sterilized": false,
         "personality": ["vocal", "social", "friendly"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "dog",
@@ -191,8 +179,7 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["Vocal", "Energetic", "Loyal", "Friendly", "Goofy"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
     },
     {
         "type": "cat",
@@ -206,7 +193,20 @@
         "vaccinated": true,
         "sterilized": true,
         "personality": ["Couch Potato", "Calm", "Cuddly", "Relaxed"],
-        "pid": null,
-        "uid": null
+        "uid": "69c0095e226ed8af0fa8d239"
+    },
+    {
+        "type": "dog",
+        "img": "pet-1774109382126.png",
+        "name": "peanut",
+        "breed": "peanut",
+        "gender": "male",
+        "description": "peanut",
+        "hdbApproved": true,
+        "dob": "0001-01-01",
+        "vaccinated": true,
+        "sterilized": true,
+        "personality": ["Affectionate"],
+        "uid": "69c0095e226ed8af0fa8d239"
     }
 ]
