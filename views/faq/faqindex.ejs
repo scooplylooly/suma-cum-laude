@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+</head>
+<body>
+    <%- include("../common/header")  %>
+    <main>
+        <h1>Frequently Asked Questions</h1>
+        <% faqs.forEach(faq => { %>
+        <h2><%= faq.question  %></h2>
+        <p><%= faq.answer  %></p>
+    <% }) %>
+    </main>
+</body>
+</html>

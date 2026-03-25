@@ -38,26 +38,26 @@ exports.getAllFaqs = async () => {
   return FAQ.find().lean()
 }
 
-exports.getFaqById = async(faqId) => {
-  return FAQ.findById({id: faqId}).lean()
-}
+// exports.getFaqById = async(faqId) => {
+//   return FAQ.findById({id: faqId}).lean()
+// }
 
-exports.createFaq = async (faq) => {
-  try {
-    FAQ.create(faq)
-    console.log("FAQ created successfully!")
-  } catch(error) {
-    console.log(error)
-  }
-}
+// exports.createFaq = async (faq) => {
+//   try {
+//     FAQ.create(faq)
+//     console.log("FAQ created successfully!")
+//   } catch(error) {
+//     console.log(error)
+//   }
+// }
 
-exports.updateFaq = async (faqId, newFAQ) => {
-  return FAQ.findByIdAndUpdate(faqId, newFAQ, {
-    new: true,
-    runValidators: true
-  })
-}
+// exports.updateFaq = async (faqId, newFAQ) => {
+//   return FAQ.findByIdAndUpdate(faqId, newFAQ, {
+//     new: true,
+//     runValidators: true
+//   })
+// }
 
-exports.deleteFaq = async (faqId) => {
-  return FAQ.findByIdAndDelete(faqId)
-}
+// exports.deleteFaq = async (faqId) => {
+//   return FAQ.findByIdAndDelete(faqId)
+// }
