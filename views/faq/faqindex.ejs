@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQs</title>
+    <link rel="stylesheet" type="text/css" href="style/faqindex.css">
 </head>
 <body>
     <%- include("../common/header")  %>
     <main>
         <h1>Frequently Asked Questions</h1>
-        <% faqs.forEach(faq => { %>
-        <h2><%= faq.question  %></h2>
-        <p><%= faq.answer  %></p>
+
+        <section class="faq-container">
+            <% faqs.forEach(faq => { %>
+            <article class="faq-card">
+            <h3 class="faq-question"><%= faq.question %></h3>
+            <p class="faq-answer"><%= faq.answer %></p>
+            </article>
     <% }) %>
-    </main>
+  </section>
+</main>
 </body>
 </html>

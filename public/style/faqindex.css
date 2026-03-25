@@ -1,0 +1,31 @@
+.faq-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 40px auto 0;
+}
+
+.faq-card {
+    background-color: #f0e0d0;
+    border: 1px solid #e2c7b2;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.faq-question {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #c97d4e;
+    font-size: 22px;
+    text-align: left;
+}
+
+.faq-answer {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    max-width: none;
+}
