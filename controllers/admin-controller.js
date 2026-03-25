@@ -19,14 +19,12 @@ exports.showAdminPage = async (req, res) => {
 };
 
 exports.showIncomingListings = async (req, res) => {
-    const user = req.session.user;
     const pets = (await petModel.getAllPets()).reverse();
     let selectedStatus = "";
-    res.render("admin-listings", { user, pets, selectedStatus });
+    res.render("admin-listings", { pets, selectedStatus });
 };
 
 exports.filterListings = async (req, res) => {
-    const user = req.session.user;
     let status = req.body.status;
     let selectedStatus = "";
     let pet;
@@ -46,7 +44,6 @@ exports.filterListings = async (req, res) => {
         pets = (await petModel.getAllPets()).reverse();
     }
     return res.render("admin-listings", {
-        user,
         pets,
         selectedStatus,
     });
@@ -66,4 +63,50 @@ exports.updateListingStatus = async (req, res) => {
         console.log(`Listing ${isApproved} successfully`);
     }
     res.redirect("/admin-listings");
+};
+
+exports.showUsers = async (req, res) => {
+    let users = await accountModel.getAllUsers();
+    res.render("admin-users", { users, selectedType: "" });
+};
+
+exports.filterUsers = async (req, res) => {
+    let userType = req.body.userType;
+    let selectedType = "";
+    let users;
+
+    if (userType) {
+        users = (await accountModel.getAllUsers())
+            .reverse()
+            .filter((user) => user.role == userType);
+        selectedType = userType;
+    } else {
+        selectedType = "";
+        users = (await accountModel.getAllUsers()).reverse();
+    }
+    return res.render("admin-users", {
+        users,
+        selectedType,
+    });
+};
+exports.displayDeleteUser = async (req, res) => {
+    let uid = req.query.uid;
+    console.log("UID FOUND:", uid);
+    let userInfo = await accountModel.retrieveProfile(uid);
+    res.render("admin-delete-user", { userInfo, error: "" });
+};
+exports.deleteUser = async (req, res) => {
+    let uid = req.body.uid;
+    console.log("UID FOUND:", uid);
+    let userInfo = await accountModel.retrieveProfile(uid);
+    let error = "";
+    try {
+        await accountModel.deleteUser(uid);
+        console.log("user deleted!");
+        res.redirect("/admin-users");
+    } catch (err) {
+        console.error(err);
+        error = "Error deleting user";
+    }
+    res.render("admin-delete-user", { userInfo, error });
 };

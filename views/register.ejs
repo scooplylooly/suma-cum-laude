@@ -25,6 +25,15 @@
                 DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
                 Password: <input type="password" name="password" value="<%= password %>" > <br><br>
                 Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
+                <%if(user.role == 'admin'){%>
+                    role:<br>
+                    <select name="role" required>
+                        <option hidden>--select a role--</option>
+                        <option value="user">User</option>
+                        <option value="lister">Lister</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                <%}%><br><br>
                 <button type="submit">Register</button> <br><br>
             </form>
             <p>Already have an account? <a href="/login">Login</a></p>
@@ -50,7 +59,7 @@
                 </script>
                 
             <% } %>
-
+            
         </div>
     </main>
     <%- include('common/footer') %>

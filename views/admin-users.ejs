@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <link rel="stylesheet" href="/style/admin-listings.css">
+
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="admin-listings-page">
+        <section class="page-hero">
+            <h2>Admin - View All Users</h2>
+            <p>Review, filter, and manage all users in one place.</p>
+        </section>
+
+        <div class="top-actions">
+            <a href="/register" class="top-link">
+                <button type="button">Create New User</button>
+            </a>
+        </div>
+
+        <form action="/admin-users" method="post" class="filter-form">
+            <label for="userType">Pick a user type:</label>
+            <select name="userType" id="userType">
+                <option value="" <%= selectedType === "" ? "selected" : "" %>>All</option>
+                <option value="user" <%= selectedType === 'users' ? "selected" : "" %>> Default users</option>
+                <option value="lister"<%= selectedType === 'lister' ? "selected" : "" %>>Listers</option>
+                <option value="admin"<%= selectedType === 'admin' ? "selected" : "" %>>Admin</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <% if (users.length < 1) { %>
+            <h4 class="empty-state">No listings found.</h4>
+        <% } else { %>
+            <h3>
+                Showing <%= selectedType === "user" ? "Default Users" : selectedType === "lister" ? "Listers" : selectedType === "admin" ? "Admin" : "All" %> 
+            </h3>
+
+            <div class="container-flex">
+                <% for (let user of users) { %>
+                    <div class="item">
+                        <h4><%= user.userName %></h4>
+                        <p><span>ID</span> : <%=user._id%></user._id></p>
+                        <p><span>Email:</span> <%= user.email%></p>
+                        <p><span>Date Of Birth:</span> <%= user.DOB %></p>
+                        <p><span>Role</span>: <%=user.role == "user" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
+                        
+                        <div class="card-actions">
+                            <a href="/edit-profile?uid=<%=user._id%>">
+                                <button type="button">Update details</button>
+                            </a>
+                            <a href="/delete-user-profile?uid=<%=user._id%>">
+                                <button type="button">Delete User</button>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+    <%- include('common/footer') %>
+
+</body>
+</html>

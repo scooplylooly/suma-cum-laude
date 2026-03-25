@@ -1,8 +1,15 @@
 exports.isLoggedIn = (req, res, next) => {
-    if (req.session.user) {
-        return res.redirect("/adopt");
+    const user = req.session.user;
+
+    if (!user) {
+        return next(); // not logged in → continue to login page
     }
-    next();
+
+    if (user.role === "admin") {
+        return res.redirect("/admin-page");
+    }
+
+    return res.redirect("/adopt");
 };
 
 exports.isAdmin = (req, res, next) => {

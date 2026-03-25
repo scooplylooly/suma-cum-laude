@@ -31,7 +31,7 @@ const usersSchema = new mongoose.Schema({
 
 const users = mongoose.model("users", usersSchema, "users");
 
-async function registerUser(userName, email, DOB, password) {
+async function registerUser(userName, email, DOB, password, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
         throw new Error("Username already exists");
@@ -42,7 +42,7 @@ async function registerUser(userName, email, DOB, password) {
             email,
             DOB,
             password: hashedPassword, // hashes the password for security
-            role: "user",
+            role,
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -66,7 +66,7 @@ async function authenticateUser(userName, password) {
 
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
-    return await users.findOne({ _id: userId });
+    return await users.findOne({ _id: userId }).lean();
 }
 
 async function addUser(user) {
@@ -83,11 +83,15 @@ async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
 }
-
+async function getAllUsers() {
+    // deletes specified user from user schema
+    return users.find().lean();
+}
 module.exports = {
     authenticateUser,
     registerUser,
     retrieveProfile,
     deleteUser,
     updateDetails,
+    getAllUsers,
 };

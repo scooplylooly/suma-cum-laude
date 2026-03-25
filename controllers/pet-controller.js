@@ -270,7 +270,6 @@ exports.updatePetProfile = async (req, res) => {
 };
 
 exports.petUpdated = async (req, res) => {
-    const user = req.session.user;
     const pid = req.body.pid;
     console.log("PID RECEIVED:", pid);
 
