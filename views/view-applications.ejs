@@ -8,12 +8,19 @@
 <body>
         <%- include('common/header') %>
     <h1>Applications for <%=petName%></h1>
+
     <%for (application of applications) {%>
+        <div>
         <h3>Application Number:<%=application.applicationNumber%></h3>
         <h3>User: <%=application.userName%></h3>
         <h3>Reason: <%=application.reason%></h3>
+        <a href="/approve"><button>Approve</button></a>
+        <a href="/deny"><button>Deny</button></a>
         <p>-------------------------------------------------</p>
+        
+        </div>
     <%}%>
+
         <%- include('common/footer') %>
 
 </body>
