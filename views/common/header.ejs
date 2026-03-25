@@ -10,15 +10,19 @@
             <h1>web name</h1>
             <nav>
                 <a href="/">Home</a>
-                <% if(!user){ %>
-                    <a href="/sign-up">Register</a>
-                    <a href="/sign-in">Log in</a>
+                <!--if user session does not exist, nav bar shows this-->
+                <% if(!user){ %> 
+                    <a href="/register">Register</a>
+                    <a href="/login">Log in</a>
+                
+                <!--else other functions in nav bar-->
                 <%}else{%>
                     <a href="/adopt">Search Listings</a>
                     <a href="">Application Status</a>
                     <a href="/view-listings">View Your Listings</a>
-                    <a href="">User Profile</a>
-                <% if (user._id.toString() === '69c2699dfc85e056c882555e'){ %>
+                    <a href="/profile">Account</a>
+                    <a href="/logout">Log out</a>
+                <% if (user._id.toString() === '69c0095e226ed8af0fa8d239'){ %>
                     <a href="/admin-page">Admin Page</a>
                 <% } %>
                 <%}%>
