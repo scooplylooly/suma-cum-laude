@@ -203,6 +203,103 @@ exports.deleteProfile = async (req, res) => {
     }
 };
 
+exports.showLister = (req, res) => {
+    res.render("apply-lister", userName, password, password2, errors = [])
+}
+
+exports.handleLister = async (req, res) => {
+    let userNameL = (req.body.userNameL ?? "").trim()
+    let passwordL = (req.body.passwordL ?? "").trim()
+    let password2L = (req.body.password2L ?? "").trim()
+
+    let errors = []
+    if (!userNameL) {
+        errors.push("Username is required")
+    }
+
+    if (!passwordL) {
+        errors.push("Password is required")
+    }
+
+    if (!password2L || passwordL !== password2L) {
+        errors.push("Passwords do not match")
+    }
+
+    res.render("apply-lister", {userNameL, passwordL, password2L})
+}
+
+exports.showLoginL = (req, res) => {
+    res.render("login-lister", {
+        userNameL: "",
+        passwordL: "",
+        errors: [],
+        success: false,
+    });
+};
+
+exports.handleLoginL = async (req, res) => {
+    const userNameL = (req.body.userNameL ?? "").trim();
+    const passwordL = (req.body.passwordL ?? "").trim();
+    let errors = [];
+
+    // checks for empty fields and records the error in an array
+    if (!userNameL) {
+        errors.push("User Name is required");
+    }
+    if (!passwordL) {
+        errors.push("Password is required");
+    }
+    if (errors.length === 0) {
+        const user = await accountModel.authenticateUser(userNameL, passwordL);
+        if (!user) {
+            errors.push(
+                "Invalid username or password. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
+            );
+            return res.render("login", {
+                userNameL,
+                passwordL,
+                errors,
+                success: false,
+            });
+        } else {
+            return res.render("login-lister", {
+                userNameL,
+                passwordL,
+                errors,
+                success: true,
+            });
+        }
+    }
+    res.render("login-lister", { userNameL, passwordL, errors, success: false });
+};
+
+exports.deleteConfirmation2 = (req, res) => {
+    // displays form for user to enter password to verify deletion
+    res.render("delete-lister-profile", { error: "" });
+};
+
+exports.deleteLister = async (req, res) => {
+    const password = req.body.password;
+    // authenticates inputted password before processing deletion
+    const match = await accountModel.authenticateUser(
+        req.session.user.userNameL,
+        passwordL,
+    );
+    if (match) {
+        await accountModel.deleteUser(req.session.user._id); // deletes user
+        console.log("Deleting user...");
+        console.log("Destroying the session");
+        req.session.destroy(() => {
+            // session destroyed
+            res.redirect("/index.html"); // redirected to homepage
+        });
+    } else {
+        res.render("delete-lister-profile", {
+            error: "Wrong password. Please try again.",
+        });
+    }
+};
+
 exports.logout = (req, res) => {
     // destroy session once user is logged out
     console.log("Logging user out...");

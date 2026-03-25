@@ -7,8 +7,9 @@
 </head>
 <body>
     <div id="form">
-        <form action="/sign-up-lister" method="post">
+        <form action="/apply-lister" method="post">
             Username: <input type="text" name="userNameL" value="<%= userNameL %>"><br><br>
+            Reason(s) for putting your pet up for adoption: <input type="text" name="reason" id="reason">
             Password: <input type="password" name="passwordL" value="<%= passwordL %>"><br><br>
             Confirm your password: <input type="password" name="password2L" value="<%= password2L %>"><br><br> 
             <button type="submit">Apply</button>

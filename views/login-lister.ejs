@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" type="text/css" href="./style/login-lister.css">
+</head>
+<body>
+    <header>
+        <h1>Placeholder Title</h1>
+        <nav>
+            <a href="/">Home</a>
+        </nav>
+    </header>
+    
+    <main class="login-page">
+        <div id="form" class="login-card">
+            <p class="subtitle">Log in to create pet listings!</p>
+            <form action="/login-lister" method="post" class="login-form">
+                Username: <input type="text" name="userNameL" value="<%= userNameL %>"> <br><br>
+                Password: <input type="password" name="passwordL" value="<%= passwordL %>" > <br><br>
+                <button type="submit">Log in</button>
+            </form>
+            <p class="register-link">Not a lister?
+                <a href="/apply-lister">Apply to be lister</a>
+            </p>
+
+            <% if (errors.length > 0){ %>
+            <ul class="error-list">
+                <% errors.forEach(error => { %>
+                    <li><%- error %></li>
+            <% }) %>
+            </ul>
+        <% }; %>
+
+        </div>
+
+
+        <% if (success) { %>
+            <p class="success-message">
+            Successful login. <br>
+            Time to list!
+            </p>
+            <script>
+                setTimeout(() => {
+                    window.location.href = "/user-profile";
+                },1000)
+            </script>
+        <% } %>
+        </div>
+
+    </main>
+    <%- include('common/footer') %>
+</body>
+</html>

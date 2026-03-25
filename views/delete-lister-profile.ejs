@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete lister profile</title>
+    <link rel="stylesheet" type="text/css" href="./style/delete-lister.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="delete-page">
+        <div class="delete-card">
+            <form action="/delete-lister" method="post" class="delete-form">
+                <h2 style="color: red;">WARNING! Danger zone</h2> <br>
+                <p>Note that all data will be deleted permanently.</p>
+                <input type="password" name="passwordL" placeholder="Enter password">
+                <button type="submit" onclick="return confirm ('WARNING: Are you sure? This action cannot be undone and all data will be lost')">Confirm Deletion</button>
+            </form>
+        </div>
+
+    </main>
+    <% if (error) { %>
+        <div class="err-message">
+            <%- error %>
+        </div>
+    <% } %>
+
+
+    <%- include('common/footer') %>
+    
+</body>
+</html>
