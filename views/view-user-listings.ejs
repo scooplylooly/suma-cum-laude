@@ -22,7 +22,7 @@
         <h5>Date Of Birth: <%=pet.dob%></h5>
         <h5>Approved: <%=pet.approved ? 'Yes' : 'No'%></h5>
         <a href="/edit-listing?pid=<%=pet._id%>"><button>Edit Listing</button></a>
-        <a href="/"><button>View Applications</button></a>
+        <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
         </div>
         <%}%>
         </div>

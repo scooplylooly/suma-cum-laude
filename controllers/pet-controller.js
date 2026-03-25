@@ -103,7 +103,8 @@ exports.applyInterest = async (req, res) => {
 
     let application = {
         uid: req.session.user?._id ?? null,
-        pid: null,
+        pid: pet?._id ?? null,
+        userName: req.session.user?.userName ?? null,
         petName: petName,
         reason: req.body.applyReason,
     };
@@ -425,6 +426,15 @@ exports.petUpdated = async (req, res) => {
         });
     }
 };
+exports.viewApplications = async (req,res) => {
+    let pid = req.query.pid
+    const user = req.session.user
+    let applications = await listing.findApplication(pid)
+    let pet = await listing.findPetById(pid)
+    let petName = pet.name
+    let count = 0
+    res.render('view-applications',{applications,petName,user,count})
+}
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);

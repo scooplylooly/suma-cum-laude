@@ -83,4 +83,5 @@ router.get(
     petController.deletePetProfile,
 );
 router.post("/delete-pet", authMiddleware.checkUser, petController.petDeleted);
+router.get('/view-applications', petController.viewApplications)
 module.exports = router;

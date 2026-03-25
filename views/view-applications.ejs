@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <%- include('common/header') %>
+    <h1>Applications for <%=petName%></h1>
+    <%for (application of applications) {%>
+        <h3>Application Number:<%=application.applicationNumber%></h3>
+        <h3>User: <%=application.userName%></h3>
+        <h3>Reason: <%=application.reason%></h3>
+        <p>-------------------------------------------------</p>
+    <%}%>
+        <%- include('common/footer') %>
+
+</body>
+</html>

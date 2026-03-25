@@ -99,12 +99,18 @@ const applicationSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        userName: {
+            type: String,
+            ref: "users",
+            default: null
+        },
         applicationNumber: {
             type: String,
             default: () => "APP-" + Date.now(),
         },
         pid: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Pets",
             default: null,
         },
         petName: {
@@ -283,3 +289,7 @@ exports.checkExistingApplications = function () {
 exports.createNewApplication = async function (application) {
     return Application.create(application);
 };
+
+exports.findApplication = async function (petID) {
+    return Application.find({pid: petID})
+}
