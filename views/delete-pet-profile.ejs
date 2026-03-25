@@ -8,8 +8,6 @@
 <body>
     <%- include('common/header') %>
 
-    <a href="/edit-listing?pid=<%=pet._id%>"><button>Back</button></a>
-
     <h2>Are you sure you want to withdraw this listing?</h2>
     <form action="/delete-pet" method="post">
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">

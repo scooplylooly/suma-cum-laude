@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { devNull } = require("os");
+const { devNull, type } = require("os");
 const path = require("path");
 const fs = require("fs").promises;
 // const applyFilePath = "data/apply-for-pet-data.json";
@@ -81,6 +81,10 @@ const petSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        approved: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
@@ -123,20 +127,20 @@ const applicationSchema = new mongoose.Schema(
 const Pet = mongoose.model("Pet", petSchema, "pets-data");
 
 // Pet Methods
-
+// get pets by user id
 exports.getMyPets = function (uid) {
     return Pet.find({ uid }).lean();
 };
-
+// get all pets
 exports.getAllPets = function () {
     return Pet.find().lean();
 };
-
+// finding pet by name
 exports.findPet = function (petName) {
     return Pet.findOne({ name: petName }).lean();
 };
-// temporary findpet using uid
-exports.findPet2 = function (pid) {
+// finding pet by ID
+exports.findPetById = function (pid) {
     return Pet.findOne({ _id: pid }).lean();
 };
 
@@ -247,6 +251,19 @@ exports.updatePetData = async function (pid, pet) {
         return result;
     } catch (err) {
         console.error("Error updating in db:", err);
+    }
+};
+exports.updatePetApproval = async function (pid, approved) {
+    try {
+        const result = await Pet.updateOne(
+            {
+                _id: new mongoose.Types.ObjectId(pid),
+            },
+            { $set: { approved: approved } },
+        );
+        return result;
+    } catch (err) {
+        console.error("Error updating approval in db:", err);
     }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////

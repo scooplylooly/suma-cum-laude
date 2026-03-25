@@ -4,50 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in</title>
-    <link rel="stylesheet" type="text/css" href="./style/sign-in.css">
+    <link rel="stylesheet" type="text/css" href="./style/login.css">
 </head>
 <body>
     <header>
         <h1>Placeholder Title</h1>
         <nav>
             <a href="/">Home</a>
-            <a href="/sign-up">Sign Up</a>
+            <a href="/register">Register</a>
         </nav>
     </header>
     
     <main class="login-page">
         <div id="form" class="login-card">
             <h2>Welcome!</h2>
-            <p class="subtitle">Sign in to find your companion!</p>
-            <form action="/sign-in" method="post" class="login-form">
+            <p class="subtitle">Log in to find your companion!</p>
+            <form action="/login" method="post" class="login-form">
                 Username: <input type="text" name="userName" value="<%= userName %>"> <br><br>
                 Password: <input type="password" name="password" value="<%= password %>" > <br><br>
                 <button type="submit">Log in</button>
             </form>
-            <p class="signup-link">Don't have an account?
-                <a href="/sign-up">Create an account</a>
+            <p class="register-link">Don't have an account?
+                <a href="/register">Create an account</a>
             </p>
-        </div>
 
-        <% if (errors.length > 0){ %>
-            <ul style="color: red">
+            <% if (errors.length > 0){ %>
+            <ul class="error-list">
                 <% errors.forEach(error => { %>
                     <li><%- error %></li>
             <% }) %>
             </ul>
         <% }; %>
+        </div>
+
 
         <% if (success) { %>
-            <p style="color:#c97d4e;">
-            Successful sign-in. <br>
+            <p class="success-message">
+            Successful login. <br>
             Time to find your dream companion / BFF!
             </p>
             <script>
                 setTimeout(() => {
-                    window.location.href = "/adopt";
-                },2000)
+                    window.location.href = "/profile";
+                },1000)
             </script>
         <% } %>
+        </div>
     </main>
+    <%- include('common/footer') %>
 </body>
 </html>
