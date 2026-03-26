@@ -32,7 +32,7 @@
         <h3>Application Number:<%=application.applicationNumber%></h3>
         <h3>User: <%=application.userName%></h3>
         <h3>Reason: <%=application.reason%></h3>
-        <h3>Housing Type: <%=application.houseType</h3>
+        <h3>Housing Type: <%=application.houseType%></h3>
         <h3>Monthly Income: <%=application.income%></h3>
         <h3>Prior Pet Experience: <%=application.petExperience%></h3>
         <h3>Existing Pets: <%=application.existingPets%></h3>
@@ -41,7 +41,7 @@
         <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Approve</button></a>
         <a href="/deny?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Deny</button></a>
         <p>-------------------------------------------------</p>
-    <%}%>
+    <%}%> 
 <%}%>
 
         <%- include('common/footer') %>
