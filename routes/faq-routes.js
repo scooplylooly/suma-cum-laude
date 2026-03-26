@@ -13,4 +13,6 @@ router.get('/admin', faqController.adminFaqs)
 router.get('/admin/edit', faqController.getFaq)
 router.post('/admin/edit', faqController.editFaqs)
 
+router.post('/delete', faqController.deleteFaq)
+
 module.exports = router

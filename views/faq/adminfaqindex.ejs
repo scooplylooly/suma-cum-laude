@@ -21,6 +21,10 @@
                 <p class="faq-answer"><%= faq.answer  %></p>
                 <div class="admin-actions">
                     <a href="/faq/admin/edit?id=<%= faq._id %>" class="btn-edit">Edit</a>
+                    <form action="/faq/delete" method="post" onsubmit="return confirm('Delete this FAQ permanently?')">
+                    <input type="hidden" name="id" value="<%= faq._id %>">
+                    <button type='submit' class="delete-btn">Delete FAQ</button>
+                    </form>
                 </div>
              </article>
             <% }) %>

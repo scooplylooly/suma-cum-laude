@@ -90,3 +90,20 @@ main h1 {
     background-color: #a9653d;
 }
 
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+.admin-actions form {
+    display: inline-block;
+    margin: 0;
+}

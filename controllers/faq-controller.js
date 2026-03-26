@@ -39,3 +39,21 @@ exports.editFaqs = async (req, res) => {
             res.send(error)
         }
 }
+
+exports.deleteFaq = async (req, res) => {
+    const faqID = req.body.id
+
+    if (!faqID) {
+        res.send("No such FAQ found!")
+    }
+    try{
+        const result = await FAQ.deleteFaq(faqID)
+
+        if (result.deletedCount === 1) {
+            console.log("FAQ successfully deleted.")
+            res.redirect("/faq/admin")
+        }
+    } catch(error) {
+        return res.send(error.message)
+    }
+}

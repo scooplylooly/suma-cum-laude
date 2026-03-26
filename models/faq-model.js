@@ -49,6 +49,10 @@ exports.updateFaq = async (faqId, newFAQ) => {
   });
 };
 
+exports.deleteFaq = async (faqId) => {
+  return FAQ.findByIdAndDelete(faqId)
+}
+
 // exports.createFaq = async (faq) => {
 //   try {
 //     FAQ.create(faq)
@@ -60,6 +64,3 @@ exports.updateFaq = async (faqId, newFAQ) => {
 
 
 
-// exports.deleteFaq = async (faqId) => {
-//   return FAQ.findByIdAndDelete(faqId)
-// }
