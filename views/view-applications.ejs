@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <%- include('common/header') %>
+    <h1>Applications for <%=petName%></h1>
+
+    <%for (application of applications) {%>
+        <div>
+        <%if (application.status == 'approved'){%>
+
+        
+        <input type="hidden" name="petID" value="<%=application.pid%>">
+        <input type="hidden" name="petName" value="<%=petName%>">
+
+        <h3>Application Number:<%=application.applicationNumber%></h3>
+        <h3>User: <%=application.userName%></h3>
+        <h3>Reason: <%=application.reason%></h3>
+        <h3>Status: Adopted</h3>
+       
+        <p>-------------------------------------------------</p>
+        
+        </div>
+    <%}else if (application.status == 'denied'){%>
+        <input type="hidden" name="petID" value="<%=application.pid%>">
+        <input type="hidden" name="petName" value="<%=petName%>">
+
+        <h3>Application Number:<%=application.applicationNumber%></h3>
+        <h3>User: <%=application.userName%></h3>
+        <h3>Reason: <%=application.reason%></h3>
+        <h3>Status: Denied</h3>
+        <!--TO DO: Add delete function to remove denied applications-->
+       
+        <p>-------------------------------------------------</p>
+    <%}else if (application.status == 'pending') {%>
+        <input type="hidden" name="petID" value="<%=application.pid%>">
+        <input type="hidden" name="petName" value="<%=petName%>">
+
+        <h3>Application Number:<%=application.applicationNumber%></h3>
+        <h3>User: <%=application.userName%></h3>
+        <h3>Reason: <%=application.reason%></h3>
+        <h3>Status: Pending</h3>
+        <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Approve</button></a>
+        <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Deny</button></a>
+        <p>-------------------------------------------------</p>
+    <%}%>
+<%}%>
+
+        <%- include('common/footer') %>
+
+</body>
+</html> 
+

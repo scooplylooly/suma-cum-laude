@@ -1,0 +1,223 @@
+/* ===== GLOBAL ===== */
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background: linear-gradient(to bottom, #fff8f0, #fdf3e7);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* ===== PAGE TITLE ===== */
+body > h2:first-of-type {
+    text-align: center;
+    margin: 36px 0 24px;
+    color: #b5673c;
+    font-size: 34px;
+    letter-spacing: 0.5px;
+}
+
+/* ===== MAIN PET PROFILE CARD ===== */
+body > div:first-of-type {
+    max-width: 760px;
+    margin: 0 auto 36px;
+    background: linear-gradient(to bottom, #fffaf5, #f6e6d7);
+    border-radius: 24px;
+    padding: 32px 34px;
+    box-shadow: 0 14px 34px rgba(130, 84, 54, 0.12);
+    border: 1px solid rgba(201, 125, 78, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+body > div:first-of-type::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(to right, #c97d4e, #e8b07b);
+}
+
+/* ===== PET IMAGE ===== */
+body > div:first-of-type img {
+    display: block;
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin: 0 auto 20px;
+    border: 5px solid #fff;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== PET NAME ===== */
+body > div:first-of-type h2 {
+    text-align: center;
+    margin: 10px 0 22px;
+    color: #7a4c2f;
+    font-size: 32px;
+}
+
+/* ===== PROFILE DETAILS ===== */
+body > div:first-of-type h4 {
+    margin: 10px 0;
+    padding: 12px 16px;
+    background-color: rgba(255, 255, 255, 0.58);
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: normal;
+    color: #4a4a4a;
+    line-height: 1.45;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* ===== APPLICATION SECTION ===== */
+body > div:nth-of-type(2) {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    background: rgba(255, 255, 255, 0.72);
+    border-radius: 24px;
+    padding: 30px 34px;
+    box-shadow: 0 10px 28px rgba(160, 102, 62, 0.1);
+    backdrop-filter: blur(4px);
+}
+
+body > div:nth-of-type(2) h2 {
+    text-align: center;
+    color: #c97d4e;
+    font-size: 28px;
+    margin: 0 0 14px;
+}
+
+body > div:nth-of-type(2) p {
+    text-align: center;
+    color: #6a4b37;
+    font-size: 17px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+/* ===== FORM ===== */
+form {
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    max-width: 100%;
+    min-height: 160px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid #e2c4aa;
+    outline: none;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: #fffdfb;
+    resize: vertical;
+    box-sizing: border-box;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+textarea:focus {
+    border-color: #c97d4e;
+    box-shadow: 0 0 0 4px rgba(201, 125, 78, 0.15);
+}
+
+button {
+    margin-top: 18px;
+    background: linear-gradient(to right, #c97d4e, #b5673c);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    box-shadow: 0 6px 14px rgba(181, 103, 60, 0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(181, 103, 60, 0.25);
+}
+
+/* ===== STATUS MESSAGES ===== */
+body > h3 {
+    text-align: center;
+    max-width: 760px;
+    margin: 14px auto;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    body > div:first-of-type,
+    body > div:nth-of-type(2) {
+        margin-left: 24px;
+        margin-right: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    body > h2:first-of-type {
+        font-size: 28px;
+        margin-top: 28px;
+    }
+
+    body > div:first-of-type,
+    body > div:nth-of-type(2) {
+        padding: 22px 20px;
+        border-radius: 18px;
+    }
+
+    body > div:first-of-type img {
+        width: 180px;
+        height: 180px;
+    }
+
+    body > div:first-of-type h2 {
+        font-size: 27px;
+    }
+
+    body > div:nth-of-type(2) h2 {
+        font-size: 24px;
+    }
+
+    body > div:first-of-type h4 {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+
+    textarea {
+        min-height: 140px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+.image-preview {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #e0c3a8;
+}

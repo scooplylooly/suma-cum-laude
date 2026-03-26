@@ -99,12 +99,18 @@ const applicationSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        userName: {
+            type: String,
+            ref: "users",
+            default: null
+        },
         applicationNumber: {
             type: String,
             default: () => "APP-" + Date.now(),
         },
         pid: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Pets",
             default: null,
         },
         petName: {
@@ -115,6 +121,11 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        status: {
+            type: String,
+            enum: ['pending','approved','denied'],
+            default: 'pending'
+        }
     },
     {
         timestamps: true,
@@ -282,4 +293,27 @@ exports.checkExistingApplications = function () {
 
 exports.createNewApplication = async function (application) {
     return Application.create(application);
+};
+
+exports.findApplicationByPet = async function (petID) {
+    return Application.find({pid: new mongoose.Types.ObjectId(petID)}).lean()
+}
+exports.findApplicationByID = async function (ID) {
+    return Application.findOne({_id:ID})
+};
+exports.updateApplicationbyID = async function (ID,value) {
+    try{
+        await Application.updateOne({_id: ID}, {$set: {status: value}})
+        return 'Success!'
+    }catch(error){
+        return error
+    }
+};
+exports.updatePetStatusbyID = async function (pid,value) {
+    try{
+        await Pet.updateOne({_id:pid}, {$set: {approved: value}})
+        return "Pet Adopted"
+    }catch(error){
+        return error
+    }
 };
