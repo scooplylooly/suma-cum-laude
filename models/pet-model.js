@@ -85,6 +85,10 @@ const petSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        adopted: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true,
@@ -125,6 +129,27 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             enum: ['pending','approved','denied'],
             default: 'pending'
+        },
+        houseType: {
+            type: String,
+            enum: ['HDB','Condo','Landed'],
+            required: true,
+        },
+        existingPets: {
+            type: String,
+            required: true,
+        },
+        petExperience: {
+            type: String,
+            required: true,
+        },
+        income: {
+            type: Number,
+            required:true
+        },
+        contactNo: {
+            type: Number,
+            required: true,
         }
     },
     {
@@ -301,6 +326,9 @@ exports.findApplicationByPet = async function (petID) {
 exports.findApplicationByID = async function (ID) {
     return Application.findOne({_id:ID})
 };
+exports.findApplicationbyUID = async function (UID) {
+    return Application.find({uid: new mongoose.Types.ObjectId(UID)}).lean()
+};
 exports.updateApplicationbyID = async function (ID,value) {
     try{
         await Application.updateOne({_id: ID}, {$set: {status: value}})
@@ -317,3 +345,18 @@ exports.updatePetStatusbyID = async function (pid,value) {
         return error
     }
 };
+exports.deleteApplication = async function (appID) {
+    try{
+        await Application.deleteOne({_id: appID})
+        console.log('success')
+    }catch(error){
+        return error
+    }
+};
+exports.updateApplicationDetails = async function (appID, updatedFields) {
+    return Application.findOneAndUpdate(
+        {_id:appID},
+        {$set: updatedFields},
+        { new:true}
+    )
+}

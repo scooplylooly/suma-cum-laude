@@ -50,6 +50,23 @@
         <!-- suppose to get user info since they signed in, and then save their username into database for application -->
         <h2> Interested in  adopting <%=petFound.name%>? Apply your interest here!</h2>
         <form action="/apply-for-pet" method="post">
+            <label for="houseType">House Type:</label>
+            <select name="houseType" id="houseType">
+                <option value="HDB" selected>HDB</option>
+                <option value="Condo">Condo</option>
+                <option value="Landed">Landed</option>
+            </select>
+            <label for="petExperience">Do you have any prior experience with owning a pet?</label>
+            <select name="petExperience" id="petExperience">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <label for="income">What is your monthly income?</label>
+            $<input type="number" name="income" min="0">
+            <label for="contactNo">What is your contact number?</label>
+            +65-<input type="tel" pattern="[0-9]{8}" name="contactNo">
+            <label for="existingPets">Describe the Pets you currently have: (If none, please indicate N.A)</label>
+            <textarea name="existingPets" cols="50" rows="5"></textarea> <br><br>
             <p>Tell the fosters abit about yourself and why you would love to adopt <%=petFound.name %>!</p>
             <input type="hidden" name="petName" value="<%=petFound.name%>">
             <input type="hidden" name="uid" value="<%=user._id%>">
