@@ -1,53 +1,102 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* header/footer from your common partials can stay as-is */
+
 .profile-page {
     min-height: calc(100vh - 160px);
     display: flex;
+    flex-direction: column;      /* title + card stacked */
     justify-content: center;
-    align-items: flex-start;   
+    align-items: center;
     padding: 60px 20px;
-    gap: 40px;       
-}          
-
-.profile-deets {
-    background-color: #e9d4c6;
-    width: 100%;
-    max-width: 420px;
-    padding: 60px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;                 
 }
 
-.box {
-    padding: 12px;
-    border: 1px solid black;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: inherit;
+.profile-page > h2 {
+    margin: 0 0 20px 0;
+    font-size: 32px;
+    color: #c97d4e;
+}
+
+.profile-card {
+    background-color: #fff;
     width: 100%;
-    box-sizing: border-box;
+    max-width: 420px;
+    padding: 32px 36px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.profile-card h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    color: #c97d4e;
+}
+
+.subtitle {
+    margin: 8px 0 20px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.profile-deets {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.profile-deets div {
+    padding: 6px 0;
+    border-bottom: 1px solid #f0e0d0;
+}
+
+.profile-deets div:last-child {
+    border-bottom: none;
 }
 
 .actions {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: flex-start;
-    padding-top: 10px;
 }
 
-.actions {
-    display: flex;
-    flex-direction: row;             
-    justify-content: space-between;  
-    align-items: center;
-    padding-top: 10px;
-    width: 100%;
-    max-width: 720px;             
+.actions a {
+    display: block;
+    text-decoration: none;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+/* buttons */
+.button1 {
+    background-color: #c97d4e;
+    color: #fff;
+}
+
+.button2 {
+    background-color: #fff0ea;
+    color: #b03a2e;
+    border: 1px solid #f0b4a0;
+}
+
+.button3 {
+    background-color: #f3f3f3;
+    color: #555;
 }
 
 .actions a:hover {
-    text-decoration: underline;
+    filter: brightness(0.96);
 }
