@@ -19,16 +19,23 @@ exports.getFaq = async (req, res) => {
     res.render('faq/faqedit', { faq })
 }
 
-// exports.editFaqs = async (req, res) => {
-//     try {
-//         let faqID = req.params.id
-//         let faq = await FAQ.getFaqById(faqID)
+exports.editFaqs = async (req, res) => {
+    try {
+        const { id: faqID, question: newQuestion, answer: newAnswer, category: newCategory, published } = req.body
+        const newFaq = { 
+            question: newQuestion,
+            answer: newAnswer,
+            category: newCategory,
+            published: published 
+         }
+        const updated = await FAQ.updateFaq(faqID, newFaq)
         
-//         if (!faq) {
-//         return res.status(404).send('FAQ not found')
-//         }
-//         res.render('faq/faqedit', {faq})
-//     } catch(error) {
-//         res.send(error)
-//     }
-// }
+        if (!updated) {
+        return res.send('FAQ not found')
+        }
+        const faqs = await FAQ.getAllFaqs()
+        res.render('faq/adminfaqindex', {faqs})
+        } catch(error) {
+            res.send(error)
+        }
+}

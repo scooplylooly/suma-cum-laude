@@ -44,10 +44,10 @@ exports.getFaqById = async(faqId) => {
 
 exports.updateFaq = async (faqId, newFAQ) => {
   return FAQ.findByIdAndUpdate(faqId, newFAQ, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true
-  })
-}
+  });
+};
 
 // exports.createFaq = async (faq) => {
 //   try {

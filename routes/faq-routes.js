@@ -11,5 +11,6 @@ router.get('/admin', faqController.adminFaqs)
 
 //Admin Edit FAQs
 router.get('/admin/edit', faqController.getFaq)
+router.post('/admin/edit', faqController.editFaqs)
 
 module.exports = router
