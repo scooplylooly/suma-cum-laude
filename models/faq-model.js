@@ -38,9 +38,9 @@ exports.getAllFaqs = async () => {
   return FAQ.find().lean()
 }
 
-// exports.getFaqById = async(faqId) => {
-//   return FAQ.findById({id: faqId}).lean()
-// }
+exports.getFaqById = async(faqId) => {
+  return FAQ.findById({id: faqId}).lean()
+}
 
 // exports.createFaq = async (faq) => {
 //   try {
