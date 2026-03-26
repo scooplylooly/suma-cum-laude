@@ -10,13 +10,21 @@ router.post("/register", accountController.handleRegister);
 router.get("/login", authMiddleware.isLoggedIn, accountController.showLogin);
 router.post("/login", accountController.handleLogin);
 
+router.get("/forget-password", accountController.showReset);
+router.post("/forget-password", accountController.handleReset);
+router.get("/verify-otp", accountController.showVerifyOtp);
+router.post("/verify-otp", accountController.handleVerifyOtp);
+router.get("/new-password", accountController.showNewPassword);
+router.post("/new-password", accountController.handleNewPassword);
+
+
 router.get("/profile", authMiddleware.checkUser, accountController.showProfile);
 
-router.get("/edit-profile", accountController.updateProfile);
-router.post("/edit-profile", accountController.processUpdate);
+router.get("/edit-profile", authMiddleware.checkUser, accountController.updateProfile);
+router.post("/edit-profile", authMiddleware.checkUser, accountController.processUpdate);
 
-router.get("/delete-profile", accountController.deleteConfirmation);
-router.post("/delete-profile", accountController.deleteProfile);
+router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation);
+router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
 
 router.get("/logout", accountController.logout);
 
