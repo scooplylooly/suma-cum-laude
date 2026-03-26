@@ -39,7 +39,14 @@ exports.getAllFaqs = async () => {
 }
 
 exports.getFaqById = async(faqId) => {
-  return FAQ.findById({id: faqId}).lean()
+  return FAQ.findById(faqId).lean()
+}
+
+exports.updateFaq = async (faqId, newFAQ) => {
+  return FAQ.findByIdAndUpdate(faqId, newFAQ, {
+    new: true,
+    runValidators: true
+  })
 }
 
 // exports.createFaq = async (faq) => {
@@ -51,12 +58,7 @@ exports.getFaqById = async(faqId) => {
 //   }
 // }
 
-// exports.updateFaq = async (faqId, newFAQ) => {
-//   return FAQ.findByIdAndUpdate(faqId, newFAQ, {
-//     new: true,
-//     runValidators: true
-//   })
-// }
+
 
 // exports.deleteFaq = async (faqId) => {
 //   return FAQ.findByIdAndDelete(faqId)

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Faq</title>
+</head>
+<body>
+    <%- include('../common/header') %>
+    <% if (faq.question) { %>
+        <h1>Edit FAQ</h1>
+        <form action="/faq/edit" method="post">
+            <table border="1">
+                <tr>
+                    <th>Question :</th><td><input type="text" name="question" value = "<%= faq.question %>"></td>
+                </tr>
+                <tr>
+                    <th>Answer :</th><td><input type="text" name="answer" value = "<%= faq.answer %>"></td>
+                </tr>
+                <input type="hidden" name="id" value="<%= faq.id %>">
+                <tr>
+                    <td colspan="2"><button type="submit">Edit FAQ</button></td>
+                </tr>
+
+            </table>
+        </form>
+    <% } %>
+</body>
+</html>

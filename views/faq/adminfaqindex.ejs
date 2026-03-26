@@ -20,7 +20,7 @@
                 <h3 class="faq-question"><%= faq.question  %></h3>
                 <p class="faq-answer"><%= faq.answer  %></p>
                 <div class="admin-actions">
-                    <a href="/faq/<%= faq._id %>/edit" class="btn-edit">Edit</a>
+                    <a href="/faq/admin/edit?id=<%= faq._id %>" class="btn-edit">Edit</a>
                 </div>
              </article>
             <% }) %>
