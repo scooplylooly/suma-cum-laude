@@ -11,22 +11,34 @@
     <%- include('common/header') %>
     
     <main class="profile-page">
-        <div>
             <%if(user.role == 'admin'){%>
             <h2>Admin: <%= details.userName %></h2> <br>
             <%}else{%>
             <h2>User: <%= details.userName %></h2> <br>
             <%}%>
-            
-            <h4>Your details</h4>
+        <div class="profile-card">
+            <p class="subtitle">Here are your details.</p>
             <div class="profile-deets">
-                <div class="box"><%= details.email %></div> <br>
-                <div class="box"><%= details.DOB.split('-').reverse().join('/') %></div> <br>
+            <div class="detail-box">
+                <span class="label">Name: </span>
+                <span class="value"><%= details.userName %></span>
             </div>
+
+            <div class="detail-box">
+                <span class="label">Email: </span>
+                <span class="value"><%= details.email %></span>
+            </div>
+
+            <div class="detail-box">
+                <span class="label">Date of Birth: </span>
+                <span class="value"><%= details.DOB.split('-').reverse().join('/') %></span>
+            </div>
+        </div>
+
             <div class="actions">
-                <a href="/edit-profile">Edit details</a>
-                <a href="/delete-profile" class="delete">Delete Account</a>
-                <a href="/logout">Log out</a>
+                <a href="/edit-profile" class="button1">Edit details</a>
+                <a href="/delete-profile" class="button2">Delete Account</a>
+                <a href="/logout" class="button3">Log out</a>
             </div>
         </div>
     </main>
