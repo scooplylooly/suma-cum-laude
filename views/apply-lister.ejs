@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./style/apply-lister.css">
     <title>Register to be a Lister</title>
 </head>
 <body>
     <div id="form">
         <form action="/apply-lister" method="post">
             Username: <input type="text" name="userNameL" value="<%= userNameL %>"><br><br>
-            Reason(s) for putting your pet up for adoption: <input type="text" name="reason" id="reason">
+            Reason for putting your pet up for adoption: <input type="text" name="reason" id="reason"><br><br>
+            Address: <input type="text" name="address" id="address"><br><br>
             Password: <input type="password" name="passwordL" value="<%= passwordL %>"><br><br>
             Confirm your password: <input type="password" name="password2L" value="<%= password2L %>"><br><br> 
             <button type="submit">Apply</button>

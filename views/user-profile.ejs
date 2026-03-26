@@ -26,27 +26,10 @@
             <div class="actions">
                 <a href="/edit-profile">Edit details</a>
                 <a href="/delete-profile" class="delete">Delete Account</a>
+                <a href="/apply-lister">lister</a>
             </div>
         </div>
-        <div>
-
-            <%if (isLoggedInL){%>
-            Create your pet listings <a href="/pet-create-listings">here</a>!
-            Update your pet details <a href="/update-pet-details">here</a>!
-            <%}else{%>
-            <h3>Do you want to list some pets?</h3>
-            <p>
-                <a href="/login-lister">Log in</a> to start listing!
-            </p>
-            <p>
-                Have you already applied? Check your application status here:
-            </p>
-            <p>
-                If not, click <a href="/apply-lister">here</a> to apply!
-            </p>
-            <%}%>
-            
-        </div>
+        
     </main>
     <%- include('common/footer') %>
 </body>

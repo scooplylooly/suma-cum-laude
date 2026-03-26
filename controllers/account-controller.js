@@ -59,7 +59,7 @@ exports.handleRegister = async (req, res) => {
     if (errors.length === 0) {
         // no errors; user is registered
         try {
-            const result = await accountModel.registerUser(
+            const result = await accountModel.registerLister(
                 userName,
                 email,
                 DOB,
@@ -176,7 +176,7 @@ exports.processUpdate = async (req, res) => {
     res.redirect("/profile");
 };
 
-exports.deleteConfirmation = (req, res) => {
+exports.deleteConfirmation1 = (req, res) => {
     // displays form for user to enter password to verify deletion
     res.render("delete-user-profile", { error: "" });
 };
@@ -204,17 +204,35 @@ exports.deleteProfile = async (req, res) => {
 };
 
 exports.showLister = (req, res) => {
-    res.render("apply-lister", userName, password, password2, errors = [])
+    res.render("apply-lister", 
+        {userNameL: "",
+        reason: "",
+        address: "",
+        passwordL: "", 
+        password2L: "", 
+        errors: [],
+        success: false,
+    });
 }
 
 exports.handleLister = async (req, res) => {
     let userNameL = (req.body.userNameL ?? "").trim()
+    let reason = (req.body.reason ?? "").trim()
+    let address = (req.body.address ?? "").trim()
     let passwordL = (req.body.passwordL ?? "").trim()
     let password2L = (req.body.password2L ?? "").trim()
 
     let errors = []
     if (!userNameL) {
         errors.push("Username is required")
+    }
+
+    if (!reason) {
+        errors.push("Reason is required")
+    }
+
+    if (!address) {
+        errors.push("Address is required")
     }
 
     if (!passwordL) {
@@ -225,7 +243,38 @@ exports.handleLister = async (req, res) => {
         errors.push("Passwords do not match")
     }
 
-    res.render("apply-lister", {userNameL, passwordL, password2L})
+    if (errors.length > 0) {
+        return res.render("apply-lister", {
+          userNameL,
+          reason,
+          address,
+          passwordL,
+          password2L,
+          success: false,
+        });
+    }
+
+    try {
+        await accountModel.registerLister(userNameL, reason, address, passwordL, "lister");
+        return res.render("apply-lister", {
+          userNameL: "",
+          reason: "",
+          address: "",
+          passwordL: "",
+          password2L: "",
+          success: success,
+        });    
+    } catch (err) {
+        errors.push(err.message || "Failed to register as lister");
+        return res.render("apply-lister", {
+          userNameL,
+          reason,
+          address,
+          passwordL,
+          password2L,
+          success: false,
+        });
+    }
 }
 
 exports.showLoginL = (req, res) => {
@@ -250,12 +299,12 @@ exports.handleLoginL = async (req, res) => {
         errors.push("Password is required");
     }
     if (errors.length === 0) {
-        const user = await accountModel.authenticateUser(userNameL, passwordL);
+        const user = await accountModel.authenticateLister(userNameL, passwordL);
         if (!user) {
             errors.push(
                 "Invalid username or password. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
             );
-            return res.render("login", {
+            return res.render("login-lister", {
                 userNameL,
                 passwordL,
                 errors,

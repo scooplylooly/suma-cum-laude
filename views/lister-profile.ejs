@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= details.userNameL %>'s lister profile</title>
+    <link rel="stylesheet" type="text/css" href="./style/profile.css" />
+</head>
+
+<body>
+    <%- include('common/header') %>
+    
+    <main class="profile-page">
+        <div>
+
+            <%if (isLoggedIn && user.role='lister'){%>
+            Create your pet listings <a href="/pet-create-listings">here</a>!
+            Update your pet details <a href="/update-pet-details">here</a>!
+            <%}else{%>
+            <h3>Do you want to list some pets?</h3>
+            <p>
+                <a href="/login-lister">Log in</a> to start listing!
+            </p>
+            <p>
+                Have you already applied? Check your application status here:
+            </p>
+            <p>
+                If not, click <a href="/apply-lister">here</a> to apply!
+            </p>
+            <%}%>
+            
+        </div>
+    </main>
+    <%- include('common/footer') %>
+</body>
+</html>

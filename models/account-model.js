@@ -87,6 +87,79 @@ async function getAllUsers() {
     // deletes specified user from user schema
     return users.find().lean();
 }
+
+const listerSchema = new mongoose.Schema({
+    userNameL: {
+        type: String,
+        required: [true, "A user must have a user name"],
+    },
+    reason: {
+        type: String,
+        required: [true, "A user must have a reason"]
+    },
+    address: {
+        type: String,
+        required: [true, "A user must have an address"]
+    },
+    passwordL: {
+        type: String,
+        required: [true, "A user must have a password"],
+    },
+    statusL: {
+        type: Boolean,
+        required: [true, "A user will have a status"],
+    },
+    role: {
+        type: String,
+        default: "user",
+        required: [true, "User role must be stated"],
+    },
+});
+
+const lister = mongoose.model("lister", listerSchema, "lister");
+
+async function registerLister(userNameL, passwordL, role) {
+    const existing = await lister.findOne({ userNameL });
+    if (existing) {
+        throw new Error("Username already exists");
+    } else {
+        let hashedPassword = await bcrypt.hash(passwordL, 10);
+        let newLister = {
+            userNameL,
+            passwordL: hashedPassword,
+            statusL,
+            role,
+        };
+    await lister.create(newLister);
+    }
+}
+
+async function authenticateLister(userNameL, passwordL) {
+    const exists = await lister.findOne({ userNameL });
+
+    if (!exists) return null;
+
+    let match = await bcrypt.compare(passwordL, exists.passwordL);
+    if (match) {
+        return exists;
+    } else {
+        return null;
+    }
+}
+
+async function retrieveLister(listerId) {
+    return await lister.findOne({ _id: listerId }).lean();
+}
+
+async function addLister(lister) {
+    return await lister.create(lister);
+}
+
+async function deleteLister(listerID) {
+    return lister.deleteOne({ _id: listerID });
+}
+
+
 module.exports = {
     authenticateUser,
     registerUser,
@@ -94,4 +167,9 @@ module.exports = {
     deleteUser,
     updateDetails,
     getAllUsers,
+    authenticateLister,
+    registerLister,
+    retrieveLister,
+    deleteLister,
+    addLister
 };

@@ -18,10 +18,10 @@ router.post("/edit-profile", accountController.processUpdate);
 router.get("/delete-profile", accountController.deleteConfirmation1);
 router.post("/delete-profile", accountController.deleteProfile);
 
-router.get('/apply-lister', authController.showLister)
-router.post('/apply-lister', authController.handleLister)
+router.get('/apply-lister', accountController.showLister)
+router.post('/apply-lister', accountController.handleLister)
 
-router.get("/login-lister", authMiddleware.isLoggedInL, accountController.showLoginL);
+router.get("/login-lister", authMiddleware.isLoggedIn, accountController.showLoginL);
 router.post("/login-lister", accountController.handleLoginL);
 
 router.get("/delete-lister", accountController.deleteConfirmation2)
