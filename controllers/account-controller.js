@@ -93,12 +93,15 @@ exports.updateProfile = async (req, res) => {
     const userId = req.session.user._id;
     // retrieves profile details for user from database and is put as default value for form fields
     const originalDetails = await accountModel.retrieveProfile(userId);
-    res.render("edit-user-profile", {originalDetails});
+    res.render("edit-user-profile", {originalDetails, password:"", password2:""});
 }
 
 exports.processUpdate = async (req, res) => {
+    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
     const userName = (req.body.userName ?? "").trim();
     const email = (req.body.email ?? "").trim();
+    const password = (req.body.password ?? "").trim() || originalDetails.password;
+    const password2 = (req.body.password ?? "").trim() || originalDetails.password;
     const DOB = req.body.dob;
 
     try{
@@ -106,7 +109,7 @@ exports.processUpdate = async (req, res) => {
         await accountModel.updateDetails(req.session.user._id, userName, email, DOB);
         console.log("Updated details successfully");
         req.session.user.userName = userName; // updates username variable in session; becauses session captures old snapshot with outdated details
-        console.log("new session userName: " + req.session.user.userName);
+        console.log("Current session userName: " + req.session.user.userName);
 
     } catch (error){
         console.error("Failed to update user details", error)
