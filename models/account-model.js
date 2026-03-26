@@ -75,7 +75,7 @@ async function addUser(user) {
 }
 
 async function updateDetails(userId, userName, email, DOB) {
-    // updates the profile details of speificied user
+    // updates the profile details of specified user
     return users.updateOne({ _id: userId }, { userName, email, DOB });
 }
 
