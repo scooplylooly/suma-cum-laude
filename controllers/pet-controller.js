@@ -107,6 +107,11 @@ exports.applyInterest = async (req, res) => {
         userName: req.session.user?.userName ?? null,
         petName: petName,
         reason: req.body.applyReason,
+        houseType: req.body.houseType,
+        existingPets: req.body.existingPets,
+        petExperience: req.body.petExperience,
+        income: req.body.income,
+        contactNo: req.body.contactNo
     };
 
     try {
@@ -492,7 +497,68 @@ exports.approveApp = async (req,res) => {
     }
     applications = await listing.findApplicationByPet(petID)
     res.render('view-applications', {applications,user,petName})
+};
+exports.denyApp = async (req,res) => {
+    const appID = req.query.application
+    const value = 'denied'
+    const petID = req.query.petID
+    const petName = req.query.petName
+    const user = req.session.user
+    try{
+        await listing.updateApplicationbyID(appID,value)
+        console.log('Success!')
+    }catch(error) {
+        console.log(error)
+    }
+    const applications = await listing.findApplicationByPet(petID)
+    res.render('view-applications', {applications,user,petName})
+};
+exports.applicationStatus = async (req,res) => {
+    const user = req.session.user
+    const uid = user._id
+    const applications = await listing.findApplicationbyUID(uid)
+    res.render('applications-status',{applications,user})
+};
+exports.deleteApplication = async (req,res) => {
+    const appID = req.query.appID
+    const user = req.session.user
+    const uid = user._id
+    try{
+        await listing.deleteApplication(appID)
+        console.log('Application Deleted')
+    }catch(error){
+        console.log('Error:', error)
+    }
+    const applications = await listing.findApplicationbyUID(uid)
+    res.render('applications-status',{applications,user})
 
-
+};
+exports.updateApplication = async (req,res) => {
+    const appID = req.query.appID
+    const user = req.session.user
+    const application = await listing.findApplicationByID(appID)
+    res.render('update-application',{application,user})
+};
+exports.updateApplicationDetails = async (req,res) => {
+    const updatedFields = {
+        houseType: req.body.houseType,
+        income: req.body.income,
+        petExperience: req.body.petExperience,
+        existingPets: req.body.existingPets,
+        contactNo: req.body.contactNo,
+        reason: req.body.applyReason
+    }
+    const user = req.session.user
+    const appID = req.body.appID
+    const uid=user._id
+    try{
+        await listing.updateApplicationDetails(appID,updatedFields)
+        console.log("application updated")
+    }catch(error){
+        console.log("Error:",error)
+    };
+    const applications = await listing.findApplicationbyUID(uid);
+    res.render('applications-status',{user,applications})
+    
 
 }
