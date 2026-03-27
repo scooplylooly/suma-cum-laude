@@ -85,7 +85,7 @@ exports.updateListingStatus = async (req, res) => {
         await petModel.updatePetApproval(pid, isApproved);
         console.log(`Listing ${isApproved} successfully`);
     }
-    return res.redirect("/admin-listings");
+    return res.redirect("/admin/listings");
 };
 
 exports.showUsers = async (req, res) => {
@@ -130,7 +130,7 @@ exports.deleteUser = async (req, res) => {
     try {
         await accountModel.deleteUser(uid);
         console.log("user deleted!");
-        return res.redirect("/admin-users");
+        return res.redirect("/admin/users");
     } catch (err) {
         console.error(err);
         error = "Error deleting user";
