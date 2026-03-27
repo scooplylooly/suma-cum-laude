@@ -1,5 +1,5 @@
 const accountModel = require("../models/account-model");
-const mailer = require("../utils/mailer")
+const mailer = require("../utils/mailer");
 const bcrypt = require("bcrypt");
 
 exports.showRegister = (req, res) => {
@@ -69,6 +69,9 @@ exports.handleRegister = async (req, res) => {
                 role,
             );
             console.log("Registering user...");
+            if (req.session.user && req.session.user.role === "admin") {
+                return res.redirect("/admin-users");
+            }
         } catch (error) {
             errors.push(error.message);
         }
@@ -142,7 +145,12 @@ exports.handleLogin = async (req, res) => {
 };
 
 exports.showReset = (req, res) => {
-    res.render('reset-form', {userName:"", email: "", errors:[], success:false });
+    res.render("reset-form", {
+        userName: "",
+        email: "",
+        errors: [],
+        success: false,
+    });
 };
 
 // handle reset form - validate user + send OTP
@@ -151,7 +159,7 @@ exports.handleReset = async (req, res) => {
     const email = (req.body.email ?? "").trim();
     let errors = [];
 
-    // checks if username and email fields are filled in 
+    // checks if username and email fields are filled in
     if (!userName) {
         errors.push("Username is required");
     }
@@ -160,16 +168,28 @@ exports.handleReset = async (req, res) => {
     }
 
     if (errors.length > 0) {
-        return res.render('reset-form', {userName, email, errors, success: false });
+        return res.render("reset-form", {
+            userName,
+            email,
+            errors,
+            success: false,
+        });
     }
 
     try {
         // check user exists with matching username + email
         const user = await accountModel.findUserByNameAndEmail(userName, email);
         if (!user) {
-            errors.push("No account found with that username and email.<br> Try <a href='/register'>registering</a> first.");
-            console.log("User does not exist")
-            return res.render('reset-form', {userName:"", email:"", errors, success: false });
+            errors.push(
+                "No account found with that username and email.<br> Try <a href='/register'>registering</a> first.",
+            );
+            console.log("User does not exist");
+            return res.render("reset-form", {
+                userName: "",
+                email: "",
+                errors,
+                success: false,
+            });
         }
 
         // generate OTP
@@ -181,56 +201,64 @@ exports.handleReset = async (req, res) => {
 
         // send OTP email
         await mailer.sendOTP(email, otp);
-        console.log("Sending OTP...")
+        console.log("Sending OTP...");
 
         // store in session for next step
         req.session.resetUserId = user._id;
-        res.redirect('/verify-otp');
-
+        res.redirect("/verify-otp");
     } catch (error) {
         console.error(error);
         errors.push("Something went wrong. Please try again.");
-        res.render('reset-form', {userName:"", email:"", errors, success: false });
+        res.render("reset-form", {
+            userName: "",
+            email: "",
+            errors,
+            success: false,
+        });
     }
 };
 
 // show OTP form
 exports.showVerifyOtp = (req, res) => {
-    if (!req.session.resetUserId) return res.redirect('/forget-password');
-    res.render('verify-otp', { errors: [], success: false });
+    if (!req.session.resetUserId) return res.redirect("/forget-password");
+    res.render("verify-otp", { errors: [], success: false });
 };
 
 // handle OTP verification
 exports.handleVerifyOtp = async (req, res) => {
-    if (!req.session.resetUserId) return res.redirect('/forget-password');
+    if (!req.session.resetUserId) return res.redirect("/forget-password");
 
     const otp = (req.body.otp ?? "").trim();
     const user = await accountModel.retrieveProfile(req.session.resetUserId);
 
     if (!user || user.otp !== otp) {
-        return res.render('verify-otp', { errors: ["Invalid OTP. Please try again."] });
+        return res.render("verify-otp", {
+            errors: ["Invalid OTP. Please try again."],
+        });
     }
 
     if (user.otpExpiry < new Date()) {
-        return res.render('verify-otp', { errors: ["OTP has expired. Please request a new one."] });
+        return res.render("verify-otp", {
+            errors: ["OTP has expired. Please request a new one."],
+        });
     }
 
     req.session.otpVerified = true;
-    console.log("OTP verified")
-    res.redirect('/new-password');
+    console.log("OTP verified");
+    res.redirect("/new-password");
 };
 
 // show new password form
 exports.showNewPassword = (req, res) => {
     if (!req.session.otpVerified) {
-        return res.redirect('/forget-password');
+        return res.redirect("/forget-password");
     }
-    res.render('new-password', { errors: [], success: false });
+    res.render("new-password", { errors: [], success: false });
 };
 
 // handle new password submission
 exports.handleNewPassword = async (req, res) => {
-    if (!req.session.otpVerified) return res.redirect('/forget-password');
+    if (!req.session.otpVerified) return res.redirect("/forget-password");
 
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
@@ -244,23 +272,26 @@ exports.handleNewPassword = async (req, res) => {
     }
 
     if (errors.length > 0) {
-        return res.render('new-password', { errors, success: false });
+        return res.render("new-password", { errors, success: false });
     }
 
     try {
         const hashed = await bcrypt.hash(password, 10);
         await accountModel.updatePassword(req.session.resetUserId, hashed);
-        console.log("Resetting password...")
+        console.log("Resetting password...");
 
         // clear session reset flags
         delete req.session.otpVerified;
         delete req.session.resetUserId;
-        console.log("Deleting reset flags...")
+        console.log("Deleting reset flags...");
 
-        res.render('new-password', { errors: [], success: true });
+        res.render("new-password", { errors: [], success: true });
     } catch (error) {
         console.error(error);
-        res.render('new-password', { errors: ["Failed to reset password."], success: false });
+        res.render("new-password", {
+            errors: ["Failed to reset password."],
+            success: false,
+        });
     }
 };
 
@@ -273,37 +304,58 @@ exports.showProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     // shows update details form for user
-    // retrieves profile details for user from database 
+    // retrieves profile details for user from database
     // and is put as default value for form fields
-    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
+    const originalDetails = await accountModel.retrieveProfile(
+        req.session.user._id,
+    );
     const userName = originalDetails.userName;
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
-    res.render("update-user-profile", {userName, email, DOB, password:"", password2:"", errors: []});
-}
+    res.render("update-user-profile", {
+        userName,
+        email,
+        DOB,
+        password: "",
+        password2: "",
+        errors: [],
+    });
+};
 
 exports.processUpdate = async (req, res) => {
-    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
-    const userName = (req.body.userName ?? "").trim() || originalDetails.userName;
+    const originalDetails = await accountModel.retrieveProfile(
+        req.session.user._id,
+    );
+    const userName =
+        (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
     // note that password fields could be left empty if user does not key im values
     // passwords are not shown for security in update page
-    const password = (req.body.password ?? "").trim() 
-    const password2 = (req.body.password2 ?? "").trim()
+    const password = (req.body.password ?? "").trim();
+    const password2 = (req.body.password2 ?? "").trim();
     const DOB = req.body.dob;
     let errors = [];
-    
-    if (userName !== originalDetails.userName && await accountModel.checkUserExist(userName)) {
-        errors.push("Username already exists")
+
+    if (
+        userName !== originalDetails.userName &&
+        (await accountModel.checkUserExist(userName))
+    ) {
+        errors.push("Username already exists");
     }
 
     if (password !== password2) {
         errors.push("Passwords do not match");
-    };
+    }
 
     if (errors.length > 0) {
         return res.render("update-user-profile", {
-            userName, email, DOB, password:"", password2: "", errors})
+            userName,
+            email,
+            DOB,
+            password: "",
+            password2: "",
+            errors,
+        });
     }
 
     try {
@@ -313,16 +365,18 @@ exports.processUpdate = async (req, res) => {
             userName,
             email,
             DOB,
-            password
+            password,
+            originalDetails.role,
         );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
-        req.session.user.userName = userName; 
-        console.log("Updated current session userName: " + req.session.user.userName);
+        req.session.user.userName = userName;
+        console.log(
+            "Updated current session userName: " + req.session.user.userName,
+        );
         res.redirect("/profile");
-
-    } catch (error){
-        console.error("Failed to update user details, error:", error)
+    } catch (error) {
+        console.error("Failed to update user details, error:", error);
     }
 };
 

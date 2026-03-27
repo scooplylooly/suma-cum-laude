@@ -1,8 +1,7 @@
-const fs = require("node:fs/promises");
+// const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { type } = require("node:os");
-const { updateProfile } = require("../controllers/account-controller");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({
@@ -28,11 +27,11 @@ const usersSchema = new mongoose.Schema({
         required: [true, "User role must be stated"],
     },
     otp: {
-        type: String
+        type: String,
     },
     otpExpiry: {
-        type: Date
-    }
+        type: Date,
+    },
 });
 
 const users = mongoose.model("users", usersSchema, "users");
@@ -48,9 +47,9 @@ async function registerUser(userName, email, DOB, password, role) {
             email,
             DOB,
             password: hashedPassword, // hashes the password for security
-            role: 'user',
-            otp:'',
-            otpExpiry:''
+            role: "user",
+            otp: "",
+            otpExpiry: "",
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -72,21 +71,24 @@ async function authenticateUser(userName, password) {
     }
 }
 
-async function findUserByNameAndEmail(userName, email){
-    return users.findOne({userName: userName, email: email}).lean();
+async function findUserByNameAndEmail(userName, email) {
+    return users.findOne({ userName: userName, email: email }).lean();
 }
 
-async function saveOTP(userId, otp, expiry){
+async function saveOTP(userId, otp, expiry) {
     return users.updateOne(
-        {_id: userId},
-        {$set: {otp, otpExpiry: expiry}}
+        { _id: userId },
+        { $set: { otp, otpExpiry: expiry } },
     );
 }
 
 async function updatePassword(userId, hashedPassword) {
     return users.updateOne(
-        {_id: userId},
-        {$set :{password: hashedPassword}, $unset: {otp:'', otpExpiry: ''}}
+        { _id: userId },
+        {
+            $set: { password: hashedPassword },
+            $unset: { otp: "", otpExpiry: "" },
+        },
     );
 }
 
@@ -101,21 +103,29 @@ async function addUser(user) {
 }
 
 async function checkUserExist(userName) {
-    if (users.findOne({userName: userName})) {
+    if (users.findOne({ userName: userName })) {
         return true;
     }
     return false;
 }
 
-async function updateDetails(userId, userName, email, DOB, password) {
+async function updateDetails(userId, userName, email, DOB, password, role) {
     // updates the profile details of specified user
     const originalDetails = await retrieveProfile(userId);
-    return users.updateOne({ _id: userId },
-        {$set: {userName, 
-            email, 
-            DOB, 
-            password: password ? await bcrypt.hash(password, 10) : originalDetails.password}
-        })
+    return users.updateOne(
+        { _id: userId },
+        {
+            $set: {
+                userName: userName,
+                email: email,
+                DOB: DOB,
+                password: password
+                    ? await bcrypt.hash(password, 10)
+                    : originalDetails.password,
+                role: role,
+            },
+        },
+    );
 }
 
 async function deleteUser(userId) {
@@ -136,5 +146,5 @@ module.exports = {
     checkUserExist,
     findUserByNameAndEmail,
     saveOTP,
-    updatePassword
+    updatePassword,
 };

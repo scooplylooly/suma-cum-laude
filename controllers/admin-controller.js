@@ -55,7 +55,7 @@ exports.filterListings = async (req, res) => {
 exports.confirmListingStatus = async (req, res) => {
     let pid = req.query.pid;
     let petFound = await petModel.findPetById(pid);
-     return res.render("admin-listing-status", { petFound });
+    return res.render("admin-listing-status", { petFound });
 };
 exports.updateListingStatus = async (req, res) => {
     let action = req.body.action;
@@ -69,12 +69,14 @@ exports.updateListingStatus = async (req, res) => {
 };
 
 exports.showUsers = async (req, res) => {
+    let adminUserId = req.session.user._id;
     let users = await accountModel.getAllUsers();
-    return res.render("admin-users", { users, selectedType: "" });
+    return res.render("admin-users", { users, selectedType: "", adminUserId });
 };
 
 exports.filterUsers = async (req, res) => {
     let userType = req.body.userType;
+    let adminUserId = req.session.user._id;
     let selectedType = "";
     let users;
 
@@ -89,7 +91,8 @@ exports.filterUsers = async (req, res) => {
     }
     return res.render("admin-users", {
         users,
-        selectedType,
+        selectedType: "",
+        adminUserId,
     });
 };
 exports.displayDeleteUser = async (req, res) => {
@@ -112,4 +115,77 @@ exports.deleteUser = async (req, res) => {
         error = "Error deleting user";
     }
     return res.render("admin-delete-user", { userInfo, error });
+};
+
+exports.displayUpdateUser = async (req, res) => {
+    // shows update details form for user
+    // retrieves profile details for user from database
+    // and is put as default value for form fields
+    const uid = req.query.uid;
+    const originalDetails = await accountModel.retrieveProfile(uid);
+    console.log("EDITING USER:", originalDetails.userName);
+    const userName = originalDetails.userName;
+    const email = originalDetails.email;
+    const DOB = originalDetails.DOB;
+    const role = originalDetails.role;
+    return res.render("admin-user-update", {
+        userName,
+        email,
+        DOB,
+        role,
+        password: "",
+        password2: "",
+        errors: [],
+        uid,
+    });
+};
+exports.updateUser = async (req, res) => {
+    const uid = req.body.uid;
+    const originalDetails = await accountModel.retrieveProfile(uid);
+    const userName =
+        (req.body.userName ?? "").trim() || originalDetails.userName;
+    const email = (req.body.email ?? "").trim() || originalDetails.email;
+    // note that password fields could be left empty if user does not key im values
+    // passwords are not shown for security in update page
+    const password = (req.body.password ?? "").trim();
+    const password2 = (req.body.password2 ?? "").trim();
+    const DOB = req.body.dob;
+    const role = req.body.role;
+    console.log(role);
+
+    let errors = [];
+    console.log("Editing user:", originalDetails.userName);
+    if (
+        userName !== originalDetails.userName &&
+        (await accountModel.checkUserExist(userName))
+    ) {
+        errors.push("Username already exists");
+    }
+
+    if (password !== password2) {
+        errors.push("Passwords do not match");
+    }
+
+    if (errors.length > 0) {
+        return res.render("update-user-profile", {
+            userName,
+            email,
+            DOB,
+            role,
+            password: "",
+            password2: "",
+            errors,
+            uid,
+        });
+    }
+
+    try {
+        // updates fields of user profile in database
+        await accountModel.updateDetails(uid, userName, email, DOB, password, role);
+        console.log("Updated details successfully");
+        // updates username variable in session; becauses session captures old snapshot with outdated details
+        return res.redirect("/admin-users");
+    } catch (error) {
+        console.error("Failed to update user details, error:", error);
+    }
 };
