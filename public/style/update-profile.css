@@ -97,6 +97,32 @@ header nav a:hover {
     background-color: #b86d3e;
 }
 
+.error-list {
+    margin-top: 20px;
+    padding-left: 20px;
+    color: red;
+    text-align: left;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;  
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;    
+}
 
 footer {
     text-align: left;

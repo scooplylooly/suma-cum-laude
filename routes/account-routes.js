@@ -2,22 +2,30 @@ const express = require("express");
 
 const router = express.Router();
 const accountController = require("../controllers/account-controller.js");
-const authMiddleware = require("../middleware/auth-middleware.js")
+const authMiddleware = require("../middleware/auth-middleware.js");
 
-router.get('/register', accountController.showRegister);
-router.post('/register', accountController.handleRegister);
+router.get("/register", accountController.showRegister);
+router.post("/register", accountController.handleRegister);
 
-router.get('/login', authMiddleware.isLoggedIn,accountController.showLogin);
-router.post('/login', accountController.handleLogin);
+router.get("/login", authMiddleware.isLoggedIn, accountController.showLogin);
+router.post("/login", accountController.handleLogin);
 
-router.get('/profile', accountController.showProfile);
+router.get("/forget-password", accountController.showReset);
+router.post("/forget-password", accountController.handleReset);
+router.get("/verify-otp", accountController.showVerifyOtp);
+router.post("/verify-otp", accountController.handleVerifyOtp);
+router.get("/new-password", accountController.showNewPassword);
+router.post("/new-password", accountController.handleNewPassword);
 
-router.get('/edit-profile', accountController.updateProfile);
-router.post('/edit-profile', accountController.processUpdate);
 
-router.get('/delete-profile', accountController.deleteConfirmation);
-router.post('/delete-profile', accountController.deleteProfile);
+router.get("/profile", authMiddleware.checkUser, accountController.showProfile);
 
-router.get('/logout', accountController.logout);
+router.get("/edit-profile", authMiddleware.checkUser, accountController.updateProfile);
+router.post("/edit-profile", authMiddleware.checkUser, accountController.processUpdate);
+
+router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation);
+router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
+
+router.get("/logout", accountController.logout);
 
 module.exports = router;

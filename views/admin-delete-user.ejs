@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete profile</title>
+    <link rel="stylesheet" type="text/css" href="./style/delete-profile.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="delete-page">
+        <div class="delete-card">
+            <form action="/delete-user-profile" method="post" class="delete-form">
+                <h2 style="color: red;">Deleting <%=userInfo.userName%></h2> <br>
+                <%for(key in userInfo){%>
+                    <% if (key != '__v' && key != 'password'){%>
+                    <%if (key == '_id'){%>
+                    <p>ID : <%=userInfo[key]%> </p>
+                    <%}else if (key == 'DOB'){%>
+                    <p>Date of Birth : <%=userInfo[key]%> </p>
+                    <%}else{%>
+                    <p><%=key[0].toUpperCase() + key.toLowerCase().slice(1)%> : <%=userInfo[key]%> </p>
+                    <%}%>
+                    <%}%>
+                <%}%>
+                <input type="hidden" value="<%=userInfo._id%>" name="uid">
+                <button type="submit" onclick="return confirm ('WARNING: Are you sure? This action cannot be undone and all data will be lost')">Confirm Deletion</button>
+            </form>
+        </div>
+
+    </main>
+    <% if (error) { %>
+        <div class="err-message">
+            <%= error %>
+        </div>
+    <% } %>
+
+
+    <%- include('common/footer') %>
+    
+</body>
+</html>

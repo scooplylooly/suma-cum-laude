@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('common/header') %>
+    <main class="'update-listing">
+        <section>
+            <h2>Update you application here:</h2>
+        </section>
+        <form action="/update-application" method="post" style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 50%; margin: 0 auto;">
+        <input type="hidden" name="appID" value="<%=application._id%>">
+        <p>Application Number: <%=application.applicationNumber%></p>
+        <p>Pet Name: <%=application.petName%></p>
+        <!--House Type-->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+            <label for="houseType">Housing Type:</label>
+            <select name="houseType" id="houseType" value="<%=application.houseType%>">
+                <option value="HDB" selected>HDB</option>
+                <option value="Condo">Condo</option>
+                <option value="Landed">Landed</option>
+            </select>
+        </div>
+        <!--Income-->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+            <label for="income">Monthly Income:</label>
+            $<input type="number" name="income" min="0" value="<%=application.income%>">
+        </div>
+        <!--Prior Pet Experiences?-->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+            <label for="petExperience">Prior Pet Experience:</label>
+            <select name="petExperience" id="petExperience" value="<%=application.petExperience%>">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+        </div>
+        <!--Applicant contact no-->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+            <label for="contact">Contact No:</label>
+            +65-<input type="tel" pattern="[0-9]{8}" name="contactNo" value="<%=application.contactNo%>">
+        </div>
+        <!--Has any current existing pets?-->
+        <label for="existingPets">Existing Pets:</label>
+        <textarea name="existingPets" cols="50" rows="5"><%=application.existingPets%></textarea>
+
+        <!--Reason for adoption-->
+        <label for="applyReason">Reason:</label>
+        <textarea name="applyReason" cols="50" rows="5"><%=application.reason%></textarea>
+        <button type="submit">Update Application</button>
+        </form>
+        
+    </main>
+</body>
+</html>

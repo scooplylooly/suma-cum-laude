@@ -3,6 +3,7 @@ const multer = require("multer"); //upload image stuff
 const path = require("path");
 const router = express.Router();
 const petController = require("../controllers/pet-controller");
+const authMiddleware = require("../middleware/auth-middleware.js");
 
 // dont touch-- upload image stuff
 const storage = multer.diskStorage({
@@ -31,21 +32,62 @@ const upload = multer({
 });
 // dont touch-- upload image stuff
 
-router.get("/adopt", petController.displayPets);
-router.get("/pet-profile", petController.showPetProfile);
-router.post("/apply-for-pet", petController.applyInterest);
-router.get("/create-listing", petController.showPetListingForm);
+router.get("/adopt", authMiddleware.checkUser, petController.displayPets);
+router.get(
+    "/pet-profile",
+    authMiddleware.checkUser,
+    petController.showPetProfile,
+);
+router.post(
+    "/apply-for-pet",
+    authMiddleware.checkUser,
+    petController.applyInterest,
+);
+router.get(
+    "/create-listing",
+    authMiddleware.checkUser,
+    petController.showPetListingForm,
+);
 router.post(
     "/create-listing",
     upload.single("image"),
+    authMiddleware.checkUser,
     petController.createPetListing,
 );
-router.get("/search", petController.searchPet);
-router.get("/view-listings", petController.viewListings);
-router.get("/edit-listing", petController.showPetlistingProfile);
+router.get("/search", authMiddleware.checkUser, petController.searchPet);
+router.get(
+    "/view-listings",
+    authMiddleware.checkUser,
+    petController.viewListings,
+);
+router.get(
+    "/edit-listing",
+    authMiddleware.checkUser,
+    petController.showPetlistingProfile,
+);
 
-router.get("/update-pet", petController.updatePetProfile);
-router.post("/update-pet", upload.single("image"), petController.petUpdated);
-router.get("/delete-pet", petController.deletePetProfile);
-router.post("/delete-pet", petController.petDeleted);
+router.get(
+    "/update-pet",
+    authMiddleware.checkUser,
+    petController.updatePetProfile,
+);
+router.post(
+    "/update-pet",
+    authMiddleware.checkUser,
+    upload.single("image"),
+    petController.petUpdated,
+);
+router.get(
+    "/delete-pet",
+    authMiddleware.checkUser,
+    petController.deletePetProfile,
+);
+router.get('/approve', petController.approveApp)
+router.get('/deny', petController.denyApp)
+router.get('/application-status', authMiddleware.checkUser, petController.applicationStatus)
+router.post("/delete-pet", authMiddleware.checkUser, petController.petDeleted);
+router.get('/view-applications', petController.viewApplications)
+router.get('/deleteApplication',petController.deleteApplication)
+router.get('/updateApplication', petController.updateApplication)
+router.post('/update-application', petController.updateApplicationDetails)
 module.exports = router;

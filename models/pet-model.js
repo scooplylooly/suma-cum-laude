@@ -85,6 +85,10 @@ const petSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        adopted: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true,
@@ -99,12 +103,18 @@ const applicationSchema = new mongoose.Schema(
             ref: "users",
             default: null,
         },
+        userName: {
+            type: String,
+            ref: "users",
+            default: null
+        },
         applicationNumber: {
             type: String,
             default: () => "APP-" + Date.now(),
         },
         pid: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Pets",
             default: null,
         },
         petName: {
@@ -115,6 +125,32 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        status: {
+            type: String,
+            enum: ['pending','approved','denied'],
+            default: 'pending'
+        },
+        houseType: {
+            type: String,
+            enum: ['HDB','Condo','Landed'],
+            required: true,
+        },
+        existingPets: {
+            type: String,
+            required: true,
+        },
+        petExperience: {
+            type: String,
+            required: true,
+        },
+        income: {
+            type: Number,
+            required:true
+        },
+        contactNo: {
+            type: Number,
+            required: true,
+        }
     },
     {
         timestamps: true,
@@ -283,3 +319,44 @@ exports.checkExistingApplications = function () {
 exports.createNewApplication = async function (application) {
     return Application.create(application);
 };
+
+exports.findApplicationByPet = async function (petID) {
+    return Application.find({pid: new mongoose.Types.ObjectId(petID)}).lean()
+}
+exports.findApplicationByID = async function (ID) {
+    return Application.findOne({_id:ID})
+};
+exports.findApplicationbyUID = async function (UID) {
+    return Application.find({uid: new mongoose.Types.ObjectId(UID)}).lean()
+};
+exports.updateApplicationbyID = async function (ID,value) {
+    try{
+        await Application.updateOne({_id: ID}, {$set: {status: value}})
+        return 'Success!'
+    }catch(error){
+        return error
+    }
+};
+exports.updatePetStatusbyID = async function (pid,value) {
+    try{
+        await Pet.updateOne({_id:pid}, {$set: {approved: value}})
+        return "Pet Adopted"
+    }catch(error){
+        return error
+    }
+};
+exports.deleteApplication = async function (appID) {
+    try{
+        await Application.deleteOne({_id: appID})
+        console.log('success')
+    }catch(error){
+        return error
+    }
+};
+exports.updateApplicationDetails = async function (appID, updatedFields) {
+    return Application.findOneAndUpdate(
+        {_id:appID},
+        {$set: updatedFields},
+        { new:true}
+    )
+}

@@ -66,16 +66,36 @@ header nav a:hover {
     text-align: left;
 }
 
-.register-form input {
+.register-form input,
+.register-form select {
     padding: 12px;
     margin-bottom: 0.5px;
     border: 1px solid #d8c3b5;
     border-radius: 8px;
     font-size: 16px;
     font-family: inherit;
+    box-sizing: border-box;
 }
 
-.register-form input:focus {
+/* dropdown only */
+.register-form select {
+    color: #4f3c2f;
+    cursor: pointer;
+    background-color: #fffdfb;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a4c2f' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 36px;
+}
+
+.register-form input:focus,
+.register-form select:focus {
     outline: none;
     border-color: #c97d4e;
     box-shadow: 0 0 0 2px rgba(201, 125, 78, 0.15);
@@ -131,4 +151,23 @@ footer {
     background-color: #f0e0d0;
     color: #888;
     font-size: 14px;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;  
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;    
 }
