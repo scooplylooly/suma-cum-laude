@@ -53,14 +53,11 @@ exports.deleteFaq = async (faqId) => {
   return FAQ.findByIdAndDelete(faqId)
 }
 
-// exports.createFaq = async (faq) => {
-//   try {
-//     FAQ.create(faq)
-//     console.log("FAQ created successfully!")
-//   } catch(error) {
-//     console.log(error)
-//   }
-// }
-
-
-
+exports.createFaq = async (faq) => {
+  try {
+    FAQ.create(faq)
+    console.log("FAQ created successfully!")
+  } catch(error) {
+    console.log(error)
+  }
+}
