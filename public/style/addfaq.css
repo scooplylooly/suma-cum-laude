@@ -149,3 +149,15 @@ body {
         width: 100%;
     }
 }
+
+.form-message {
+    max-width: 850px;
+    margin: 20px auto 0;
+    padding: 14px 18px;
+    background-color: #fbe7da;
+    border: 1px solid #e2b89a;
+    border-radius: 10px;
+    color: #8a4f2b;
+    text-align: center;
+    font-size: 16px;
+}

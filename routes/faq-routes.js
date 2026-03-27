@@ -16,5 +16,6 @@ router.post('/admin/edit', faqController.editFaqs)
 router.post('/delete', faqController.deleteFaq)
 
 router.get('/new', faqController.showAddFaq)
+router.post('/new', faqController.newFaq)
 
 module.exports = router

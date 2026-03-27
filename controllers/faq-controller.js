@@ -59,9 +59,37 @@ exports.deleteFaq = async (req, res) => {
 }
 
 exports.showAddFaq = async (req, res) => {
-    res.render('faq/createfaq', { faq: "" })
+    res.render('faq/createfaq', { faq: null, msg: "" })
 }
 
-// exports.newFaq = async (req, res) => {
-    
-// }
+exports.newFaq = async (req, res) => {
+    const user = req.session.user
+
+    const {
+        question,
+        answer,
+        category,
+        published
+    } = req.body
+
+    if (!question || !answer || !category || !published ) {
+        msg = 'Please enter all fields'
+        return res.render('faq/createfaq', { faq: null, msg })
+    }
+    try {
+        const addFaq = {
+            question,
+            answer,
+            category,
+            published: published === 'true',
+            createdBy: user ? user._id : null
+        }
+
+        const result = await FAQ.createFaq(addFaq)
+        console.log(result)
+        res.redirect('/faq/admin')
+
+    } catch(error) {
+        console.error(error)
+    }
+}
