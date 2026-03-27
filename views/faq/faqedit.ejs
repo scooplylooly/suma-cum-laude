@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Faq</title>
+    <link rel="stylesheet" href="/style/editfaq.css">
+</head>
+<body>
+    <%- include('../common/header') %>
+
+    <% if (faq && faq.question) { %>
+        <h1 class="page-title">Edit FAQ</h1>
+
+        <form action="/faq/admin/edit" method="post" class="faq-form">
+            <table class="faq-table">
+                <tr>
+                    <th>Question :</th>
+                    <td>
+                        <input type="text" name="question" value="<%= faq.question %>" class="faq-input" required>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Answer :</th>
+                    <td>
+                        <textarea name="answer" class="faq-textarea" required><%= faq.answer %></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Category :</th>
+                    <td>
+                        <input type="text" name="category" value="<%= faq.category %>" class="faq-input" required>
+                    </td>
+                </tr>
+
+                <input type="hidden" name="id" value="<%= faq._id %>">
+                <input type="hidden" name="published" value="<%= faq.published %>">
+
+                <tr>
+                    <td colspan="2" class="submit-row">
+                        <button type="submit" class="faq-button">Edit FAQ</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    <% } %>
+</body>
+</html>

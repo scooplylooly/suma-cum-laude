@@ -1,0 +1,21 @@
+const express = require("express");
+const path = require("path");
+const router = express.Router();
+const faqController = require('../controllers/faq-controller')
+
+//Show all FAQs
+router.get('/', faqController.listFaqs)
+
+//Admin Dashboard Handling
+router.get('/admin', faqController.adminFaqs)
+
+//Admin Edit FAQs
+router.get('/admin/edit', faqController.getFaq)
+router.post('/admin/edit', faqController.editFaqs)
+
+router.post('/delete', faqController.deleteFaq)
+
+router.get('/new', faqController.showAddFaq)
+router.post('/new', faqController.newFaq)
+
+module.exports = router

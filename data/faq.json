@@ -1,0 +1,142 @@
+[
+  {
+    "question": "How do I adopt a pet?",
+    "answer": "Browse available pets, click on one you like, and submit an adoption application form.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "How long does the adoption process take?",
+    "answer": "The adoption review process usually takes a few days depending on application volume.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I meet the pet before adopting?",
+    "answer": "Yes, shortlisted applicants may be invited for a meet-up before final approval.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Are all pets vaccinated?",
+    "answer": "Most pets listed are vaccinated. Please check the pet details page for specific information.",
+    "category": "Pets",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "What does HDB-approved mean?",
+    "answer": "HDB-approved pets are allowed to be kept in HDB flats under current regulations.",
+    "category": "Pets",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I adopt if I live in an HDB flat?",
+    "answer": "Yes, but you should only adopt pets that are HDB-approved.",
+    "category": "Housing",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Is there an adoption fee?",
+    "answer": "Some pets may require an adoption fee to cover vaccination and care costs.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I apply for multiple pets?",
+    "answer": "Yes, but each application will be reviewed individually.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "What happens after my application is approved?",
+    "answer": "You will be contacted to arrange the next steps, which may include a meet-up or final confirmation.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I cancel my application?",
+    "answer": "Yes, you may contact the admin or withdraw your application before approval.",
+    "category": "Account",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Do I need experience to adopt a pet?",
+    "answer": "Experience is helpful but not required. Some pets are more suitable for first-time owners.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I return a pet after adoption?",
+    "answer": "In special circumstances, you may contact the shelter for assistance.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Are pets sterilized before adoption?",
+    "answer": "Many pets are sterilized. Check individual pet details for confirmation.",
+    "category": "Pets",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I edit my profile information?",
+    "answer": "Yes, you can update your profile details from your account settings.",
+    "category": "Account",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "What should I prepare before adopting a pet?",
+    "answer": "Prepare a safe environment, necessary supplies, and ensure you have enough time for pet care.",
+    "category": "Preparation",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Why was my application rejected?",
+    "answer": "Applications may be rejected due to unsuitable living conditions or mismatch with the pet's needs.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I adopt more than one pet?",
+    "answer": "Yes, but each application will be evaluated separately to ensure proper care.",
+    "category": "Adoption",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "How do I contact support?",
+    "answer": "You can contact support via the contact form or email listed on the website.",
+    "category": "General",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Can I search for pets based on personality?",
+    "answer": "Yes, you can use filters to find pets based on traits like calm, playful, or affectionate.",
+    "category": "Features",
+    "published": true,
+    "createdBy": null
+  },
+  {
+    "question": "Is registration required to apply for a pet?",
+    "answer": "Yes, you need to create an account before submitting an adoption application.",
+    "category": "Account",
+    "published": true,
+    "createdBy": null
+  }
+]
