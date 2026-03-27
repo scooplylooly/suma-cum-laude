@@ -57,3 +57,11 @@ exports.deleteFaq = async (req, res) => {
         return res.send(error.message)
     }
 }
+
+exports.showAddFaq = async (req, res) => {
+    res.render('faq/createfaq', { faq: "" })
+}
+
+// exports.newFaq = async (req, res) => {
+    
+// }
