@@ -14,22 +14,6 @@ header {
     align-items: center;
 }
 
-/* header h1 {
-    color: white;
-    margin: 0;
-}
-
-header nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-size: 16px;
-} */
-
-/* header nav a:hover {
-    text-decoration: underline;
-} */
-
 .delete-page {
     min-height: calc(100vh - 160px);
     display: flex;
@@ -99,7 +83,7 @@ header nav a {
     margin-top: 20px;
     padding-left: 20px;
     color: red;
-    text-align: left;
+    text-align: center;
 }
 
 footer {
@@ -108,4 +92,34 @@ footer {
     background-color: #f0e0d0;
     color: #888;
     font-size: 14px;
+}
+
+.delete-form input {
+    padding: 12px;
+    margin-bottom: 0;      
+    border: 1px solid #d8c3b5;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; 
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;    
 }

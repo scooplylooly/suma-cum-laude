@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in</title>
     <link rel="stylesheet" type="text/css" href="./style/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
     <header>
@@ -20,10 +22,18 @@
             <h2>Welcome!</h2>
             <p class="subtitle">Log in to find your companion!</p>
             <form action="/login" method="post" class="login-form">
-                Username: <input type="text" name="userName" value="<%= userName %>"> <br><br>
-                Password: <input type="password" name="password" value="<%= password %>" > <br><br>
+                Username: <input type="text" name="userName" value="<%= userName %>"> <br>
+                Password: 
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" value="<%= password %>" >
+                    <span class="eye-icon" onclick="togglePassword('password')">
+                        <i class="fa-regular fa-eye-slash" id="password-icon"></i>
+                    </span>
+                </div> <br><br>
                 <button type="submit">Log in</button>
             </form>
+            <br>
+            <a href="/forget-password" class="forget-pw">Forget your password?</a>
             <p class="register-link">Don't have an account?
                 <a href="/register">Create an account</a>
             </p>
@@ -35,10 +45,7 @@
             <% }) %>
             </ul>
         <% }; %>
-        </div>
-
-
-        <% if (success) { %>
+            <% if (success) { %>
             <p class="success-message">
             Successful login. <br>
             Time to find your dream companion / BFF!
@@ -50,7 +57,23 @@
             </script>
         <% } %>
         </div>
+
     </main>
     <%- include('common/footer') %>
+
+    <script>
+        function togglePassword(passwordField) {
+        const input = document.getElementById(passwordField);
+        const icon = document.getElementById(passwordField + '-icon')
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        }
+    }
+    </script>
 </body>
 </html>

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="./style/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
 
@@ -23,9 +25,22 @@
                 User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
                 Email: <input type="email" name="email" value="<%= email %>"> <br><br>
                 DOB: <input type="date" name="dob" value="<%= DOB %>"> <br><br>
-                Password: <input type="password" name="password" value="<%= password %>" > <br><br>
-                Confirm your password: <input type="password" name="password2" value="<%= password2 %>"> <br><br>
-                <%if(user.role == 'admin'){%>
+                Password: 
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" value="<%= password %>" >
+                    <span class="eye-icon" onclick="togglePassword('password')">
+                        <i class="fa-regular fa-eye-slash" id="password-icon"></i>
+                    </span>
+                </div> <br><br>
+
+                 Confirm your password: 
+                <div class="password-wrapper">
+                   <input type="password" id="password2" name="password2" value="<%= password2 %>" >
+                    <span class="eye-icon" onclick="togglePassword('password2')">
+                        <i class="fa-regular fa-eye-slash" id="password2-icon"></i>
+                    </span>
+                </div>
+                <%if (user && user.role == 'admin'){%>
                     role:<br>
                     <select name="role" required>
                         <option hidden>--select a role--</option>
@@ -34,7 +49,7 @@
                         <option value="admin">Admin</option>
                     </select>
                 <%}%><br><br>
-                <button type="submit">Register</button> <br><br>
+                <button type="submit" class="register-link">Register</button> <br><br>
             </form>
             <p>Already have an account? <a href="/login">Login</a></p>
 
@@ -63,5 +78,20 @@
         </div>
     </main>
     <%- include('common/footer') %>
+
+    <script>
+        function togglePassword(passwordField) {
+        const input = document.getElementById(passwordField);
+        const icon = document.getElementById(passwordField + '-icon')
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        }
+    }
+    </script>
 </body>
 </html>

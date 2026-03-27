@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP verification</title>
+     <link rel="stylesheet" type="text/css" href="./style/verify-otp.css">
+
+</head>
+<body>
+    <header>
+        <h1>Placeholder Title</h1>
+        <nav>
+            <a href="/index.html">Home</a>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        </nav>
+    </header>
+
+    <main class="verify-page">
+        <div class="verify-card">
+            <h3>Please check your email inbox for the OTP</h3><br>
+            <form action="/verify-otp" class="verify-form" method="post">
+                <input type="text" name="otp" placeholder="Enter OTP" maxlength="6"> <br><br>
+                <button type="submit" class="verify-link">Verify</button>
+            </form>
+            <% if (errors.length > 0) { %>
+           <ul class="error-list">
+            <% errors.forEach(error => { %>
+                <li><%- error %></li>
+            <% }) %>
+           </ul>
+        <% } %>
+
+        </div>
+
+    </main>
+    <%- include('common/footer') %>
+
+</body>
+</html>
