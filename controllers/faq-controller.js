@@ -9,7 +9,6 @@ exports.listFaqs = async (req, res) => {
 
 exports.adminFaqs = async (req, res) => {
     let faqs = await FAQ.getAllFaqs()
-    console.log(faqs)
     res.render('faq/adminfaqindex', {faqs})
 }
 
@@ -44,15 +43,15 @@ exports.deleteFaq = async (req, res) => {
     const faqID = req.body.id
 
     if (!faqID) {
-        res.send("No such FAQ found!")
+        return res.send("No such FAQ found!")
     }
     try{
         const result = await FAQ.deleteFaq(faqID)
 
         if (result.deletedCount === 1) {
             console.log("FAQ successfully deleted.")
-            res.redirect("/faq/admin")
-        }
+        } 
+        res.redirect("/faq/admin")
     } catch(error) {
         return res.send(error.message)
     }
@@ -87,7 +86,7 @@ exports.newFaq = async (req, res) => {
 
         const result = await FAQ.createFaq(addFaq)
         console.log(result)
-        res.redirect('/faq/admin')
+        return res.redirect('/faq/admin')
 
     } catch(error) {
         console.error(error)
