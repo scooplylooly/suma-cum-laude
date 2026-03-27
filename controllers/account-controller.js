@@ -168,6 +168,7 @@ exports.handleReset = async (req, res) => {
         const user = await accountModel.findUserByNameAndEmail(userName, email);
         if (!user) {
             errors.push("No account found with that username and email.<br> Try <a href='/register'>registering</a> first.");
+            console.log("User does not exist")
             return res.render('reset-form', {userName:"", email:"", errors, success: false });
         }
 
@@ -180,6 +181,7 @@ exports.handleReset = async (req, res) => {
 
         // send OTP email
         await mailer.sendOTP(email, otp);
+        console.log("Sending OTP...")
 
         // store in session for next step
         req.session.resetUserId = user._id;
@@ -220,7 +222,9 @@ exports.handleVerifyOtp = async (req, res) => {
 
 // show new password form
 exports.showNewPassword = (req, res) => {
-    if (!req.session.otpVerified) return res.redirect('/forget-password');
+    if (!req.session.otpVerified) {
+        return res.redirect('/forget-password');
+    }
     res.render('new-password', { errors: [], success: false });
 };
 
@@ -246,6 +250,7 @@ exports.handleNewPassword = async (req, res) => {
     try {
         const hashed = await bcrypt.hash(password, 10);
         await accountModel.updatePassword(req.session.resetUserId, hashed);
+        console.log("Resetting password...")
 
         // clear session reset flags
         delete req.session.otpVerified;
