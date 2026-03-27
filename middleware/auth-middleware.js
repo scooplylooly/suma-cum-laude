@@ -9,10 +9,6 @@ exports.isLoggedIn = (req, res, next) => {
         return next();
     }
 
-    if (user.role === "admin") {
-        return res.redirect("/admin-page");
-    }
-
     return res.redirect("/adopt");
 };
 

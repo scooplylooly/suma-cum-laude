@@ -253,3 +253,25 @@ form {
     backdrop-filter: blur(4px);
     text-align: center;
 }
+/* ===== STATUS BADGE ===== */
+.status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* adopted style */
+.status.adopted {
+    background-color: #e4f5e7;
+    color: #3f8a4e;
+    border: 1px solid #b9dfbf;
+}
+.status.adopted::before {
+    content: "✓ ";
+}
+.item .status {
+    margin-top: 14px;
+}

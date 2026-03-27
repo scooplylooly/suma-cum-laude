@@ -39,7 +39,7 @@ exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
     pets.reverse();
-    res.render("pet-search", {
+    return res.render("pet-search", {
         pets,
         nameSearched: "",
         user,
@@ -53,14 +53,18 @@ exports.searchPet = async (req, res) => {
     let pets = [];
     if (nameSearched != "") {
         for (let pet of allPets) {
-            if (pet.name.toLowerCase().includes(nameSearched.toLowerCase())||pet.type.toLowerCase().includes(nameSearched.toLowerCase())||pet.breed.toLowerCase().includes(nameSearched.toLowerCase())) {
+            if (
+                pet.name.toLowerCase().includes(nameSearched.toLowerCase()) ||
+                pet.type.toLowerCase().includes(nameSearched.toLowerCase()) ||
+                pet.breed.toLowerCase().includes(nameSearched.toLowerCase())
+            ) {
                 pets.push(pet);
             }
         }
     } else {
         pets = allPets;
     }
-    res.render("pet-search", {
+    return res.render("pet-search", {
         nameSearched,
         pets,
     });
@@ -68,7 +72,7 @@ exports.searchPet = async (req, res) => {
 
 exports.showPetListingForm = async (req, res) => {
     const user = req.session.user;
-    res.render("pet-create-listing", {
+    return res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
         user,
@@ -79,12 +83,12 @@ exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
     let pid = req.query.pid;
     if (!pid) {
-        res.redirect("/adopt");
+        return res.redirect("/adopt");
         return;
     } else {
         let result = await listing.findPetById(pid);
         console.log(result);
-        res.render("pet-profile", {
+        return res.render("pet-profile", {
             petFound: result,
             errorMsg: "",
             successMsg: "",
@@ -111,7 +115,7 @@ exports.applyInterest = async (req, res) => {
         existingPets: req.body.existingPets,
         petExperience: req.body.petExperience,
         income: req.body.income,
-        contactNo: req.body.contactNo
+        contactNo: req.body.contactNo,
     };
 
     try {
@@ -123,7 +127,7 @@ exports.applyInterest = async (req, res) => {
         console.error("Error when applying", error);
     }
 
-    res.render("pet-profile", {
+    return res.render("pet-profile", {
         petFound: pet,
         errorMsg: errorMsg,
         successMsg: successMsg,
@@ -430,18 +434,18 @@ exports.petUpdated = async (req, res) => {
         });
     }
 };
-exports.viewApplications = async (req,res) => {
-    let pid = req.query.pid
-    const user = req.session.user
-    let applications = await listing.findApplicationByPet(pid)
-    let pet = await listing.findPetById(pid)
-    let petName = pet.name
-    res.render('view-applications',{applications,petName,user})
-}
+exports.viewApplications = async (req, res) => {
+    let pid = req.query.pid;
+    const user = req.session.user;
+    let applications = await listing.findApplicationByPet(pid);
+    let pet = await listing.findPetById(pid);
+    let petName = pet.name;
+    return res.render("view-applications", { applications, petName, user });
+};
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);
-    res.render("delete-pet-profile", { pet, errorMsg: "" });
+    return res.render("delete-pet-profile", { pet, errorMsg: "" });
 };
 exports.petDeleted = async (req, res) => {
     const pid = req.body.pid;
@@ -463,102 +467,99 @@ exports.petDeleted = async (req, res) => {
     } catch (err) {
         console.error("Trouble deleting pet", err);
         fail = "Error deleting pet";
-        res.render("delete-pet-profile", {
+        return res.render("delete-pet-profile", {
             pet,
             errorMsg: fail,
         });
     }
 };
-exports.approveApp = async (req,res) => {
-    const appID = req.query.application
-    const value = 'approved'
-    const petID = req.query.petID
-    const petName = req.query.petName
-    const user = req.session.user
+exports.approveApp = async (req, res) => {
+    const appID = req.query.application;
+    const value = "approved";
+    const petID = req.query.petID;
+    const petName = req.query.petName;
+    const user = req.session.user;
 
-    try{
-        await listing.updateApplicationbyID(appID,value)
-        await listing.updatePetStatusbyID(petID, true)
-        console.log('Success!')
-    }catch(error) {
-        console.log(error)
+    try {
+        await listing.updateApplicationbyID(appID, value);
+        await listing.updatePetStatusbyID(petID, true);
+        console.log("Success!");
+    } catch (error) {
+        console.log(error);
     }
-    let applications = await listing.findApplicationByPet(petID)
-    console.log(petID)
-    console.log(appID)
+    let applications = await listing.findApplicationByPet(petID);
+    console.log(petID);
+    console.log(appID);
     for (let application of applications) {
-        console.log("checking:", application._id.toString(), "vs", appID)
+        console.log("checking:", application._id.toString(), "vs", appID);
 
         if (application._id.toString() != appID) {
-            console.log("denying:", application._id)
+            console.log("denying:", application._id);
 
-            await listing.updateApplicationbyID(application._id,'denied')
+            await listing.updateApplicationbyID(application._id, "denied");
         }
     }
-    applications = await listing.findApplicationByPet(petID)
-    res.render('view-applications', {applications,user,petName})
+    applications = await listing.findApplicationByPet(petID);
+    return res.render("view-applications", { applications, user, petName });
 };
-exports.denyApp = async (req,res) => {
-    const appID = req.query.application
-    const value = 'denied'
-    const petID = req.query.petID
-    const petName = req.query.petName
-    const user = req.session.user
-    try{
-        await listing.updateApplicationbyID(appID,value)
-        console.log('Success!')
-    }catch(error) {
-        console.log(error)
+exports.denyApp = async (req, res) => {
+    const appID = req.query.application;
+    const value = "denied";
+    const petID = req.query.petID;
+    const petName = req.query.petName;
+    const user = req.session.user;
+    try {
+        await listing.updateApplicationbyID(appID, value);
+        console.log("Success!");
+    } catch (error) {
+        console.log(error);
     }
-    const applications = await listing.findApplicationByPet(petID)
-    res.render('view-applications', {applications,user,petName})
+    const applications = await listing.findApplicationByPet(petID);
+    return res.render("view-applications", { applications, user, petName });
 };
-exports.applicationStatus = async (req,res) => {
-    const user = req.session.user
-    const uid = user._id
-    const applications = await listing.findApplicationbyUID(uid)
-    res.render('applications-status',{applications,user})
+exports.applicationStatus = async (req, res) => {
+    const user = req.session.user;
+    const uid = user._id;
+    const applications = await listing.findApplicationbyUID(uid);
+    return res.render("applications-status", { applications, user });
 };
-exports.deleteApplication = async (req,res) => {
-    const appID = req.query.appID
-    const user = req.session.user
-    const uid = user._id
-    try{
-        await listing.deleteApplication(appID)
-        console.log('Application Deleted')
-    }catch(error){
-        console.log('Error:', error)
+exports.deleteApplication = async (req, res) => {
+    const appID = req.query.appID;
+    const user = req.session.user;
+    const uid = user._id;
+    try {
+        await listing.deleteApplication(appID);
+        console.log("Application Deleted");
+    } catch (error) {
+        console.log("Error:", error);
     }
-    const applications = await listing.findApplicationbyUID(uid)
-    res.render('applications-status',{applications,user})
-
+    const applications = await listing.findApplicationbyUID(uid);
+    return res.render("applications-status", { applications, user });
 };
-exports.updateApplication = async (req,res) => {
-    const appID = req.query.appID
-    const user = req.session.user
-    const application = await listing.findApplicationByID(appID)
-    res.render('update-application',{application,user})
+exports.updateApplication = async (req, res) => {
+    const appID = req.query.appID;
+    const user = req.session.user;
+    const application = await listing.findApplicationByID(appID);
+    return res.render("update-application", { application, user });
 };
-exports.updateApplicationDetails = async (req,res) => {
+exports.updateApplicationDetails = async (req, res) => {
     const updatedFields = {
         houseType: req.body.houseType,
         income: req.body.income,
         petExperience: req.body.petExperience,
         existingPets: req.body.existingPets,
         contactNo: req.body.contactNo,
-        reason: req.body.applyReason
-    }
-    const user = req.session.user
-    const appID = req.body.appID
-    const uid=user._id
-    try{
-        await listing.updateApplicationDetails(appID,updatedFields)
-        console.log("application updated")
-    }catch(error){
-        console.log("Error:",error)
+        reason: req.body.applyReason,
     };
+    const user = req.session.user;
+    const appID = req.body.appID;
+    const uid = user._id;
+    try {
+        await listing.updateApplicationDetails(appID, updatedFields);
+        console.log("application updated");
+    } catch (error) {
+        console.log("Error:", error);
+    }
     const applications = await listing.findApplicationbyUID(uid);
-    res.render('applications-status',{user,applications})
-    
-
-}
+    return res.render("applications-status", { user, applications });
+};

@@ -11,11 +11,14 @@ exports.showAdminPage = async (req, res) => {
 
             <script>
                 setTimeout(() => {
-                    location.href = "/sign-in"}, 3000);
+                    location.href = "/login"}, 3000);
             </script>
         `);
+    } else if (user.role == "admin") {
+        return res.render("admin-page", { user });
+    } else {
+        return res.redirect("/adopt");
     }
-    res.render("admin-page", { user });
 };
 
 exports.showIncomingListings = async (req, res) => {
@@ -52,7 +55,7 @@ exports.filterListings = async (req, res) => {
 exports.confirmListingStatus = async (req, res) => {
     let pid = req.query.pid;
     let petFound = await petModel.findPetById(pid);
-    res.render("admin-listing-status", { petFound });
+     return res.render("admin-listing-status", { petFound });
 };
 exports.updateListingStatus = async (req, res) => {
     let action = req.body.action;
@@ -62,12 +65,12 @@ exports.updateListingStatus = async (req, res) => {
         await petModel.updatePetApproval(pid, isApproved);
         console.log(`Listing ${isApproved} successfully`);
     }
-    res.redirect("/admin-listings");
+    return res.redirect("/admin-listings");
 };
 
 exports.showUsers = async (req, res) => {
     let users = await accountModel.getAllUsers();
-    res.render("admin-users", { users, selectedType: "" });
+    return res.render("admin-users", { users, selectedType: "" });
 };
 
 exports.filterUsers = async (req, res) => {
@@ -93,7 +96,7 @@ exports.displayDeleteUser = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
     let userInfo = await accountModel.retrieveProfile(uid);
-    res.render("admin-delete-user", { userInfo, error: "" });
+    return res.render("admin-delete-user", { userInfo, error: "" });
 };
 exports.deleteUser = async (req, res) => {
     let uid = req.body.uid;
@@ -103,10 +106,10 @@ exports.deleteUser = async (req, res) => {
     try {
         await accountModel.deleteUser(uid);
         console.log("user deleted!");
-        res.redirect("/admin-users");
+        return res.redirect("/admin-users");
     } catch (err) {
         console.error(err);
         error = "Error deleting user";
     }
-    res.render("admin-delete-user", { userInfo, error });
+    return res.render("admin-delete-user", { userInfo, error });
 };

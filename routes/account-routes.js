@@ -8,7 +8,7 @@ router.get("/register", accountController.showRegister);
 router.post("/register", accountController.handleRegister);
 
 router.get("/login", authMiddleware.isLoggedIn, accountController.showLogin);
-router.post("/login", accountController.handleLogin);
+router.post("/login", authMiddleware.isLoggedIn, accountController.handleLogin);
 
 router.get("/forget-password", accountController.showReset);
 router.post("/forget-password", accountController.handleReset);
