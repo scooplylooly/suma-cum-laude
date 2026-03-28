@@ -206,10 +206,10 @@ exports.deleteProfile = async (req, res) => {
 exports.showLister = (req, res) => {
     res.render("apply-lister", 
         {userNameL: "",
-        reason: "",
         address: "",
-        passwordL: "", 
-        password2L: "", 
+        contactNo: "",
+        reason: "", 
+        pets: "", 
         errors: [],
         success: false,
     });
@@ -217,61 +217,61 @@ exports.showLister = (req, res) => {
 
 exports.handleLister = async (req, res) => {
     let userNameL = (req.body.userNameL ?? "").trim()
+    let address = (req.body.reason ?? "").trim()
+    let contactNo = (req.body.contactNo ?? "").trim()
     let reason = (req.body.reason ?? "").trim()
-    let address = (req.body.address ?? "").trim()
-    let passwordL = (req.body.passwordL ?? "").trim()
-    let password2L = (req.body.password2L ?? "").trim()
+    let pets = (req.body.pets ?? "").trim()
 
     let errors = []
     if (!userNameL) {
         errors.push("Username is required")
     }
 
-    if (!reason) {
-        errors.push("Reason is required")
-    }
-
     if (!address) {
         errors.push("Address is required")
     }
 
-    if (!passwordL) {
-        errors.push("Password is required")
+    if (!contactNo) {
+        errors.push("Contact Number is required")
     }
 
-    if (!password2L || passwordL !== password2L) {
-        errors.push("Passwords do not match")
+    if (!reason) {
+        errors.push("A reason is required")
+    }
+
+    if (!pets) {
+        errors.push("Pet(s) is required")
     }
 
     if (errors.length > 0) {
         return res.render("apply-lister", {
           userNameL,
-          reason,
           address,
-          passwordL,
-          password2L,
+          contactNo,
+          reason,
+          pets,
           success: false,
         });
     }
 
     try {
-        await accountModel.registerLister(userNameL, reason, address, passwordL, "lister");
+        await accountModel.registerLister(userNameL, address, contactNo, reason, pets, "lister");
         return res.render("apply-lister", {
           userNameL: "",
-          reason: "",
           address: "",
-          passwordL: "",
-          password2L: "",
+          contactNo: "",
+          reason: "",
+          pets: "",
           success: success,
         });    
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
           userNameL,
-          reason,
           address,
-          passwordL,
-          password2L,
+          contactNo,
+          reason,
+          pets,
           success: false,
         });
     }
@@ -280,7 +280,6 @@ exports.handleLister = async (req, res) => {
 exports.showLoginL = (req, res) => {
     res.render("login-lister", {
         userNameL: "",
-        passwordL: "",
         errors: [],
         success: false,
     });
@@ -288,38 +287,33 @@ exports.showLoginL = (req, res) => {
 
 exports.handleLoginL = async (req, res) => {
     const userNameL = (req.body.userNameL ?? "").trim();
-    const passwordL = (req.body.passwordL ?? "").trim();
     let errors = [];
 
     // checks for empty fields and records the error in an array
     if (!userNameL) {
         errors.push("User Name is required");
     }
-    if (!passwordL) {
-        errors.push("Password is required");
-    }
+    
     if (errors.length === 0) {
-        const user = await accountModel.authenticateLister(userNameL, passwordL);
+        const user = await accountModel.authenticateLister(userNameL);
         if (!user) {
             errors.push(
-                "Invalid username or password. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
+                "Invalid username. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
             );
             return res.render("login-lister", {
                 userNameL,
-                passwordL,
                 errors,
                 success: false,
             });
         } else {
             return res.render("login-lister", {
                 userNameL,
-                passwordL,
                 errors,
                 success: true,
             });
         }
     }
-    res.render("login-lister", { userNameL, passwordL, errors, success: false });
+    res.render("login-lister", { userNameL, errors, success: false });
 };
 
 exports.deleteConfirmation2 = (req, res) => {
@@ -332,7 +326,7 @@ exports.deleteLister = async (req, res) => {
     // authenticates inputted password before processing deletion
     const match = await accountModel.authenticateUser(
         req.session.user.userNameL,
-        passwordL,
+        password,
     );
     if (match) {
         await accountModel.deleteUser(req.session.user._id); // deletes user
