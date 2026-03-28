@@ -24,6 +24,9 @@ router.post('/apply-lister', accountController.handleLister)
 router.get("/login-lister", authMiddleware.isLoggedIn, accountController.showLoginL);
 router.post("/login-lister", accountController.handleLoginL);
 
+router.get("/edit-lister", accountController.updateLister);
+router.post("/edit-lister", accountController.processLister);
+
 router.get("/delete-lister", accountController.deleteConfirmation2)
 router.post("/delete-lister", accountController.deleteLister)
 

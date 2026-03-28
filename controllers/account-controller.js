@@ -316,6 +316,31 @@ exports.handleLoginL = async (req, res) => {
     res.render("login-lister", { userNameL, errors, success: false });
 };
 
+exports.updateLister = async (req, res) => {
+    const userId = req.session.lister._id;
+    const originalDetails = await accountModel.retrieveLister(listerId);
+    res.render("edit-lister-profile", { originalDetails });
+};
+
+exports.processLister = async (req, res) => {
+    const address = (req.body.address ?? "").trim();
+    const contactNo = (req.body.contactNo ?? "").trim();
+    const pets = (req.body.pets ?? "").trim();
+
+    try {
+        await accountModel.updateDetails(
+            req.session.lister._id,
+            address,
+            contactNo,
+            pets,
+        );
+        console.log("Updated details successfully");
+    } catch (error) {
+        console.error("Failed to update user details", error);
+    }
+    res.redirect("/lister-profile");
+};
+
 exports.deleteConfirmation2 = (req, res) => {
     // displays form for user to enter password to verify deletion
     res.render("delete-lister-profile", { error: "" });

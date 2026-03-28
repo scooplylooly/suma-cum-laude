@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= details.userNameL %>'s lister profile</title>
+    <title><%= lister.userNameL %>'s lister profile</title>
     <link rel="stylesheet" type="text/css" href="./style/profile.css" />
 </head>
 
@@ -16,6 +16,7 @@
             <%if (isLoggedIn && user.role='lister'){%>
             Create your pet listings <a href="/pet-create-listings">here</a>!
             Update your pet details <a href="/update-pet-details">here</a>!
+            Update your own lister details <a href="/edit-lister-profile">here</a>!
             <%}else{%>
             <h3>Do you want to list some pets?</h3>
             <p>

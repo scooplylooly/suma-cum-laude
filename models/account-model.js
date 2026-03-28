@@ -2,7 +2,7 @@ const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { type } = require("node:os");
-const { updateProfile } = require("../controllers/account-controller");
+// const { updateProfile } = require("../controllers/account-controller");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({
@@ -47,7 +47,7 @@ async function registerUser(userName, email, DOB, password, role) {
         // create new user profile + add to users schema
         await addUser(newUser);
     }
-}
+};
 
 async function authenticateUser(userName, password) {
     // checks if user exists in DB; additional check if password is correct before logging user in.
@@ -62,48 +62,52 @@ async function authenticateUser(userName, password) {
     } else {
         return null;
     }
-}
+};
 
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
-}
+};
 
 async function addUser(user) {
     // creates a new record under user schema
     return await users.create(user);
-}
+};
 
 async function updateDetails(userId, userName, email, DOB) {
     // updates the profile details of speificied user
     return users.updateOne({ _id: userId }, { userName, email, DOB });
-}
+};
 
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
-}
+};
 async function getAllUsers() {
     // deletes specified user from user schema
     return users.find().lean();
-}
+};
 
 const listerSchema = new mongoose.Schema({
     userNameL: {
         type: String,
         required: [true, "A user must have a user name"],
     },
-    reason: {
-        type: String,
-        required: [true, "A user must have a reason"]
-    },
     address: {
         type: String,
         required: [true, "A user must have an address"]
     },
-    passwordL: {
+    contactNo: {
         type: String,
-        required: [true, "A user must have a password"],
+        required: [true, "A user must have a contact number"]
+    },
+    reason: {
+        type: String,
+        required: [true, "A user must have a reason"],
+    },
+    pets: {
+        type: String,
+        required: [true, "A user must have at least a pet"],
     },
     statusL: {
         type: Boolean,
@@ -118,46 +122,43 @@ const listerSchema = new mongoose.Schema({
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
-async function registerLister(userNameL, passwordL, role) {
+async function registerLister(userNameL, role) {
     const existing = await lister.findOne({ userNameL });
     if (existing) {
         throw new Error("Username already exists");
     } else {
-        let hashedPassword = await bcrypt.hash(passwordL, 10);
         let newLister = {
             userNameL,
-            passwordL: hashedPassword,
             statusL,
             role,
         };
     await lister.create(newLister);
     }
-}
+};
 
-async function authenticateLister(userNameL, passwordL) {
+async function authenticateLister(userNameL) {
     const exists = await lister.findOne({ userNameL });
 
     if (!exists) return null;
 
-    let match = await bcrypt.compare(passwordL, exists.passwordL);
-    if (match) {
-        return exists;
-    } else {
-        return null;
-    }
-}
+};
 
 async function retrieveLister(listerId) {
     return await lister.findOne({ _id: listerId }).lean();
-}
+};
 
 async function addLister(lister) {
     return await lister.create(lister);
-}
+};
+
+async function updateLister(listerId, address, contactNo, pets) {
+    // updates the profile details of speificied user
+    return users.updateOne({ _id: listerId }, { address, contactNo, pets });
+};
 
 async function deleteLister(listerID) {
     return lister.deleteOne({ _id: listerID });
-}
+};
 
 
 module.exports = {
@@ -170,6 +171,7 @@ module.exports = {
     authenticateLister,
     registerLister,
     retrieveLister,
+    updateLister,
     deleteLister,
     addLister
 };
