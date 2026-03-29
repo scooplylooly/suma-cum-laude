@@ -22,8 +22,8 @@
             <h3>Key in your details to reset your password</h3>
             <form action="/forget-password" method="post" class="reset-form">
                 Username: <input type="text" name="userName" value="<%= userName %>"> <br>
-                Email: <input type="email" name="email" value="<%= email %>"> <br>
-                <button type="submit">Get OTP</button>
+                Please answer the security question: <input type="text" name="securityKey" placeholder="What is your dream pet?" value="<%= securityKey %>">
+                <button type="submit">Verify</button>
             </form>
 
             <% if (errors.length > 0){ %>
@@ -33,14 +33,15 @@
             <% }) %>
             </ul>
         <% }; %>
+
             <% if (success) { %>
             <p class="success-message">
-            Sending OTP to email: <%= email %>. <br>
-            Dedirecting to login...
+                Your identity has been verified. <br>
+                Redirecting to password reset page...
             </p>
             <script>
                 setTimeout(() => {
-                    window.location.href = "/verify-otp";
+                    window.location.href = "/reset-password";
                 },1000)
             </script>
         <% } %>
