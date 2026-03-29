@@ -45,3 +45,10 @@ exports.checkUser = (req, res, next) => {
     }
     next();
 };
+
+exports.verifiedIdentity = (req, res, next) => {
+    if (!req.session.verified) {
+        return res.redirect('/login');
+    }
+    next();
+}
