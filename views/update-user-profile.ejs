@@ -32,7 +32,12 @@
                         <i class="fa-regular fa-eye-slash" id="password2-icon"></i>
                     </span> 
                 </div> <br>
+
+                Update Security Key: What is your dream pet?
+                <input type="text" name="securityKey" value="<%= securityKey %>"> <br><br>
+
                 <button type="submit">Update</button>
+
             </form>
             <% if (errors.length > 0) { %>
                <ul class="error-list">
