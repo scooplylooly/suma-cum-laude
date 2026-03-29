@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
+    // initialises user session; information is needed in ejs template
     if (!user) {
         req.session.user = {
             _id: "",
@@ -10,6 +11,7 @@ exports.showRegister = (req, res) => {
             role: "",
         };
     }
+    // renders registration form with empty fields
     res.render("register", {
         user,
         userName: "",
@@ -17,29 +19,28 @@ exports.showRegister = (req, res) => {
         DOB: "",
         password: "",
         password2: "",
+        securityKey: "",
         errors: [],
         success: false,
     });
 };
 
 exports.handleRegister = async (req, res) => {
+    // checks for valid inputs
     const userName = (req.body.userName ?? "").trim();
     const email = (req.body.email ?? "").trim();
     const DOB = req.body.dob || "";
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
-    const role = req.body.role ?? "user";
-
-    let user = req.session.user;
-    if (!user) {
-        req.session.user = {
-            _id: "",
-            userName: "",
-            role: "",
-        };
-    }
-    // checks for empty fields and records the error in an array
+    const securityKey = (req.body.securityKey ?? "").trim();
+    // role is defaulted to user since only admins can register other account roles such as admin / lister
+    const role = req.body.role || "user";
+    // check to see if user session is already active
+    // if session is active, registration ejs file checks if user role is admin
+    const user = req.session.user ?? null;
+    // checks for invalid inputs and records the error in an array
     let errors = [];
+
     if (!userName) {
         errors.push("User Name is required");
     }
@@ -55,17 +56,30 @@ exports.handleRegister = async (req, res) => {
         errors.push("Password is required");
     } else if (password !== password2) {
         errors.push("Passwords do not match");
+    } else {
+        // checks if password meets mininum requirements for security purposes
+        const checkSecure = accountModel.securePassword(password);
+        if (checkSecure !== true) { // catches the errors and append to error array
+            for (let error of checkSecure) {
+                errors.push(error);
+            }
+        }
+    }
+
+    if (!securityKey) {
+        errors.push("Security question input is required")
     }
 
     if (errors.length === 0) {
-        // no errors; user is registered
+        // no errors; user is registered and data added to users schema
         try {
-            const result = await accountModel.registerUser(
+            await accountModel.registerUser(
                 userName,
                 email,
                 DOB,
                 password,
-                role,
+                securityKey,
+                role
             );
             console.log("Registering user...");
             if (req.session.user && req.session.user.role === "admin") {
@@ -82,12 +96,14 @@ exports.handleRegister = async (req, res) => {
         DOB,
         password,
         password2,
+        securityKey,
         errors,
         success: errors.length === 0,
     });
 };
 
 exports.showLogin = (req, res) => {
+    // renders form with empty fields
     res.render("login", {
         userName: "",
         password: "",
@@ -101,7 +117,7 @@ exports.handleLogin = async (req, res) => {
     const password = (req.body.password ?? "").trim();
     let errors = [];
 
-    // checks for empty fields and records the error in an array
+    // checks for invalid inputs and records the error to array
     if (!userName) {
         errors.push("User Name is required");
     }
@@ -109,11 +125,11 @@ exports.handleLogin = async (req, res) => {
         errors.push("Password is required");
     }
     if (errors.length === 0) {
-        // if all fields are filled, user authentication is carried out
+        // if all fields are filled and inputs valid, user authentication is implemented
         const user = await accountModel.authenticateUser(userName, password);
         // checks if user exists in user schema
         if (!user) {
-            // if user does not exist, prompts user to register for an account.
+            // prompts user to register for an account if user does not exist
             errors.push(
                 "Invalid username or password. <br> Try <a href='/register'>registering</a> first.",
             );
@@ -124,7 +140,7 @@ exports.handleLogin = async (req, res) => {
                 success: false,
             });
         } else {
-            // successful login and user session is started
+            // successful login and creates new user session
             req.session.user = {
                 _id: user._id,
                 userName: user.userName,
@@ -143,217 +159,163 @@ exports.handleLogin = async (req, res) => {
     res.render("login", { userName, password, errors, success: false });
 };
 
-exports.showReset = (req, res) => {
-    res.render("reset-form", {
-        userName: "",
-        email: "",
-        errors: [],
-        success: false,
-    });
+exports.showVerify = (req, res) => {
+    // renders vefification form with empty fields
+    res.render('verify-identity', {userName:"", securityKey: "", errors:[], success:false });
 };
 
-// handle reset form - validate user + send OTP
-exports.handleReset = async (req, res) => {
+// handle verification form - validates user + verify security key
+exports.handleVerify = async (req, res) => {
     const userName = (req.body.userName ?? "").trim();
-    const email = (req.body.email ?? "").trim();
+    const securityKey = (req.body.securityKey ?? "").trim();
     let errors = [];
 
-    // checks if username and email fields are filled in
+    // checks for invalid inputs and records errors to array
     if (!userName) {
         errors.push("Username is required");
     }
-    if (!email) {
-        errors.push("Email is required");
+    if (!securityKey) {
+        errors.push("Please answer the security question to verify your identity");
     }
-
     if (errors.length > 0) {
-        return res.render("reset-form", {
-            userName,
-            email,
-            errors,
-            success: false,
-        });
-    }
+        // re-renders form with identifed input errors
+        res.render('reset-form', {userName, securityKey, errors, success: false });
 
-    try {
-        // check user exists with matching username + email
-        const user = await accountModel.findUserByNameAndEmail(userName, email);
-        if (!user) {
-            errors.push(
-                "No account found with that username and email.<br> Try <a href='/register'>registering</a> first.",
-            );
-            console.log("User does not exist");
-            return res.render("reset-form", {
-                userName: "",
-                email: "",
-                errors,
-                success: false,
-            });
+    } else {
+            try {
+                // checks whether another user with matching username exists in database; to ensure username is unique
+                let errors = [];
+                const user = await accountModel.checkUserExist(userName);
+                if (!user) {
+                    // prompts user to register if user not found in database
+                    errors.push("No account found with that username. <br> Try <a href='/register'>registering</a> first.");
+                    console.log("User does not exist")
+                
+                // authentication of security key
+                } else {
+                    const checkPass = await accountModel.checkSecurityKey(userName, securityKey);
+                    if (!checkPass) {
+                        errors.push("Incorrect security key");
+                    }
+                }
+                if (errors.length === 0) {
+                    // setting up user data and verification flag in session temporarily
+                    req.session.resetUser = userName;
+                    req.session.verified = true;
+                    console.log("User verified and userName recorded... ")
+                    console.log(`Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`);
+                }
+                return res.render('reset-form', {userName, securityKey, errors, success: errors.length === 0 });
+
+            } catch (error) {
+                console.error(error);
+                errors.push("Something went wrong. Please try again.");
+                res.render('reset-form', {userName:"", securityKey:"", errors, success: false });
+            }
         }
+}
 
-        // generate OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
-
-        // save OTP to database
-        await accountModel.saveOTP(user._id, otp, expiry);
-
-
-        // store in session for next step
-        req.session.resetUserId = user._id;
-        res.redirect("/verify-otp");
-    } catch (error) {
-        console.error(error);
-        errors.push("Something went wrong. Please try again.");
-        res.render("reset-form", {
-            userName: "",
-            email: "",
-            errors,
-            success: false,
-        });
-    }
-};
-
-// show OTP form
-exports.showVerifyOtp = (req, res) => {
-    if (!req.session.resetUserId) return res.redirect("/forget-password");
-    res.render("verify-otp", { errors: [], success: false });
-};
-
-// handle OTP verification
-exports.handleVerifyOtp = async (req, res) => {
-    if (!req.session.resetUserId) return res.redirect("/forget-password");
-
-    const otp = (req.body.otp ?? "").trim();
-    const user = await accountModel.retrieveProfile(req.session.resetUserId);
-
-    if (!user || user.otp !== otp) {
-        return res.render("verify-otp", {
-            errors: ["Invalid OTP. Please try again."],
-        });
-    }
-
-    if (user.otpExpiry < new Date()) {
-        return res.render("verify-otp", {
-            errors: ["OTP has expired. Please request a new one."],
-        });
-    }
-
-    req.session.otpVerified = true;
-    console.log("OTP verified");
-    res.redirect("/new-password");
-};
-
-// show new password form
-exports.showNewPassword = (req, res) => {
-    if (!req.session.otpVerified) {
-        return res.redirect("/forget-password");
-    }
-    res.render("new-password", { errors: [], success: false });
+// renders reset password form with empty fields
+exports.showResetPassword = (req, res) => {
+    res.render('reset-password', { password: "", password2:"", errors: [], success: false });
 };
 
 // handle new password submission
-exports.handleNewPassword = async (req, res) => {
-    if (!req.session.otpVerified) return res.redirect("/forget-password");
-
+exports.handleResetPassword = async (req, res) => {
+    // this value is captured from prev verification page using hidden input
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
     let errors = [];
 
+    // check for invalid inputs and record errors to array
     if (!password) {
         errors.push("Password is required");
-    }
-    if (password !== password2) {
+    } else if (password !== password2) {
         errors.push("Passwords do not match");
+    } else {
+        const checkSecure = accountModel.securePassword(password);
+        if (checkSecure !== true) {
+            for (let error of checkSecure) {
+                errors.push(error);
+            }
+        }
     }
 
     if (errors.length > 0) {
-        return res.render("new-password", { errors, success: false });
+        return res.render('reset-password', { password, password2, errors, success: false });
     }
 
     try {
-        const hashed = await bcrypt.hash(password, 10);
-        await accountModel.updatePassword(req.session.resetUserId, hashed);
+        // hashes password for security
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // resets password for specified user in database
+        await accountModel.updatePassword(req.session.resetUser, hashedPassword);
         console.log("Resetting password...");
+        // deletes verifiation flag and temporary user data in session
+        delete req.session.verified;
+        delete req.session.resetUser;
+         console.log("Deleting verified flag...")
+        // deletes the verified check from session;
+        res.render('reset-password', { password, password2, errors: [], success: true });
 
-        // clear session reset flags
-        delete req.session.otpVerified;
-        delete req.session.resetUserId;
-        console.log("Deleting reset flags...");
-
-        res.render("new-password", { errors: [], success: true });
     } catch (error) {
         console.error(error);
-        res.render("new-password", {
-            errors: ["Failed to reset password."],
-            success: false,
-        });
+        res.render('reset-password', { password, password2, errors: ["Failed to reset password."], success: false });
     }
 };
 
 exports.showProfile = async (req, res) => {
-    // displays logged in user's profile
-    const userId = req.session.user._id;
-    const details = await accountModel.retrieveProfile(userId);
+    // displays user's profile if they are logged in
+    const details = await accountModel.retrieveProfile(req.session.user._id);
     res.render("user-profile", { details });
 };
 
 exports.updateProfile = async (req, res) => {
-    // shows update details form for user
-    // retrieves profile details for user from database
-    // and is put as default value for form fields
-    const originalDetails = await accountModel.retrieveProfile(
-        req.session.user._id,
-    );
+    // retrieves profile details for user from database + details put as default value for form fields when form is rendered
+    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
     const userName = originalDetails.userName;
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
-    res.render("update-user-profile", {
-        userName,
-        email,
-        DOB,
-        password: "",
-        password2: "",
-        errors: [],
-    });
-};
+    const securityKey = originalDetails.securityKey;
+    // password is not displayed in the fields for securiy reasons
+    res.render("update-user-profile", {userName, email, DOB, password:"", password2:"", securityKey, errors: []});
+}
 
 exports.processUpdate = async (req, res) => {
-    const originalDetails = await accountModel.retrieveProfile(
-        req.session.user._id,
-    );
-    const userName =
-        (req.body.userName ?? "").trim() || originalDetails.userName;
+    // if inputs are not valid, field inputs are by default set to data recorded in user's orginal profile
+    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
+    const userName = (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
     // note that password fields could be left empty if user does not key im values
     // passwords are not shown for security in update page
-    const password = (req.body.password ?? "").trim();
-    const password2 = (req.body.password2 ?? "").trim();
     const DOB = req.body.dob;
+    const password = (req.body.password ?? "").trim() 
+    const password2 = (req.body.password2 ?? "").trim()
+    const securityKey = (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
     let errors = [];
-
-    if (
-        userName !== originalDetails.userName &&
-        (await accountModel.checkUserExist(userName))
-    ) {
-        errors.push("Username already exists");
+    // if username inputted is not same as original name, check if another user with same username exists
+    if (userName !== originalDetails.userName && await accountModel.checkUserExist(userName)) {
+        errors.push("Username already exists")
     }
 
     if (password !== password2) {
         errors.push("Passwords do not match");
+    } else {
+        if (password && password2) {
+            const checkSecure = accountModel.securePassword(password);
+            if (checkSecure !== true) {
+                for (let error of checkSecure) {
+                    errors.push(error);
+                }
+            }
+        }
     }
 
     if (errors.length > 0) {
         return res.render("update-user-profile", {
-            userName,
-            email,
-            DOB,
-            password: "",
-            password2: "",
-            errors,
-        });
+            userName, email, DOB, password, password2, securityKey, errors})
     }
-
+    
     try {
         // updates fields of user profile in database
         await accountModel.updateDetails(
@@ -362,14 +324,12 @@ exports.processUpdate = async (req, res) => {
             email,
             DOB,
             password,
-            originalDetails.role,
+            securityKey
         );
         console.log("Updated details successfully");
-        // updates username variable in session; becauses session captures old snapshot with outdated details
-        req.session.user.userName = userName;
-        console.log(
-            "Updated current session userName: " + req.session.user.userName,
-        );
+        // updates username variable in session; session captures old snapshot with outdated details
+        req.session.user.userName = userName; 
+        console.log("Updated current session userName: " + req.session.user.userName);
         res.redirect("/profile");
     } catch (error) {
         console.error("Failed to update user details, error:", error);
@@ -386,7 +346,7 @@ exports.deleteProfile = async (req, res) => {
     // authenticates inputted password before processing deletion
     const match = await accountModel.authenticateUser(
         req.session.user.userName,
-        password,
+        password
     );
     if (match) {
         await accountModel.deleteUser(req.session.user._id); // deletes user
@@ -394,7 +354,7 @@ exports.deleteProfile = async (req, res) => {
         console.log("Destroying the session");
         req.session.destroy(() => {
             // session destroyed
-            res.redirect("/index.html"); // redirected to homepage
+            res.redirect("/index.html"); // redirected to introduction homepage
         });
     } else {
         res.render("delete-user-profile", {
@@ -404,10 +364,10 @@ exports.deleteProfile = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-    // destroy session once user is logged out
+    // destroy user session once user is logged out
     console.log("Logging user out...");
     console.log("Destroying the session");
     req.session.destroy(() => {
-        res.redirect("/index.html");
+        res.redirect("/index.html"); // redirected to introduction homepage
     });
 };
