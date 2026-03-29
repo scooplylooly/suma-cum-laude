@@ -9,10 +9,6 @@ exports.isLoggedIn = (req, res, next) => {
         return next();
     }
 
-    if (user.role === "admin") {
-        return res.redirect("/admin-page");
-    }
-
     return res.redirect("/adopt");
 };
 
@@ -45,3 +41,10 @@ exports.checkUser = (req, res, next) => {
     }
     next();
 };
+
+exports.verifiedIdentity = (req, res, next) => {
+    if (!req.session.verified) {
+        return res.redirect('/login');
+    }
+    next();
+}

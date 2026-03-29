@@ -11,11 +11,14 @@ exports.showAdminPage = async (req, res) => {
 
             <script>
                 setTimeout(() => {
-                    location.href = "/sign-in"}, 3000);
+                    location.href = "/login"}, 3000);
             </script>
         `);
+    } else if (user.role == "admin") {
+        return res.render("admin-page", { user });
+    } else {
+        return res.redirect("/adopt");
     }
-    res.render("admin-page", { user });
 };
 
 exports.showIncomingListings = async (req, res) => {
@@ -52,7 +55,7 @@ exports.filterListings = async (req, res) => {
 exports.confirmListingStatus = async (req, res) => {
     let pid = req.query.pid;
     let petFound = await petModel.findPetById(pid);
-    res.render("admin-listing-status", { petFound });
+    return res.render("admin-listing-status", { petFound });
 };
 exports.updateListingStatus = async (req, res) => {
     let action = req.body.action;
@@ -62,16 +65,18 @@ exports.updateListingStatus = async (req, res) => {
         await petModel.updatePetApproval(pid, isApproved);
         console.log(`Listing ${isApproved} successfully`);
     }
-    res.redirect("/admin-listings");
+    return res.redirect("/admin-listings");
 };
 
 exports.showUsers = async (req, res) => {
+    let adminUserId = req.session.user._id;
     let users = await accountModel.getAllUsers();
-    res.render("admin-users", { users, selectedType: "" });
+    return res.render("admin-users", { users, selectedType: "", adminUserId });
 };
 
 exports.filterUsers = async (req, res) => {
     let userType = req.body.userType;
+    let adminUserId = req.session.user._id;
     let selectedType = "";
     let users;
 
@@ -86,14 +91,15 @@ exports.filterUsers = async (req, res) => {
     }
     return res.render("admin-users", {
         users,
-        selectedType,
+        selectedType: "",
+        adminUserId,
     });
 };
 exports.displayDeleteUser = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
     let userInfo = await accountModel.retrieveProfile(uid);
-    res.render("admin-delete-user", { userInfo, error: "" });
+    return res.render("admin-delete-user", { userInfo, error: "" });
 };
 exports.deleteUser = async (req, res) => {
     let uid = req.body.uid;
@@ -103,10 +109,83 @@ exports.deleteUser = async (req, res) => {
     try {
         await accountModel.deleteUser(uid);
         console.log("user deleted!");
-        res.redirect("/admin-users");
+        return res.redirect("/admin-users");
     } catch (err) {
         console.error(err);
         error = "Error deleting user";
     }
-    res.render("admin-delete-user", { userInfo, error });
+    return res.render("admin-delete-user", { userInfo, error });
+};
+
+exports.displayUpdateUser = async (req, res) => {
+    // shows update details form for user
+    // retrieves profile details for user from database
+    // and is put as default value for form fields
+    const uid = req.query.uid;
+    const originalDetails = await accountModel.retrieveProfile(uid);
+    console.log("EDITING USER:", originalDetails.userName);
+    const userName = originalDetails.userName;
+    const email = originalDetails.email;
+    const DOB = originalDetails.DOB;
+    const role = originalDetails.role;
+    return res.render("admin-user-update", {
+        userName,
+        email,
+        DOB,
+        role,
+        password: "",
+        password2: "",
+        errors: [],
+        uid,
+    });
+};
+exports.updateUser = async (req, res) => {
+    const uid = req.body.uid;
+    const originalDetails = await accountModel.retrieveProfile(uid);
+    const userName =
+        (req.body.userName ?? "").trim() || originalDetails.userName;
+    const email = (req.body.email ?? "").trim() || originalDetails.email;
+    // note that password fields could be left empty if user does not key im values
+    // passwords are not shown for security in update page
+    const password = (req.body.password ?? "").trim();
+    const password2 = (req.body.password2 ?? "").trim();
+    const DOB = req.body.dob;
+    const role = req.body.role;
+    console.log(role);
+
+    let errors = [];
+    console.log("Editing user:", originalDetails.userName);
+    if (
+        userName !== originalDetails.userName &&
+        (await accountModel.checkUserExist(userName))
+    ) {
+        errors.push("Username already exists");
+    }
+
+    if (password !== password2) {
+        errors.push("Passwords do not match");
+    }
+
+    if (errors.length > 0) {
+        return res.render("update-user-profile", {
+            userName,
+            email,
+            DOB,
+            role,
+            password: "",
+            password2: "",
+            errors,
+            uid,
+        });
+    }
+
+    try {
+        // updates fields of user profile in database
+        await accountModel.updateDetails(uid, userName, email, DOB, password, role);
+        console.log("Updated details successfully");
+        // updates username variable in session; becauses session captures old snapshot with outdated details
+        return res.redirect("/admin-users");
+    } catch (error) {
+        console.error("Failed to update user details, error:", error);
+    }
 };

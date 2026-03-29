@@ -1,0 +1,109 @@
+.faq-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 40px auto 0;
+}
+
+.faq-card {
+    background-color: #f0e0d0;
+    border: 1px solid #e2c7b2;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.faq-question {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #c97d4e;
+    font-size: 22px;
+    text-align: left;
+}
+
+.faq-answer {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    max-width: none;
+}
+
+main h1 {
+    text-align: center;
+    color: #c97d4e;
+    margin-bottom: 30px;
+}
+
+.faq-empty {
+    text-align: center;
+    color: #666;
+}
+
+.admin-page .faq-container {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+}
+
+.admin-card {
+    position: relative;
+    border-left: 6px solid #c97d4e;
+}
+
+.admin-actions {
+    margin-top: 15px;
+}
+
+.btn-edit {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #c97d4e;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-edit:hover {
+    background-color: #a9653d;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 40px auto 20px;
+}
+
+.btn-add {
+    padding: 10px 18px;
+    background-color: #c97d4e;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-add:hover {
+    background-color: #a9653d;
+}
+
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+.admin-actions form {
+    display: inline-block;
+    margin: 0;
+}

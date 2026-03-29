@@ -97,6 +97,14 @@ header nav a:hover {
     background-color: #b86d3e;
 }
 
+.links a {
+     color: #7a4c2f;
+}
+
+.links a:hover {
+    color: #c97d4e;
+}
+
 .error-list {
     margin-top: 20px;
     padding-left: 20px;

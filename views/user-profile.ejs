@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= details.userName %>'s profile</title>
-    <link rel="stylesheet" type="text/css" href="./style/profile.css" />
+    <link rel="stylesheet" type="text/css" href="./style/user-profile.css" />
 </head>
 
 <body>
@@ -17,28 +17,34 @@
             <h2>User: <%= details.userName %></h2> <br>
             <%}%>
         <div class="profile-card">
-            <p class="subtitle">Here are your details.</p>
+            <h4>Here are your details</h4>
             <div class="profile-deets">
             <div class="detail-box">
-                <span class="label">Name: </span>
+                <strong><span class="label">Name: </span></strong>
                 <span class="value"><%= details.userName %></span>
             </div>
 
             <div class="detail-box">
-                <span class="label">Email: </span>
+                <strong> <span class="label">Email: </span></strong>
                 <span class="value"><%= details.email %></span>
             </div>
 
             <div class="detail-box">
-                <span class="label">Date of Birth: </span>
+                <strong><span class="label">Date of Birth: </span></strong>
                 <span class="value"><%= details.DOB.split('-').reverse().join('/') %></span>
             </div>
+
+            <div class="detail-box">
+                <strong><span class="label">Security Question: What is your dream pet? </span></strong>
+                <span class="value"><%= details.securityKey %></span>
+            </div>
+
         </div>
 
             <div class="actions">
-                <a href="/edit-profile" class="button1">Edit details</a>
-                <a href="/delete-profile" class="button2">Delete Account</a>
-                <a href="/logout" class="button3">Log out</a>
+                <a href="/edit-profile" class="edit-button">Edit details</a>
+                <a href="/delete-profile" class="delete-button">Delete Account</a>
+                <a href="/logout" class="logout-button">Log out</a>
             </div>
         </div>
     </main>
