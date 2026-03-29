@@ -82,6 +82,9 @@ exports.handleRegister = async (req, res) => {
                 role
             );
             console.log("Registering user...");
+            if (req.session.user && req.session.user.role === "admin") {
+                return res.redirect("/admin-users");
+            }
         } catch (error) {
             errors.push(error.message);
         }
@@ -328,9 +331,8 @@ exports.processUpdate = async (req, res) => {
         req.session.user.userName = userName; 
         console.log("Updated current session userName: " + req.session.user.userName);
         res.redirect("/profile");
-
-    } catch (error){
-        console.error("Failed to update user details, error:", error)
+    } catch (error) {
+        console.error("Failed to update user details, error:", error);
     }
 };
 

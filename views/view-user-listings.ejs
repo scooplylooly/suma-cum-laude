@@ -23,7 +23,11 @@
         <h4><%=pet.name%></h4>
         <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
         <h5>Date Of Birth: <%=pet.dob%></h5>
-        <h5>Approved: <%=pet.approved ? 'Yes' : 'No'%></h5>
+        <% if (pet.approved) { %>
+        <p class="status approved">Approved</p>
+        <% } else { %>
+        <p class="status pending">Pending</p>
+        <% } %>
         <a href="/edit-listing?pid=<%=pet._id%>"><button>Edit Listing</button></a>
         <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
         </div>

@@ -4,46 +4,36 @@ const router = express.Router();
 const adminController = require("../controllers/admin-controller");
 const authMiddleware = require("../middleware/auth-middleware.js");
 
-router.get(
-    "/admin-page",
-    authMiddleware.isAdmin,
-    adminController.showAdminPage,
-);
+router.get("/admin-page", adminController.showAdminPage);
 router.get(
     "/admin-listings",
-    authMiddleware.checkUser,
+    authMiddleware.isAdmin,
     adminController.showIncomingListings,
 );
-router.post(
-    "/admin-listings",
-    authMiddleware.checkUser,
-    adminController.filterListings,
-);
+router.post("/admin-listings", adminController.filterListings);
 router.get(
     "/admin-change-listings-status",
-    authMiddleware.checkUser,
+    authMiddleware.isAdmin,
     adminController.confirmListingStatus,
 );
 router.post(
     "/admin-change-listings-status",
-    authMiddleware.checkUser,
+    authMiddleware.isAdmin,
     adminController.updateListingStatus,
 );
-router.get("/admin-users", authMiddleware.checkUser, adminController.showUsers);
-router.post(
-    "/admin-users",
-    authMiddleware.checkUser,
-    adminController.filterUsers,
-);
+router.get("/admin-users", authMiddleware.isAdmin, adminController.showUsers);
+router.post("/admin-users", adminController.filterUsers);
 
 router.get(
     "/delete-user-profile",
     authMiddleware.isAdmin,
     adminController.displayDeleteUser,
 );
-router.post(
-    "/delete-user-profile",
+router.post("/delete-user-profile", adminController.deleteUser);
+router.get(
+    "/admin-user-update",
     authMiddleware.isAdmin,
-    adminController.deleteUser,
+    adminController.displayUpdateUser,
 );
+router.post("/admin-user-update", adminController.updateUser);
 module.exports = router;

@@ -1,8 +1,7 @@
-const fs = require("node:fs/promises");
+// const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { type } = require("node:os");
-const { updateProfile } = require("../controllers/account-controller");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({

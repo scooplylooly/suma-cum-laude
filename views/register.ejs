@@ -45,7 +45,7 @@
                  Security Question: <input type="text" name="securityKey" placeholder="What is your dream pet?" value="<%= securityKey %>">
                  
                 <%if (user && user.role == 'admin'){%>
-                    role:<br>
+                    <br>role:<br>
                     <select name="role" required>
                         <option hidden>--select a role--</option>
                         <option value="user">User</option>
