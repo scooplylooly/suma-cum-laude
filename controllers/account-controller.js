@@ -1,5 +1,4 @@
 const accountModel = require("../models/account-model");
-const mailer = require("../utils/mailer");
 const bcrypt = require("bcrypt");
 
 exports.showRegister = (req, res) => {
@@ -199,9 +198,6 @@ exports.handleReset = async (req, res) => {
         // save OTP to database
         await accountModel.saveOTP(user._id, otp, expiry);
 
-        // send OTP email
-        await mailer.sendOTP(email, otp);
-        console.log("Sending OTP...");
 
         // store in session for next step
         req.session.resetUserId = user._id;
