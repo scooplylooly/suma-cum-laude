@@ -19,7 +19,9 @@
         <h3>Prior Pet Experience: <%=application.petExperience%></h3>
         <h3>Existing Pets: <%=application.existingPets%></h3>
         <h3>Contact No: +65-<%=application.contactNo%></h3>
+        <%if (application.status != 'denied'){%>
         <a href="/pet-profile?pid=<%=application.pid%>"><button>View Pet</button></a>
+        <%}%>
         <%if (application.status == 'pending'){%>
         <a href="/updateApplication?appID=<%=application._id%>"><button>Update Application</button></a>
         <%}%>
