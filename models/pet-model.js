@@ -150,7 +150,12 @@ const applicationSchema = new mongoose.Schema(
         contactNo: {
             type: Number,
             required: true,
-        }
+        },
+        activityLevel: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium"
+        },
     },
     {
         timestamps: true,
