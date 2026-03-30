@@ -420,3 +420,24 @@ exports.userPreferenceForm = (req, res) => {
         res.redirect('/preferences')
     }
 }
+
+exports.updatePreferences = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+
+        const preferences = {
+            housingType: req.body.housingType,
+            preferredAnimal: req.body.preferredAnimal || [],
+            preferredTraits: req.body.preferredTraits || [],
+            experienceLevel: req.body.experienceLevel,
+            activityLevel: req.body.activityLevel
+        }
+
+        await users.findByIdAndUpdate(userId, { preferences })
+        console.log("Success")
+        res.redirect('/profile')
+    } catch (error) {
+        console.log(error)
+        res.redirect('/preferences')
+    }
+}
