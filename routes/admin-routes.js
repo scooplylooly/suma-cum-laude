@@ -38,12 +38,6 @@ router.get(
 router.post("/admin-user-update", adminController.updateUser);
 
 router.get(
-    "/admin-listings",
-    authMiddleware.isAdmin,
-    adminController.showListerListings,
-);
-router.post("/admin-listings", adminController.filterListings);
-router.get(
     "/admin-lister-status",
     authMiddleware.isAdmin,
     adminController.confirmListerStatus,
