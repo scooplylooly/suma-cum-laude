@@ -62,10 +62,14 @@ exports.displayPets = async (req, res) => {
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
-    let user = req.session.user;
+    const user = req.session.user;
 
     allPets.reverse();
-
+    const applications = listing.findApplicationbyUID(user._id)
+    pids = []
+    for (let application of applications) {
+        pids.push(application.pid)
+    }
     let pets = [];
 
     if (nameSearched !== "") {
@@ -98,6 +102,7 @@ exports.searchPet = async (req, res) => {
         nameSearched,
         pets,
         user,
+        pids,
     });
 };
 
