@@ -169,7 +169,7 @@ const listerSchema = new mongoose.Schema({
         required: [true, "A user must have experience"],
     },
     statusL: {
-        type: string,
+        type: String,
         default: "pending",
         required: [true, "A user will have a status"],
     },

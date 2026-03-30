@@ -38,11 +38,11 @@ router.get(
 router.post("/admin-user-update", adminController.updateUser);
 
 router.get(
-    "/admin-lister-listings",
+    "/admin-listings",
     authMiddleware.isAdmin,
     adminController.showListerListings,
 );
-router.post("/admin-lister-listings", adminController.filterListings);
+router.post("/admin-listings", adminController.filterListings);
 router.get(
     "/admin-lister-status",
     authMiddleware.isAdmin,
