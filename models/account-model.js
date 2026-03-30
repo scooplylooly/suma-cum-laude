@@ -179,6 +179,14 @@ const updatePreferences = async (userId, preferences) => {
     return await users.findByIdAndUpdate(userId, {preferences})
 }
 
+const countUsers = async () => {
+    try {
+        return users.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
 module.exports = {
     authenticateUser,
     registerUser,
@@ -190,5 +198,6 @@ module.exports = {
     updatePassword,
     checkSecurityKey,
     securePassword,
-    updatePreferences
+    updatePreferences,
+    countUsers
 };

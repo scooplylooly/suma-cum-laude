@@ -382,8 +382,23 @@ exports.getAllApplications = async function () {
 
 exports.countPets = async function () {
     try {
-        await Pet.countDocuments({})
-        console.log("Success")
+        return Pet.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countTotalApplications = async function () {
+    try {
+        return Application.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countPendingApplications = async function () {
+    try {
+        return Application.countDocuments({ status: 'pending' })
     } catch(error) {
         return error
     }
