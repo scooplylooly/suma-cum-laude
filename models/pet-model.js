@@ -339,7 +339,7 @@ exports.updateApplicationbyID = async function (ID,value) {
 };
 exports.updatePetStatusbyID = async function (pid,value) {
     try{
-        await Pet.updateOne({_id:pid}, {$set: {approved: value}})
+        await Pet.updateOne({_id:pid}, {$set: {adopted: value}})
         return "Pet Adopted"
     }catch(error){
         return error
