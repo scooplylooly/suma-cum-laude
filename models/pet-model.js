@@ -376,3 +376,15 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
 exports.getAllApplications = async function () {
     return Application.find().lean()
 }
+
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        await Pet.countDocuments({})
+        console.log("Success")
+    } catch(error) {
+        return error
+    }
+}
