@@ -6,19 +6,16 @@ const accModel = require("../models/account-model")
 
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
-    const allApplications = await petModel.getAllApplications()
-    const typeCounts = {};
-    for (let app of allApplications) {
-        if (app.petType) {
-            typeCounts[app.petType] = (typeCounts[app.petType] || 0) + 1;
-        }
-    }
-    let topPetTypes = [];
-    for (let type in typeCounts) {
-        topPetTypes.push({ type: type, count: typeCounts[type] });
-    }
-    topPetTypes.sort((a, b) => b.count - a.count);
-    topPetTypes = topPetTypes.slice(0, 3);
+    const totalPets = await petModel.countPets({})
+    console.log("Total Pets: " + totalPets)
+    const totalApplications = await petModel.countTotalApplications({})
+    console.log("Total Applications: " + totalApplications)
+    const pendingApplications = await petModel.countPendingApplications({ status: 'pending' })
+    console.log("Total Pending Applications: " + pendingApplications)
+    const totalUsers = await accModel.countUsers({})
+    console.log("Total Users: " + totalUsers)
+    const totalFaqs = await faqModel.countFaqs({})
+    console.log("Total FAQs: " + totalFaqs)
     if (!user) {
         return res.send(`
             <h1 style="color: red;">Unauthorized</h1>
@@ -30,7 +27,15 @@ exports.showAdminPage = async (req, res) => {
             </script>
         `);
     } else if (user.role == "admin") {
-        return res.render("admin-page", { user, topPetTypes });
+        return res.render("admin-page", { 
+            user,
+            totalPets,
+            totalApplications,
+            pendingApplications,
+            totalFaqs,
+            totalUsers 
+
+         });
     } else {
         return res.redirect("/adopt");
     }
@@ -64,6 +69,7 @@ exports.filterListings = async (req, res) => {
     return res.render("admin-listings", {
         pets,
         selectedStatus,
+
     });
 };
 
