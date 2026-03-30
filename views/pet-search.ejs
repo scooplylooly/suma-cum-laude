@@ -30,7 +30,7 @@
             <h4><%=pet.name%></h4>
             <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
             <h5>Date Of Birth: <%=pet.dob%></h5>
-            <%if (pet.adopted == false) {%>
+            <%if (pet.adopted == false && pet.uid != user._id) {%>
                 <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
             <% } else if (user && String(user._id) === String(pet.uid)) { %>
                 <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
