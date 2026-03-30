@@ -41,11 +41,9 @@
                 <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
             <% } else if (hasApplied) { %>
                 <a href="/application-status"><button>View Application Status</button></a>
-            <%}else{%>
-                <%if (pet.adopted == true){%>
+            <% } else if (pet.adopted) { %>
                 <p class="status adopted">Adopted</p>
-                <%}%>
-        <%}%>
+            <% } %>
         </div>
     <%}%>
   
