@@ -365,27 +365,25 @@ exports.deleteProfile = async (req, res) => {
 
 exports.showLister = (req, res) => {
     res.render("apply-lister", 
-        {userNameL: "",
-        address: "",
+        {address: "",
         contactNo: "",
         reason: "", 
         pets: "", 
+        experience: "",
         errors: [],
         success: false,
     });
 }
 
 exports.handleLister = async (req, res) => {
-    let userNameL = (req.body.userNameL ?? "").trim()
     let address = (req.body.reason ?? "").trim()
     let contactNo = (req.body.contactNo ?? "").trim()
     let reason = (req.body.reason ?? "").trim()
     let pets = (req.body.pets ?? "").trim()
+    let experience = (req.body.experience ?? "").trim()
+    
 
     let errors = []
-    if (!userNameL) {
-        errors.push("Username is required")
-    }
 
     if (!address) {
         errors.push("Address is required")
@@ -403,35 +401,39 @@ exports.handleLister = async (req, res) => {
         errors.push("Pet(s) is required")
     }
 
+    if (!experience) {
+        errors.push("Experience field is required")
+    }
+
     if (errors.length > 0) {
         return res.render("apply-lister", {
-          userNameL,
           address,
           contactNo,
           reason,
           pets,
+          experience,
           success: false,
         });
     }
 
     try {
-        await accountModel.registerLister(userNameL, address, contactNo, reason, pets, "lister");
+        await accountModel.registerLister(address, contactNo, reason, pets, experience, "lister");
         return res.render("apply-lister", {
-          userNameL: "",
           address: "",
           contactNo: "",
           reason: "",
           pets: "",
+          experience: "",
           success: success,
         });    
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
-          userNameL,
           address,
           contactNo,
           reason,
           pets,
+          experience,
           success: false,
         });
     }
@@ -439,46 +441,46 @@ exports.handleLister = async (req, res) => {
 
 exports.showLoginL = (req, res) => {
     res.render("login-lister", {
-        userNameL: "",
+        userName: "",
         errors: [],
         success: false,
     });
 };
 
 exports.handleLoginL = async (req, res) => {
-    const userNameL = (req.body.userNameL ?? "").trim();
+    const userName = (req.body.userName ?? "").trim();
     let errors = [];
 
     // checks for empty fields and records the error in an array
-    if (!userNameL) {
+    if (!userName) {
         errors.push("User Name is required");
     }
     
     if (errors.length === 0) {
-        const user = await accountModel.authenticateLister(userNameL);
+        const user = await accountModel.authenticateLister(userName);
         if (!user) {
             errors.push(
                 "Invalid username. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
             );
             return res.render("login-lister", {
-                userNameL,
+                userName,
                 errors,
                 success: false,
             });
         } else {
             return res.render("login-lister", {
-                userNameL,
+                userName,
                 errors,
                 success: true,
             });
         }
     }
-    res.render("login-lister", { userNameL, errors, success: false });
+    res.render("login-lister", { userName, errors, success: false });
 };
 
 exports.updateLister = async (req, res) => {
-    const userId = req.session.lister._id;
-    const originalDetails = await accountModel.retrieveLister(listerId);
+    const userId = req.session.user._id;
+    const originalDetails = await accountModel.retrieveLister(userId);
     res.render("edit-lister-profile", { originalDetails });
 };
 
@@ -498,7 +500,7 @@ exports.processLister = async (req, res) => {
     } catch (error) {
         console.error("Failed to update user details", error);
     }
-    res.redirect("/lister-profile");
+    res.redirect("/user-profile");
 };
 
 exports.deleteConfirmation2 = (req, res) => {
