@@ -133,14 +133,16 @@ header nav a:hover {
 .register-link {
     margin-top: 25px;
     font-size: 15px;
-}
-
-.register-link a {
     color: #333;
     text-decoration: none;
 }
 
 .register-link a:hover {
+    color: #c97d4e;
+    text-decoration: underline;
+}
+
+.login-link:hover {
     color: #c97d4e;
     text-decoration: underline;
 }

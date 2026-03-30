@@ -1,8 +1,7 @@
-const fs = require("node:fs/promises");
+// const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { type } = require("node:os");
-const { updateProfile } = require("../controllers/account-controller");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({
@@ -22,25 +21,23 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: [true, "A user must have a password"],
     },
+    securityKey: {
+        type: String,
+        required: [true, "A user must have a securityKey"],
+    },
     role: {
         type: String,
         default: "user",
         required: [true, "User role must be stated"],
-    },
-    otp: {
-        type: String
-    },
-    otpExpiry: {
-        type: Date
     }
 });
 
 const users = mongoose.model("users", usersSchema, "users");
 
-async function registerUser(userName, email, DOB, password, role) {
+async function registerUser(userName, email, DOB, password, securityKey, role ) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
-        throw new Error("Username already exists");
+        throw new Error("Username already exists. Please choose another username.");
     } else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
@@ -48,9 +45,8 @@ async function registerUser(userName, email, DOB, password, role) {
             email,
             DOB,
             password: hashedPassword, // hashes the password for security
-            role: 'user',
-            otp:'',
-            otpExpiry:''
+            securityKey,
+            role
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -58,13 +54,14 @@ async function registerUser(userName, email, DOB, password, role) {
 }
 
 async function authenticateUser(userName, password) {
-    // checks if user exists in DB; additional check if password is correct before logging user in.
+    // checks if user exists in DB
     const user = await users.findOne({ userName: userName });
 
     if (!user) return null;
 
+    // authenticates password before logging user in
     let match = await bcrypt.compare(password, user.password);
-    // returns user if password authentication passes
+    // returns user if authentication passed
     if (match) {
         return user;
     } else {
@@ -72,21 +69,37 @@ async function authenticateUser(userName, password) {
     }
 }
 
-async function findUserByNameAndEmail(userName, email){
-    return users.findOne({userName: userName, email: email}).lean();
+// function checks if password meets mininum requirements to ensure security
+function securePassword(password){
+    let errors = [];
+    if (password.length < 5){
+        errors.push("Password must be at least 5 characters")
+    } 
+    if (!/[!@#$%^&*]/.test(password)) {
+        errors.push("Password must contain at least one special character: !@#$%^&*")
+    }
+
+    if (errors.length === 0) {
+        return true 
+    }
+    // returns array of errors back to caller
+    return errors;
 }
 
-async function saveOTP(userId, otp, expiry){
-    return users.updateOne(
-        {_id: userId},
-        {$set: {otp, otpExpiry: expiry}}
-    );
+async function checkSecurityKey(userName, securityKey) {
+    // checks if securityKey matches; case insensitive
+    const data = await users.findOne({userName}).lean()
+    if (!data) {
+        return false
+    }
+    // authenticates security key: case insensitive
+    return data.securityKey.toLowerCase() === securityKey.toLowerCase();
 }
 
-async function updatePassword(userId, hashedPassword) {
-    return users.updateOne(
-        {_id: userId},
-        {$set :{password: hashedPassword}, $unset: {otp:'', otpExpiry: ''}}
+async function updatePassword(userName, hashedPassword) {
+    return await users.updateOne(
+        {userName},
+        {$set: {password: hashedPassword}}
     );
 }
 
@@ -101,22 +114,25 @@ async function addUser(user) {
 }
 
 async function checkUserExist(userName) {
-    if (users.findOne({userName: userName})) {
+    // checks if current user exists in database
+    if (await users.findOne({userName})) {
         return true;
     }
     return false;
 }
 
-async function updateDetails(userId, userName, email, DOB, password) {
+async function updateDetails(userId, userName, email, DOB, password, securityKey) {
     // updates the profile details of specified user
     const originalDetails = await retrieveProfile(userId);
     return users.updateOne({ _id: userId },
         {$set: {userName, 
             email, 
             DOB, 
-            password: password ? await bcrypt.hash(password, 10) : originalDetails.password}
+            // if no password was inputted in form, value defaulted to original password
+            password: password ? await bcrypt.hash(password, 10) : originalDetails.password,
+            securityKey}
         })
-}
+} 
 
 async function deleteUser(userId) {
     // deletes specified user from user schema
@@ -134,7 +150,7 @@ module.exports = {
     updateDetails,
     getAllUsers,
     checkUserExist,
-    findUserByNameAndEmail,
-    saveOTP,
-    updatePassword
+    updatePassword,
+    checkSecurityKey,
+    securePassword
 };
