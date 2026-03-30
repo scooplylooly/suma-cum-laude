@@ -360,3 +360,15 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new:true}
     )
 }
+
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        await Pet.countDocuments({})
+        console.log("Success")
+    } catch(error) {
+        return error
+    }
+}
