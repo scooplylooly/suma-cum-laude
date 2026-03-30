@@ -46,12 +46,12 @@ router.post("/admin-listings", adminController.filterListings);
 router.get(
     "/admin-lister-status",
     authMiddleware.isAdmin,
-    adminController.confirmListingStatus,
+    adminController.confirmListerStatus,
 );
 router.post(
     "/admin-lister-status",
     authMiddleware.isAdmin,
-    adminController.updateListingStatus,
+    adminController.updateListerStatus,
 );
 router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
 router.post("/admin-lister", adminController.filterLister);

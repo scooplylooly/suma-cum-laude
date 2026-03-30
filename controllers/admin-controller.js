@@ -206,6 +206,29 @@ exports.rejectLister = async (req,res) => {
     res.redirect("admin-lister-status");
 };
 
+exports.confirmListerStatus = async (req, res) => {
+    const pending = await accountModel.getPendingListers();
+    res.render("admin-lister-status", { pending });
+};
+
+exports.updateListerStatus = async (req, res) => {
+    const { id, statusL } = req.body;
+
+    try {
+        if (statusL === 'approved') {
+            await accountModel.approveLister(uid);
+        } else if (statusL === 'rejected') {
+            await accountModel.rejectLister(uid);
+        }
+
+        res.redirect("/admin-lister-status");
+    } catch (err) {
+        console.log(err);
+        res.redirect("/admin-lister-status");
+    }
+};
+    
+
 exports.displayDeleteLister = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
