@@ -179,7 +179,7 @@ exports.handleVerify = async (req, res) => {
     }
     if (errors.length > 0) {
         // re-renders form with identifed input errors
-        res.render('reset-form', {userName, securityKey, errors, success: false });
+        res.render('verify-identity', {userName, securityKey, errors, success: false });
 
     } else {
             try {
@@ -205,12 +205,12 @@ exports.handleVerify = async (req, res) => {
                     console.log("User verified and userName recorded... ")
                     console.log(`Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`);
                 }
-                return res.render('reset-form', {userName, securityKey, errors, success: errors.length === 0 });
+                res.render('verify-identity', {userName, securityKey, errors, success: errors.length === 0 });
 
             } catch (error) {
                 console.error(error);
                 errors.push("Something went wrong. Please try again.");
-                res.render('reset-form', {userName:"", securityKey:"", errors, success: false });
+                res.render('verify-identity', {userName:"", securityKey:"", errors, success: false });
             }
         }
 }
