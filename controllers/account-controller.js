@@ -433,7 +433,7 @@ exports.updatePreferences = async (req, res) => {
             activityLevel: req.body.activityLevel
         }
 
-        await users.findByIdAndUpdate(userId, { preferences })
+        await accountModel.updatePreferences(userId, preferences)
         console.log("Success")
         res.redirect('/profile')
     } catch (error) {

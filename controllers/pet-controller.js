@@ -1,5 +1,7 @@
 const { configDotenv } = require("dotenv");
 const listing = require("../models/pet-model");
+const accountModel = require("../models/account-model");
+const petScorer = require("../utils/petScorer");
 const path = require("path");
 
 // ... rest of your code
@@ -39,6 +41,12 @@ exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
     pets.reverse();
+
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+    pets = pets.map((pet) => ({ ...pet, score: petScorer.calculateScore(preferences, pet).score }));
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         pets,
         nameSearched: "",
@@ -49,7 +57,7 @@ exports.displayPets = async (req, res) => {
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
-    let user = req.session.user
+    let user = req.session.user;
     allPets.reverse();
     let pets = [];
     if (nameSearched != "") {
@@ -65,6 +73,12 @@ exports.searchPet = async (req, res) => {
     } else {
         pets = allPets;
     }
+
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+    pets = pets.map((pet) => ({ ...pet, score: petScorer.calculateScore(preferences, pet).score }));
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         nameSearched,
         pets,

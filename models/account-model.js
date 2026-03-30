@@ -168,5 +168,6 @@ module.exports = {
     checkUserExist,
     updatePassword,
     checkSecurityKey,
-    securePassword
+    securePassword,
+    updatePreferences
 };
