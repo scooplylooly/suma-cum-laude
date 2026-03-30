@@ -154,6 +154,10 @@ async function getAllUsers() {
     return users.find().lean();
 }
 
+const updatePreferences = async (userId, preferences) => {
+    return await users.findByIdAndUpdate(userId, {preferences})
+}
+
 module.exports = {
     authenticateUser,
     registerUser,

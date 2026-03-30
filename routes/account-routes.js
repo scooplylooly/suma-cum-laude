@@ -24,4 +24,7 @@ router.post("/delete-profile", authMiddleware.checkUser, accountController.delet
 
 router.get("/logout", accountController.logout);
 
+//Preferences Logic
+router.get('/preferences', authMiddleware.checkUser, accountController.userPreferenceForm)
+
 module.exports = router;
