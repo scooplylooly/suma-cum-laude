@@ -29,6 +29,13 @@ const usersSchema = new mongoose.Schema({
         type: String,
         default: "user",
         required: [true, "User role must be stated"],
+    },
+    preferences: {
+        housingType: String,
+        preferredAnimal: [String],
+        preferredTraits: [String],
+        experienceLevel: String,
+        activityLevel: String
     }
 });
 
@@ -38,7 +45,12 @@ async function registerUser(userName, email, DOB, password, securityKey, role ) 
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
         throw new Error("Username already exists. Please choose another username.");
-    } else {
+    } 
+    
+    if (await users.findOne({ email: email })) {
+        throw new Error("Email already exists. Please use another email.")
+    }
+    else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
             userName,
@@ -46,7 +58,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role ) 
             DOB,
             password: hashedPassword, // hashes the password for security
             securityKey,
-            role
+            role: "user"
         };
         // create new user profile + add to users schema
         await addUser(newUser);
