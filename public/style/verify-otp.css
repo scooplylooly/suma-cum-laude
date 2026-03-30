@@ -1,0 +1,149 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #c97d4e;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    color: white;
+    margin: 0;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+.verify-page {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+.verify-card {
+    background-color: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.verify-card h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #c97d4e;
+}
+
+.subtitle {
+    margin-bottom: 30px;
+    font-size: 17px;
+    color: #555;
+}
+
+.verify-form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.verify-form input,
+.verify-form select {
+    padding: 12px;
+    margin-bottom: 0.5px;
+    border: 1px solid #d8c3b5;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.verify-form select {
+    color: #4f3c2f;
+    cursor: pointer;
+    background-color: #fffdfb;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a4c2f' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 36px;
+}
+
+.verify-form input:focus,
+.verify-form select:focus {
+    outline: none;
+    border-color: #c97d4e;
+    box-shadow: 0 0 0 2px rgba(201, 125, 78, 0.15);
+}
+
+.verify-form button {
+    background-color: #c97d4e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 17px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.verify-form button:hover {
+    background-color: #b86d3e;
+}
+
+.error-list {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding-left: 0;
+    color: red;
+    list-style-position: inside;
+}
+
+.verify-link {
+    margin-top: 25px;
+    font-size: 15px;
+}
+
+.verify-link a {
+    color: #333;
+    text-decoration: none;
+}
+
+.verify-link a:hover {
+    color: #c97d4e;
+    text-decoration: underline;
+}
+
+footer {
+    text-align: left;
+    padding: 20px;
+    background-color: #f0e0d0;
+    color: #888;
+    font-size: 14px;
+}

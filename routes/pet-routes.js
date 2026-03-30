@@ -83,7 +83,11 @@ router.get(
     petController.deletePetProfile,
 );
 router.get('/approve', petController.approveApp)
-//router.get('/deny', petController.denyApp)
+router.get('/deny', petController.denyApp)
+router.get('/application-status', authMiddleware.checkUser, petController.applicationStatus)
 router.post("/delete-pet", authMiddleware.checkUser, petController.petDeleted);
 router.get('/view-applications', petController.viewApplications)
+router.get('/deleteApplication',petController.deleteApplication)
+router.get('/updateApplication', petController.updateApplication)
+router.post('/update-application', petController.updateApplicationDetails)
 module.exports = router;

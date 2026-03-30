@@ -25,17 +25,6 @@
         <p>-------------------------------------------------</p>
         
         </div>
-    <%}else if (application.status == 'denied'){%>
-        <input type="hidden" name="petID" value="<%=application.pid%>">
-        <input type="hidden" name="petName" value="<%=petName%>">
-
-        <h3>Application Number:<%=application.applicationNumber%></h3>
-        <h3>User: <%=application.userName%></h3>
-        <h3>Reason: <%=application.reason%></h3>
-        <h3>Status: Denied</h3>
-        <!--TO DO: Add delete function to remove denied applications-->
-       
-        <p>-------------------------------------------------</p>
     <%}else if (application.status == 'pending') {%>
         <input type="hidden" name="petID" value="<%=application.pid%>">
         <input type="hidden" name="petName" value="<%=petName%>">
@@ -43,11 +32,16 @@
         <h3>Application Number:<%=application.applicationNumber%></h3>
         <h3>User: <%=application.userName%></h3>
         <h3>Reason: <%=application.reason%></h3>
+        <h3>Housing Type: <%=application.houseType%></h3>
+        <h3>Monthly Income: <%=application.income%></h3>
+        <h3>Prior Pet Experience: <%=application.petExperience%></h3>
+        <h3>Existing Pets: <%=application.existingPets%></h3>
+        <h3>Contact No: +65-<%=application.contactNo%></h3>
         <h3>Status: Pending</h3>
         <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Approve</button></a>
-        <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Deny</button></a>
+        <a href="/deny?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Deny</button></a>
         <p>-------------------------------------------------</p>
-    <%}%>
+    <%}%> 
 <%}%>
 
         <%- include('common/footer') %>

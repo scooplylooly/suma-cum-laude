@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New FAQ</title>
+    <link rel="stylesheet" href="/style/addfaq.css">
+</head>
+<body>
+    
+    <%- include("../common/header")  %>
+
+    <h1 class="page-title">Add a New FAQ</h1>
+
+    <% if (!faq) { %>
+     <form action="/faq/new" method="post" class="faq-form">
+        <table class="faq-table">
+            <tr>
+                <th>Question: </th>
+                <td>
+                    <input type="text" name="question" placeholder="Enter your question here" class="faq-input" required>
+                </td>
+            </tr>
+            <tr>
+                <th>Answer: </th>
+                <td>
+                    <textarea name="answer" placeholder="Enter your answer here" class="faq-textarea" required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>Category: </th>
+                <td>
+                    <input type="text" name="category" placeholder="Enter the category here" class="faq-input" required>
+                </td>
+            </tr>
+            <tr>
+                <th>Published? :</th>
+                <td class="radio-group">
+                    <label>
+                        <input type="radio" name="published" value="true"> Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="published" value="false"> No
+                    </label>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="submit-row">
+                    <button type="submit" class="faq-button">Add FAQ</button>
+                </td>
+            </tr>
+        </table>
+     </form>
+    <% } %>
+    <% if (msg) { %>
+        <p class="form-message"><%= msg %></p>
+    <% } %>
+</body>
+</html>

@@ -17,6 +17,7 @@ dotenv.config({ path: "./config.env" });
 const petRoutes = require("./routes/pet-routes");
 const accountRoutes = require("./routes/account-routes");
 const adminRoutes = require("./routes/admin-routes");
+const faqRoutes = require("./routes/faq-routes");
 
 server.use(
     session({
@@ -34,6 +35,7 @@ server.use((req, res, next) => {
 server.use("/", accountRoutes);
 server.use("/", petRoutes);
 server.use("/", adminRoutes);
+server.use("/faq", faqRoutes);
 
 server.get("/", (req, res) => {
     res.redirect("/adopt");

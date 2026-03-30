@@ -1,8 +1,7 @@
-const fs = require("node:fs/promises");
+// const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { type } = require("node:os");
-// const { updateProfile } = require("../controllers/account-controller");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({
@@ -27,6 +26,12 @@ const usersSchema = new mongoose.Schema({
         default: "user",
         required: [true, "User role must be stated"],
     },
+    otp: {
+        type: String,
+    },
+    otpExpiry: {
+        type: Date,
+    },
 });
 
 const users = mongoose.model("users", usersSchema, "users");
@@ -42,7 +47,9 @@ async function registerUser(userName, email, DOB, password, role) {
             email,
             DOB,
             password: hashedPassword, // hashes the password for security
-            role,
+            role: "user",
+            otp: "",
+            otpExpiry: "",
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -64,6 +71,27 @@ async function authenticateUser(userName, password) {
     }
 };
 
+async function findUserByNameAndEmail(userName, email) {
+    return users.findOne({ userName: userName, email: email }).lean();
+}
+
+async function saveOTP(userId, otp, expiry) {
+    return users.updateOne(
+        { _id: userId },
+        { $set: { otp, otpExpiry: expiry } },
+    );
+}
+
+async function updatePassword(userId, hashedPassword) {
+    return users.updateOne(
+        { _id: userId },
+        {
+            $set: { password: hashedPassword },
+            $unset: { otp: "", otpExpiry: "" },
+        },
+    );
+}
+
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
@@ -74,17 +102,37 @@ async function addUser(user) {
     return await users.create(user);
 };
 
-async function updateDetails(userId, userName, email, DOB) {
-    // updates the profile details of speificied user
-    return users.updateOne({ _id: userId }, { userName, email, DOB });
-};
+async function checkUserExist(userName) {
+    if (users.findOne({ userName: userName })) {
+        return true;
+    }
+    return false;
+}
+
+async function updateDetails(userId, userName, email, DOB, password, role) {
+    // updates the profile details of specified user
+    const originalDetails = await retrieveProfile(userId);
+    return users.updateOne(
+        { _id: userId },
+        {
+            $set: {
+                userName: userName,
+                email: email,
+                DOB: DOB,
+                password: password
+                    ? await bcrypt.hash(password, 10)
+                    : originalDetails.password,
+                role: role,
+            },
+        },
+    );
+}
 
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
 };
 async function getAllUsers() {
-    // deletes specified user from user schema
     return users.find().lean();
 };
 
@@ -173,5 +221,9 @@ module.exports = {
     retrieveLister,
     updateLister,
     deleteLister,
-    addLister
+    addLister,
+    checkUserExist,
+    findUserByNameAndEmail,
+    saveOTP,
+    updatePassword,
 };
