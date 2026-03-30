@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Listers</title>
+    <link rel="stylesheet" href="/style/admin-listings.css">
+
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="admin-listings-page">
+        <section class="page-hero">
+            <h2>Admin - View All Listers</h2>
+            <p>Review, filter, and manage all listers in one place.</p>
+        </section>
+
+        <div class="top-actions">
+            <a href="/apply-lister" class="top-link">
+                <button type="button">Apply New Lister</button>
+            </a>
+        </div>
+
+        <% if (listers.length < 1) { %>
+            <h4 class="empty-state">No listings found.</h4>
+        <% } else { %>
+            
+            <div class="container-flex">
+                <% for (let lister of listers) { %>
+                    <%if(user._id != adminUserId){%>
+                    <div class="item">
+                        <h4><%= lister.userName %></h4>
+                        <p><span>ID</span> : <%=user._id%></user._id></p>
+                        <p><span>Address:</span> <%= lister.address%></p>
+                        <p><span>Contact number:</span> <%= user.contactNo %></p>
+                        <p><span>Reason(s) for becoming a lister</span> : <%= lister.reason></user._id></p>
+                        <p><span>Current pet(s) owned:</span> <%= lister.pets%></p>
+                        <p><span>Experience with adoption:</span> <%= lister.experience %></p>
+                        <p><span>Role</span>: <%=user.role == "lister" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
+                        
+                        <div class="card-actions">
+                            <a href="/admin-lister-update?uid=<%=user._id%>">
+                                <button type="button">Update details</button>
+                            </a>
+                            <a href="/delete-lister-profile?uid=<%=user._id%>">
+                                <button type="button">Delete User</button>
+                            </a>
+                        </div>
+                    </div>
+                    <%}%>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+    <%- include('common/footer') %>
+
+</body>
+</html>

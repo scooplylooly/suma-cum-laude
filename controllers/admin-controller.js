@@ -189,3 +189,113 @@ exports.updateUser = async (req, res) => {
         console.error("Failed to update user details, error:", error);
     }
 };
+
+exports.showListerApps = async (req,res) => {
+    const pending = await accountModel.getPendingListers();
+    res.render("admin-lister-status", { pending });
+}
+
+exports.approveLister = async (req,res) => {
+    const uid = req.query.uid;
+    await accountModel.approveLister(uid);
+    res.redirect("admin-lister-status");
+}
+exports.rejectLister = async (req,res) => {
+    const uid = req.query.uid;
+    await accountModel.rejectLister(uid);
+    res.redirect("admin-lister-status");
+};
+
+exports.displayDeleteLister = async (req, res) => {
+    let uid = req.query.uid;
+    console.log("UID FOUND:", uid);
+    let listerInfo = await accountModel.retrieveLister(uid);
+    return res.render("admin-delete-lister", { userInfo, error: "" });
+};
+exports.deleteLister2 = async (req, res) => {
+    let uid = req.body.uid;
+    console.log("UID FOUND:", uid);
+    let userInfo = await accountModel.retrieveLister(uid);
+    let error = "";
+    try {
+        await accountModel.deleteLister2(uid);
+        console.log("lister deleted!");
+        return res.redirect("/admin-lister");
+    } catch (err) {
+        console.error(err);
+        error = "Error deleting lister";
+    }
+    return res.render("admin-delete-lister", { listerInfo, error });
+};
+
+exports.displayUpdateLister = async (req, res) => {
+    // shows update details form for user
+    // retrieves profile details for user from database
+    // and is put as default value for form fields
+    const uid = req.query.uid;
+    const originalDetails = await accountModel.retrieveLister(uid);
+    console.log("EDITING USER:", originalDetails.userName);
+    const address = originalDetails.address;
+    const contactNo = originalDetails.contactNo;
+    const currentPets = originalDetails.pets;
+    const role = originalDetails.role;
+    return res.render("admin-user-update", {
+        userName,
+        address,
+        contactNo,
+        currentPets,
+        role,
+        password: "",
+        password2: "",
+        errors: [],
+        uid,
+    });
+};
+exports.updateLister = async (req, res) => {
+    const uid = req.body.uid;
+    const originalDetails = await accountModel.retrieveLister(uid);
+    const userName =
+        (req.body.userName ?? "").trim() || originalDetails.userName;
+    const address = (req.body.address ?? "").trim() || originalDetails.address;
+    const contactNo = (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
+    const pets = (req.body.pets ?? "").trim() || originalDetails.pets;
+    const experience = (req.body.experience ?? "").trim() || originalDetails.experience;
+    const role = req.body.role;
+    console.log(role);
+
+    let errors = [];
+    console.log("Editing lister:", originalDetails.userName);
+    if (
+        userName !== originalDetails.userName &&
+        (await accountModel.checkUserExist(userName))
+    ) {
+        errors.push("Username already exists");
+    }
+
+    if (password !== password2) {
+        errors.push("Passwords do not match");
+    }
+
+    if (errors.length > 0) {
+        return res.render("update-lister-profile", {
+            userName,
+            address,
+            contactNo,
+            role,
+            pets: "",
+            experience: "",
+            errors,
+            uid,
+        });
+    }
+
+    try {
+        // updates fields of user profile in database
+        await accountModel.updateLister(uid, userName, address, contactNo, pets, experience, role);
+        console.log("Updated details successfully");
+        // updates username variable in session; becauses session captures old snapshot with outdated details
+        return res.redirect("/admin-lister");
+    } catch (error) {
+        console.error("Failed to update lister details, error:", error);
+    }
+};

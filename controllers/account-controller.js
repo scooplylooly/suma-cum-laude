@@ -417,7 +417,19 @@ exports.handleLister = async (req, res) => {
     }
 
     try {
-        await accountModel.addLister(address, contactNo, reason, pets, experience, "lister");
+        const exists = await accountModel.retrieveLister(userId);
+        if (exists && exists.statusL === "pending") {
+            errors.push("Your application is pending.");
+            return res.render("apply-lister", {
+                address: "",
+              contactNo: "",
+              reason: "",
+              pets: "",
+              experience: "",
+              success: success,
+            }); 
+        }
+        await accountModel.addLister(userId, address, contactNo, reason, pets, experience, "lister");
         return res.render("apply-lister", {
           address: "",
           contactNo: "",
@@ -488,6 +500,7 @@ exports.processLister = async (req, res) => {
     const address = (req.body.address ?? "").trim();
     const contactNo = (req.body.contactNo ?? "").trim();
     const pets = (req.body.pets ?? "").trim();
+    const experience = (req.body.experience ?? "").trim();
 
     try {
         await accountModel.updateDetails(
@@ -495,6 +508,7 @@ exports.processLister = async (req, res) => {
             address,
             contactNo,
             pets,
+            experience,
         );
         console.log("Updated details successfully");
     } catch (error) {
@@ -512,7 +526,7 @@ exports.deleteLister = async (req, res) => {
     const password = req.body.password;
     // authenticates inputted password before processing deletion
     const match = await accountModel.authenticateUser(
-        req.session.user.userNameL,
+        req.session.user.user._id,
         password,
     );
     if (match) {

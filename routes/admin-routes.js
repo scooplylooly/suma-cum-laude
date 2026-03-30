@@ -36,4 +36,38 @@ router.get(
     adminController.displayUpdateUser,
 );
 router.post("/admin-user-update", adminController.updateUser);
+
+router.get(
+    "/admin-lister-listings",
+    authMiddleware.isAdmin,
+    adminController.showListerListings,
+);
+router.post("/admin-lister-listings", adminController.filterListings);
+router.get(
+    "/admin-lister-status",
+    authMiddleware.isAdmin,
+    adminController.confirmListingStatus,
+);
+router.post(
+    "/admin-lister-status",
+    authMiddleware.isAdmin,
+    adminController.updateListingStatus,
+);
+router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
+router.post("/admin-lister", adminController.filterLister);
+
+router.get(
+    "/delete-lister-profile",
+    authMiddleware.isAdmin,
+    adminController.displayDeleteLister,
+);
+router.post("/delete-lister-profile", adminController.deleteLister2);
+router.get(
+    "/admin-lister-update",
+    authMiddleware.isAdmin,
+    adminController.displayUpdateLister,
+);
+router.post("/admin-lister-update", adminController.updateLister);
+
+
 module.exports = router;

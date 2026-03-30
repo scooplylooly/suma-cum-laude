@@ -143,6 +143,11 @@ async function getAllUsers() {
 };
 
 const listerSchema = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: [true, "A user must have an address"]
+    },
+
     address: {
         type: String,
         required: [true, "A user must have an address"]
@@ -164,7 +169,8 @@ const listerSchema = new mongoose.Schema({
         required: [true, "A user must have experience"],
     },
     statusL: {
-        type: Boolean,
+        type: string,
+        default: "pending",
         required: [true, "A user will have a status"],
     },
     role: {
@@ -183,6 +189,18 @@ async function authenticateLister(userName) {
 
 };
 
+async function getPendingListers() {
+    return await lister.find({ statusL: false }).lean();
+};
+
+async function approveLister(userId) {
+    return await lister.updateOne({ _id: userId}, { statusL: "approved"})
+};
+
+async function rejectLister(userId) {
+    return await lister.updateOne({ _id: userId}, { statusL: "rejected"})
+};
+
 async function retrieveLister(userId) {
     return await lister.findOne({ _id: userId }).lean();
 };
@@ -191,9 +209,9 @@ async function addLister(lister) {
     return await lister.create(lister);
 };
 
-async function updateLister(userId, address, contactNo, pets) {
+async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return users.updateOne({ _id: userId }, { address, contactNo, pets });
+    return users.updateOne({ _id: userId }, { address, contactNo, pets, experience });
 };
 
 async function deleteLister(userID) {
@@ -209,7 +227,9 @@ module.exports = {
     updateDetails,
     getAllUsers,
     authenticateLister,
-    registerLister,
+    getPendingListers,
+    approveLister,
+    rejectLister,
     retrieveLister,
     updateLister,
     deleteLister,
