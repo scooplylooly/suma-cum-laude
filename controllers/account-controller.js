@@ -376,7 +376,7 @@ exports.showLister = (req, res) => {
 }
 
 exports.handleLister = async (req, res) => {
-    let address = (req.body.reason ?? "").trim()
+    let address = (req.body.address ?? "").trim()
     let contactNo = (req.body.contactNo ?? "").trim()
     let reason = (req.body.reason ?? "").trim()
     let pets = (req.body.pets ?? "").trim()
@@ -417,7 +417,7 @@ exports.handleLister = async (req, res) => {
     }
 
     try {
-        await accountModel.registerLister(address, contactNo, reason, pets, experience, "lister");
+        await accountModel.addLister(address, contactNo, reason, pets, experience, "lister");
         return res.render("apply-lister", {
           address: "",
           contactNo: "",

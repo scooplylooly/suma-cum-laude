@@ -176,20 +176,6 @@ const listerSchema = new mongoose.Schema({
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
-async function registerLister(userName, role) {
-    const existing = await lister.findOne({ userName });
-    if (existing) {
-        throw new Error("Lister already exists");
-    } else {
-        let newLister = {
-            userName,
-            statusL,
-            role,
-        };
-    await lister.create(newLister);
-    }
-};
-
 async function authenticateLister(userName) {
     const exists = await lister.findOne({ userName });
 
