@@ -38,6 +38,11 @@ petPersonalities.sort();
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
+    const applications = await listing.findApplicationbyUID(user._id)
+    pids = []
+    for (let application of applications) {
+        pids.push(application.pid)
+    }
     pets.reverse();
     res.render("pet-search", {
         pets,
@@ -50,6 +55,12 @@ exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
     allPets.reverse();
+    const user = req.session.user;
+    const applications = listing.findApplicationbyUID(user._id)
+    pids = []
+    for (let application of applications) {
+        pids.push(application.pid)
+    }
     let pets = [];
     if (nameSearched != "") {
         for (let pet of allPets) {
@@ -63,6 +74,8 @@ exports.searchPet = async (req, res) => {
     res.render("pet-search", {
         nameSearched,
         pets,
+        user,
+        pids,
     });
 };
 
