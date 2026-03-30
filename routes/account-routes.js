@@ -23,20 +23,17 @@ router.get("/profile", authMiddleware.checkUser, accountController.showProfile);
 router.get("/edit-profile", authMiddleware.checkUser, accountController.updateProfile);
 router.post("/edit-profile", authMiddleware.checkUser, accountController.processUpdate);
 
-router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation);
+router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation1);
 router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
 
 router.get('/apply-lister', accountController.showLister)
 router.post('/apply-lister', accountController.handleLister)
 
-router.get("/login-lister", authMiddleware.isLoggedIn, accountController.showLoginL);
-router.post("/login-lister", accountController.handleLoginL);
+router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
+router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
 
-router.get("/edit-lister", accountController.updateLister);
-router.post("/edit-lister", accountController.processLister);
-
-router.get("/delete-lister", accountController.deleteConfirmation2)
-router.post("/delete-lister", accountController.deleteLister)
+router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmation2);
+router.post("/delete-lister", authMiddleware.checkUser, accountController.deleteLister);
 
 router.get("/logout", accountController.logout);
 

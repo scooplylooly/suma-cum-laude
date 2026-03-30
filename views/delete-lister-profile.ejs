@@ -3,31 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete lister profile</title>
-    <link rel="stylesheet" type="text/css" href="./style/delete-lister.css">
+    <title>Delete profile</title>
+    <link rel="stylesheet" type="text/css" href="./style/delete-profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
     <%- include('common/header') %>
 
     <main class="delete-page">
         <div class="delete-card">
-            <form action="/delete-lister" method="post" class="delete-form">
+            <form action="/delete-lister" method="post" class="delete-form" id="delete-form">
                 <h2 style="color: red;">WARNING! Danger zone</h2> <br>
                 <p>Note that all data will be deleted permanently.</p>
-                <input type="password" name="passwordL" placeholder="Enter password">
-                <button type="submit" onclick="return confirm ('WARNING: Are you sure? This action cannot be undone and all data will be lost')">Confirm Deletion</button>
+                
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="Enter password">
+                    <span class="eye-icon" onclick="togglePassword('password')">
+                        <i class="fa-regular fa-eye-slash" id="password-icon"></i>
+                    </span>
+                </div> <br><br>
+                <button type="button" onclick="showModal()">Confirm Deletion</button>
+                
             </form>
+            <% if (error) { %>
+            <div class="err-message">
+                <%- error %>
+            </div>
+        <% } %>
         </div>
 
+        <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:999;">
+                <div style="background:white; padding:40px; border-radius:12px; text-align:center; width:350px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                    <h3 style="color:red; margin-top:0;">⚠️ WARNING</h3>
+                    <p style="color:#333;">Are you sure? This action cannot be undone and all data will be lost.</p>
+                    <div style="display:flex; justify-content:center; gap:12px; margin-top:20px;">
+                        <button onclick="closeModal()" 
+                            style="padding:10px 24px; border-radius:8px; border:1px solid #d8c3b5; background:white; cursor:pointer; font-family:inherit; font-size:15px;">
+                            Cancel
+                        </button>
+                        <button id="confirm-delete-btn" onclick="document.getElementById('delete-form').submit()"
+                            style="padding:10px 24px; border-radius:8px; border:none; background:#c0392b; color:white; cursor:pointer; font-family:inherit; font-size:15px;">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
     </main>
-    <% if (error) { %>
-        <div class="err-message">
-            <%- error %>
-        </div>
-    <% } %>
 
 
     <%- include('common/footer') %>
+
+    <script>
+        function togglePassword(passwordField) {
+        const input = document.getElementById(passwordField);
+        const icon = document.getElementById(passwordField + '-icon')
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        }
+    }
+        function showModal() {
+            document.getElementById('modal').style.display='flex';
+            document.getElementById('confirm-delete-btn').focus();
+        }
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.getElementById('password').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            showModal();
+        }
+    });
+    </script>
     
 </body>
 </html>

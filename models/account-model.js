@@ -137,10 +137,6 @@ async function getAllUsers() {
 };
 
 const listerSchema = new mongoose.Schema({
-    userNameL: {
-        type: String,
-        required: [true, "A user must have a user name"],
-    },
     address: {
         type: String,
         required: [true, "A user must have an address"]
@@ -157,6 +153,10 @@ const listerSchema = new mongoose.Schema({
         type: String,
         required: [true, "A user must have at least a pet"],
     },
+    experience: {
+        type: String,
+        required: [true, "A user must have experience"],
+    },
     statusL: {
         type: Boolean,
         required: [true, "A user will have a status"],
@@ -170,13 +170,13 @@ const listerSchema = new mongoose.Schema({
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
-async function registerLister(userNameL, role) {
-    const existing = await lister.findOne({ userNameL });
+async function registerLister(userName, role) {
+    const existing = await lister.findOne({ userName });
     if (existing) {
-        throw new Error("Username already exists");
+        throw new Error("Lister already exists");
     } else {
         let newLister = {
-            userNameL,
+            userName,
             statusL,
             role,
         };
@@ -184,28 +184,28 @@ async function registerLister(userNameL, role) {
     }
 };
 
-async function authenticateLister(userNameL) {
-    const exists = await lister.findOne({ userNameL });
+async function authenticateLister(userName) {
+    const exists = await lister.findOne({ userName });
 
     if (!exists) return null;
 
 };
 
-async function retrieveLister(listerId) {
-    return await lister.findOne({ _id: listerId }).lean();
+async function retrieveLister(userId) {
+    return await lister.findOne({ _id: userId }).lean();
 };
 
 async function addLister(lister) {
     return await lister.create(lister);
 };
 
-async function updateLister(listerId, address, contactNo, pets) {
+async function updateLister(userId, address, contactNo, pets) {
     // updates the profile details of speificied user
-    return users.updateOne({ _id: listerId }, { address, contactNo, pets });
+    return users.updateOne({ _id: userId }, { address, contactNo, pets });
 };
 
-async function deleteLister(listerID) {
-    return lister.deleteOne({ _id: listerID });
+async function deleteLister(userID) {
+    return lister.deleteOne({ _id: userID });
 };
 
 
