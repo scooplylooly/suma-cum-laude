@@ -44,15 +44,25 @@
                         <img src="/images/<%= listing.img %>.jpg" alt="<%= listing.name %>">
 
                         <h4><%= listing.name %></h4>
-                        <p><span>ID</span>:<%= listing._id %></p>
+
+                        <!-- subtitle -->
+                        <p class="pet-id"><%= listing._id%></p>
+
                         <p><span>Breed:</span> <%= listing.breed[0].toUpperCase() + listing.breed.slice(1) %></p>
                         <p><span>Date Of Birth:</span> <%= listing.dob %></p>
 
-                        <% if (!listing.approved) { %>
-                            <p class="status pending">Status: Pending</p>
-                        <% } else { %>
-                            <p class="status approved">Status: Approved</p>
-                        <% } %>
+                        <!-- ✅ same line -->
+                        <div class="status-row">
+                            <% if (!listing.approved) { %>
+                                <span class="status pending">Pending</span>
+                            <% } else { %>
+                                <span class="status approved">Approved</span>
+                            <% } %>
+
+                            <% if (listing.adopted) { %>
+                                <span class="status adopted">Adopted</span>
+                            <% } %>
+                        </div>
 
                         <div class="card-actions">
                             <a href="/admin-change-listings-status?pid=<%= listing._id %>">
@@ -62,7 +72,7 @@
                                 <button type="button">Update Listing</button>
                             </a>
                             <a href="/delete-pet?pid=<%= listing._id %>">
-                                <button type="button">Delete Listing</button>
+                                <button type="button" class="danger">Delete Listing</button>
                             </a>
                         </div>
                     </div>

@@ -3,30 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><%= user.userName %>'s Applications</title>
+    <link rel="stylesheet" type="text/css" href="/style/application.css">
 </head>
 <body>
     <%- include('common/header') %>
-    <h1><%=user.userName%>'s Applications:</h1>
-    <div>
-    <%for (application of applications) {%>
-        <h3>Application Number: <%=application.applicationNumber%></h3>
-        <h3>Pet Name: <%=application.petName%></h3>
-        <h3>Reason: <%=application.reason%></h3>
-        <h3>Status: <%=application.status%></h3>
-        <h3>Housing Type: <%=application.houseType%></h3>
-        <h3>Monthly Income: <%=application.income%></h3>
-        <h3>Prior Pet Experience: <%=application.petExperience%></h3>
-        <h3>Existing Pets: <%=application.existingPets%></h3>
-        <h3>Contact No: +65-<%=application.contactNo%></h3>
-        <%if (application.status != 'denied'){%>
-        <a href="/pet-profile?pid=<%=application.pid%>"><button>View Pet</button></a>
-        <%}%>
-        <%if (application.status == 'pending'){%>
-        <a href="/updateApplication?appID=<%=application._id%>"><button>Update Application</button></a>
-        <%}%>
-        <a href="/deleteApplication?appID=<%=application._id%>"><button>Delete Application</button></a>
-    <%}%>
-    </div>
+
+    <main class="applications-page">
+        <section class="applications-hero">
+            <h1>Your Applications</h1>
+            <p>View and manage your pet adoption applications below.</p>
+        </section>
+
+        <% if (applications.length === 0) { %>
+            <section class="empty-state">
+                <h3>You have not applied for any pets yet!</h3>
+            </section>
+        <% } else { %>
+            <section class="applications-list">
+                <% for (let application of applications) { %>
+                    <article class="application-card">
+                        <div class="application-card-top">
+                            <div>
+                                <h2><%= application.petName %></h2>
+                                <p class="application-number">Application #<%= application.applicationNumber %></p>
+                            </div>
+
+                            <% if (application.status === "approved") { %>
+                                <span class="status approved">Approved</span>
+                            <% } else if (application.status === "pending") { %>
+                                <span class="status pending">Pending</span>
+                            <% } else { %>
+                                <span class="status denied">Denied</span>
+                            <% } %>
+                        </div>
+
+                        <div class="application-details">
+                            <div class="detail full">
+                                <span class="label">Reason</span>
+                                <p><%= application.reason %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Housing Type</span>
+                                <p><%= application.houseType %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Monthly Income</span>
+                                <p><%= application.income %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Prior Pet Experience</span>
+                                <p><%= application.petExperience %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Existing Pets</span>
+                                <p><%= application.existingPets %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Contact No</span>
+                                <p>+65-<%= application.contactNo %></p>
+                            </div>
+                        </div>
+
+                        <div class="application-actions">
+                            <% if (application.status !== 'denied') { %>
+                                <a href="/pet-profile?pid=<%= application.pid %>">
+                                    <button type="button">View Pet</button>
+                                </a>
+                            <% } %>
+
+                            <% if (application.status === 'pending') { %>
+                                <a href="/updateApplication?appID=<%= application._id %>">
+                                    <button type="button">Update Application</button>
+                                </a>
+                            <% } %>
+
+                            <a href="/deleteApplication?appID=<%= application._id %>">
+                                <button type="button" class="danger-btn">Delete Application</button>
+                            </a>
+                        </div>
+                    </article>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
+
+    <%- include('common/footer') %>
 </body>
 </html>

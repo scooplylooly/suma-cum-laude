@@ -15,11 +15,14 @@
                     <a href="/register">Register</a>
                     <a href="/login">Log in</a>
                 <!--else other functions in nav bar-->
+               
                 <%}else{%>
                     <a href="/application-status">Application Status</a>
-                    <a href="/view-listings">View Your Listings</a>
                     <a href="/profile">Profile</a>
                     <a href="/faq">FAQ</a>
+                <%}%>
+                 <% if (user.role == 'lister'||user.role == 'admin'){%>
+                    <a href="/view-listings">My Listed Pets</a>
                 <%}%>
                 <%if(user.role == 'admin'){%>
                     <a href="/admin-page">Admin page</a>

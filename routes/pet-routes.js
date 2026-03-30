@@ -45,49 +45,53 @@ router.post(
 );
 router.get(
     "/create-listing",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.showPetListingForm,
 );
 router.post(
     "/create-listing",
     upload.single("image"),
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.createPetListing,
 );
 router.get("/search", authMiddleware.checkUser, petController.searchPet);
 router.get(
     "/view-listings",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.viewListings,
 );
 router.get(
     "/edit-listing",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.showPetlistingProfile,
 );
 
 router.get(
     "/update-pet",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.updatePetProfile,
 );
 router.post(
     "/update-pet",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     upload.single("image"),
     petController.petUpdated,
 );
 router.get(
     "/delete-pet",
-    authMiddleware.checkUser,
+    authMiddleware.isLister,
     petController.deletePetProfile,
 );
-router.get('/approve', petController.approveApp)
-router.get('/deny', petController.denyApp)
-router.get('/application-status', authMiddleware.checkUser, petController.applicationStatus)
-router.post("/delete-pet", authMiddleware.checkUser, petController.petDeleted);
-router.get('/view-applications', petController.viewApplications)
-router.get('/deleteApplication',petController.deleteApplication)
-router.get('/updateApplication', petController.updateApplication)
-router.post('/update-application', petController.updateApplicationDetails)
+router.get("/approve", petController.approveApp);
+router.get("/deny", petController.denyApp);
+router.get(
+    "/application-status",
+    authMiddleware.checkUser,
+    petController.applicationStatus,
+);
+router.post("/delete-pet", authMiddleware.isLister, petController.petDeleted);
+router.get("/view-applications", petController.viewApplications);
+router.get("/deleteApplication", petController.deleteApplication);
+router.get("/updateApplication", petController.updateApplication);
+router.post("/update-application", petController.updateApplicationDetails);
 module.exports = router;

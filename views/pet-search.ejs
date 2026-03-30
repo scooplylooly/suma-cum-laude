@@ -38,7 +38,9 @@
             <% } else if (user && String(user._id) === String(pet.uid)) { %>
                 <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
             <%}else{%>
+                <%if (pet.adopted == true){%>
                 <p class="status adopted">Adopted</p>
+                <%}%>
         <%}%>
         </div>
     <%}%>
