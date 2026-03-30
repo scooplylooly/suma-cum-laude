@@ -232,3 +232,8 @@ body > h4 {
     color: #c07a1b;
     border: 1px solid #f3d2a2;
 }
+
+span {
+    font-weight: bold;
+    color: #6a4b37;
+}

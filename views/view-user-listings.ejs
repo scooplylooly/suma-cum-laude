@@ -21,8 +21,8 @@
         <div class="item">
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
         <h4><%=pet.name%></h4>
-        <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
-        <h5>Date Of Birth: <%=pet.dob%></h5>
+        <h5><span>Breed:</span> <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+        <h5><span>Date Of Birth:</span> <%=pet.dob%></h5>
         <% if (pet.approved) { %>
         <p class="status approved">Approved</p>
         <% } else { %>
