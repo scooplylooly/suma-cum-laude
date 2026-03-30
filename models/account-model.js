@@ -142,6 +142,14 @@ async function getAllUsers() {
     return users.find().lean();
 }
 
+const countUsers = async () => {
+    try {
+        return users.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
 module.exports = {
     authenticateUser,
     registerUser,
@@ -152,5 +160,6 @@ module.exports = {
     checkUserExist,
     updatePassword,
     checkSecurityKey,
-    securePassword
+    securePassword,
+    countUsers
 };
