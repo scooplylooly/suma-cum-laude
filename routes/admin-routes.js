@@ -4,7 +4,7 @@ const router = express.Router();
 const adminController = require("../controllers/admin-controller");
 const authMiddleware = require("../middleware/auth-middleware.js");
 
-router.get("/admin-page", adminController.showAdminPage);
+// router.get("/admin-page", adminController.showAdminPage);
 router.get(
     "/admin/listings",
     authMiddleware.isAdmin,
@@ -39,5 +39,7 @@ router.post("/admin-user-update", adminController.updateUser);
 router.get(
     "/view-user-applications",
     authMiddleware.isAdmin,
-    adminController.viewUserApplications)
+    adminController.viewUserApplications,
+);
+router.get("/admin/dashboard", authMiddleware.isAdmin, adminController.showAdminDashboard);
 module.exports = router;
