@@ -3,49 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Applications for <%= petName %></title>
+    <link rel="stylesheet" type="text/css" href="/style/application.css">
 </head>
 <body>
-        <%- include('common/header') %>
-    <h1>Applications for <%=petName%></h1>
+    <%- include('common/header') %>
 
-    <%for (application of applications) {%>
-        <div>
-        <%if (application.status == 'approved'){%>
+    <main class="applications-page">
+        <section class="applications-hero">
+            <h1>Applications for <%= petName %></h1>
+            <p>Review and manage adoption requests for this pet.</p>
+        </section>
 
-        
-        <input type="hidden" name="petID" value="<%=application.pid%>">
-        <input type="hidden" name="petName" value="<%=petName%>">
+        <% if (!applications || applications.length === 0) { %>
+            <section class="empty-state">
+                <h3>No applications yet for <%= petName %>.</h3>
+            </section>
+        <% } else { %>
+            <section class="applications-list">
+                <% for (let application of applications) { %>
+                    <% if (application.status === "approved" || application.status === "pending") { %>
+                        <article class="application-card">
+                            <div class="application-card-top">
+                                <div>
+                                    <h2><%= application.userName %></h2>
+                                    <p class="application-number">Application #<%= application.applicationNumber %></p>
+                                </div>
 
-        <h3>Application Number:<%=application.applicationNumber%></h3>
-        <h3>User: <%=application.userName%></h3>
-        <h3>Reason: <%=application.reason%></h3>
-        <h3>Status: Adopted</h3>
-       
-        <p>-------------------------------------------------</p>
-        
-        </div>
-    <%}else if (application.status == 'pending') {%>
-        <input type="hidden" name="petID" value="<%=application.pid%>">
-        <input type="hidden" name="petName" value="<%=petName%>">
+                                <% if (application.status === "approved") { %>
+                                    <span class="status approved">Adopted</span>
+                                <% } else { %>
+                                    <span class="status pending">Pending</span>
+                                <% } %>
+                            </div>
 
-        <h3>Application Number:<%=application.applicationNumber%></h3>
-        <h3>User: <%=application.userName%></h3>
-        <h3>Reason: <%=application.reason%></h3>
-        <h3>Housing Type: <%=application.houseType%></h3>
-        <h3>Monthly Income: <%=application.income%></h3>
-        <h3>Prior Pet Experience: <%=application.petExperience%></h3>
-        <h3>Existing Pets: <%=application.existingPets%></h3>
-        <h3>Contact No: +65-<%=application.contactNo%></h3>
-        <h3>Status: Pending</h3>
-        <a href="/approve?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Approve</button></a>
-        <a href="/deny?application=<%=application._id%>&petID=<%=application.pid%>&petName=<%=petName%>"><button>Deny</button></a>
-        <p>-------------------------------------------------</p>
-    <%}%> 
-<%}%>
+                            <div class="application-details">
+                                <div class="detail full">
+                                    <span class="label">Reason</span>
+                                    <p><%= application.reason %></p>
+                                </div>
 
-        <%- include('common/footer') %>
+                                <% if (application.status === "pending") { %>
+                                    <div class="detail">
+                                        <span class="label">Housing Type</span>
+                                        <p><%= application.houseType %></p>
+                                    </div>
 
+                                    <div class="detail">
+                                        <span class="label">Monthly Income</span>
+                                        <p><%= application.income %></p>
+                                    </div>
+
+                                    <div class="detail">
+                                        <span class="label">Prior Pet Experience</span>
+                                        <p><%= application.petExperience %></p>
+                                    </div>
+
+                                    <div class="detail">
+                                        <span class="label">Existing Pets</span>
+                                        <p><%= application.existingPets %></p>
+                                    </div>
+
+                                    <div class="detail">
+                                        <span class="label">Contact No</span>
+                                        <p>+65-<%= application.contactNo %></p>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <% if (application.status === "pending") { %>
+                                <div class="application-actions">
+                                    <a href="/approve?application=<%= application._id %>&petID=<%= application.pid %>&petName=<%= petName %>">
+                                        <button type="button">Approve</button>
+                                    </a>
+                                    <a href="/deny?application=<%= application._id %>&petID=<%= application.pid %>&petName=<%= petName %>">
+                                        <button type="button" class="danger-btn">Deny</button>
+                                    </a>
+                                </div>
+                            <% } %>
+                        </article>
+                    <% } %>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
+
+    <%- include('common/footer') %>
 </body>
-</html> 
-
+</html>

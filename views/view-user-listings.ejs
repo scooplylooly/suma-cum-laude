@@ -28,6 +28,11 @@
         <% } else { %>
         <p class="status pending">Pending</p>
         <% } %>
+        <% if (pet.adopted) { %>
+        <p class="status approved">Adopted</p>
+        <% } else { %>
+        <p class="status pending">Not Adopted</p>
+        <% } %>
         <a href="/edit-listing?pid=<%=pet._id%>"><button>Edit Listing</button></a>
         <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
         </div>

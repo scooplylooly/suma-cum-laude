@@ -88,10 +88,11 @@ exports.filterUsers = async (req, res) => {
     } else {
         selectedType = "";
         users = (await accountModel.getAllUsers()).reverse();
+        selectedType = userType;
     }
     return res.render("admin-users", {
         users,
-        selectedType: "",
+        selectedType,
         adminUserId,
     });
 };
