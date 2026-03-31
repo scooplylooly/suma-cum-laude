@@ -10,12 +10,12 @@
 </head>
 <body>
     <%- include('common/header') %>
+    <h2>Your Listings</h2>
+    <h3>Make changes to your listing here!</h3>
     <a href="/create-listing"><button>Create Listing</button></a>
     <%if(petFound.length<1){%>
         <h4>No listing found.</h4>
     <%}else{%>
-     <h2>Your Listings</h2>
-     <h3>Make changes to your listing here!</h3>
         <div class="container-flex">
         <% for(let pet of petFound){%>
         <div class="item">
