@@ -85,7 +85,7 @@
         </tr>
     </table>
     <% for (let entry of topPetTypes) { %>
-    <p><%= entry.type %>: <%= entry.count %> applications</p>
+    <p><%= entry.type %>: <%= Math.round((entry.count/totalApplications)*100) %> applications</p>
 <% } %>
     <h2>Quick Actions</h2>
     <div>

@@ -6,6 +6,19 @@ const accModel = require("../models/account-model")
 
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
+    const allApplications = await petModel.checkExistingApplications()
+    const typeCounts = {};
+    for (let app of allApplications) {
+        if (app.petType) {
+            typeCounts[app.petType] = (typeCounts[app.petType] || 0) + 1;
+        }
+    }
+    let topPetTypes = [];
+    for (let type in typeCounts) {
+        topPetTypes.push({ type: type, count: typeCounts[type] });
+    }
+    topPetTypes.sort((a, b) => b.count - a.count);
+    topPetTypes = topPetTypes.slice(0, 3);
     const totalPets = await petModel.countPets({})
     console.log("Total Pets: " + totalPets)
     const totalApplications = await petModel.countTotalApplications({})
@@ -33,7 +46,8 @@ exports.showAdminPage = async (req, res) => {
             totalApplications,
             pendingApplications,
             totalFaqs,
-            totalUsers 
+            totalUsers,
+            topPetTypes,
 
          });
     } else {

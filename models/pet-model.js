@@ -373,9 +373,7 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new: true },
     );
 };
-exports.getAllApplications = async function () {
-    return Application.find().lean()
-}
+
 
 
 //For Admin Dashboard
