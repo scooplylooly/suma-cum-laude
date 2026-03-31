@@ -205,14 +205,18 @@ async function retrieveLister(userId) {
     return await lister.findOne({ _id: userId }).lean();
 };
 
-async function addLister(lister) {
-    return await lister.create(lister);
+async function addLister(listerData) {
+    return await lister.create(listerData);
 };
 
 async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return users.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
+    return lister.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
 };
+
+async function getListerByUserName (userName) {
+    return await lister.findOne({ userName }).lean()
+}
 
 async function deleteLister(userID) {
     return lister.deleteOne({ _id: userID });
@@ -232,6 +236,7 @@ module.exports = {
     rejectLister,
     retrieveLister,
     updateLister,
+    getListerByUserName,
     deleteLister,
     addLister,
     checkUserExist,

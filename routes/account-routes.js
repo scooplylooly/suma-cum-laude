@@ -25,6 +25,8 @@ router.post("/delete-profile", authMiddleware.checkUser, accountController.delet
 router.get('/apply-lister', authMiddleware.checkUser, accountController.showLister)
 router.post('/apply-lister', authMiddleware.checkUser, accountController.handleLister)
 
+router.get("/lister-application-status", authMiddleware.checkUser, accountController.showListerStatus)
+
 router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
 router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
 

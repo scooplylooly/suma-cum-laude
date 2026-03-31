@@ -517,6 +517,34 @@ exports.processLister = async (req, res) => {
     res.redirect("/user-profile");
 };
 
+exports.showListerStatus = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const application = await accountModel.getListerByUserName(userName);
+
+        if (!application) {
+            return res.render("lister-application-status", {
+                hasApplication: false,
+                status: null,
+                userName
+            });
+        }
+        return res.render("lister-application-status", {
+            hasApplication: true,
+            status: application.statusL,
+            userName
+        });
+    } catch (err) {
+        console.error("Error fetching lister applications:", err);
+        return res.render("lister-application-status", {
+            hasApplication: false,
+            status: null,
+            userName
+        });
+    }
+};
+
 exports.deleteConfirmation2 = (req, res) => {
     // displays form for user to enter password to verify deletion
     res.render("delete-lister-profile", { error: "" });
@@ -538,7 +566,7 @@ exports.deleteLister = async (req, res) => {
             res.redirect("/index.html"); // redirected to homepage
         });
     } else {
-        res.render("delete-lister-profile", {
+        res.render("delete-lister", {
             error: "Wrong password. Please try again.",
         });
     }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lister Application Status</title>
+</head>
+<body>
+    <%- include('common/header') %>
+    <main>
+
+        <h2>Lister Application Status for <%= userName %></h2>
+        <%if (!hasApplication) {%>
+            <p>You haven't applied yet. Do apply <a href="/apply-lister">here</a> if interested.</p>
+        <%} else {%>
+            <p>Your application status is:</p>
+            <%if (status === 'approved') {%>
+                <p><strong>approved</strong></p>
+                <p>You can now create pet listings</p>
+            <%} else if (status === 'pending') {%>
+                <p>pending</p>
+                <p>Your application is now being reviewed.</p>
+            <%} else if (status === 'rejected') {%>
+                <p>rejected</p>
+                <p>You can try again after some time.</p>
+            <%}%>
+        <%}%>
+    </main>
+    <%- include('common/footer') %>
+</body>
+</html>
