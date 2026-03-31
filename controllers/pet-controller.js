@@ -40,13 +40,11 @@ petPersonalities.sort();
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
-    pets.reverse();
-
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
+    pets.reverse();
     pets = pets.map((pet) => ({ ...pet, score: petScorer.calculateScore(preferences, pet).score }));
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
-
     return res.render("pet-search", {
         pets,
         nameSearched: "",
