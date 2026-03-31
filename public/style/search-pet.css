@@ -150,7 +150,10 @@ form button:hover {
     color: #5a5a5a;
     line-height: 1.4;
 }
-
+.item h5 b {
+    color: #7a4c2f;
+    font-weight: bold;
+}
 /* ===== BUTTON IN CARD ===== */
 .item button {
     margin-top: 14px;
