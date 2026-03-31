@@ -28,16 +28,16 @@
             
             <div class="container-flex">
                 <% for (let lister of listers) { %>
-                    <%if(user._id != adminUserId){%>
+                    <%if(lister._id != adminUserId){%>
                     <div class="item">
                         <h4><%= lister.userName %></h4>
-                        <p><span>ID</span> : <%=user._id%></user._id></p>
+                        <p><span>ID</span> : <%=lister._id%></user._id></p>
                         <p><span>Address:</span> <%= lister.address%></p>
-                        <p><span>Contact number:</span> <%= user.contactNo %></p>
+                        <p><span>Contact number:</span> <%= lister.contactNo %></p>
                         <p><span>Reason(s) for becoming a lister</span> : <%= lister.reason></user._id></p>
                         <p><span>Current pet(s) owned:</span> <%= lister.pets%></p>
                         <p><span>Experience with adoption:</span> <%= lister.experience %></p>
-                        <p><span>Role</span>: <%=user.role == "lister" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
+                        <p><span>Role</span>: <%=user.role == "user" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
                         
                         <div class="card-actions">
                             <a href="/admin-lister-update?uid=<%=user._id%>">

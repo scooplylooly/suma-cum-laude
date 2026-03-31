@@ -55,7 +55,7 @@ router.get(
     authMiddleware.isAdmin,
     adminController.displayDeleteLister,
 );
-router.post("/delete-lister-profile", adminController.deleteLister2);
+router.post("/delete-lister-profile", adminController.deleteLister);
 router.get(
     "/admin-lister-update",
     authMiddleware.isAdmin,

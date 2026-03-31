@@ -198,12 +198,12 @@ exports.showListerApps = async (req,res) => {
 exports.approveLister = async (req,res) => {
     const uid = req.query.uid;
     await accountModel.approveLister(uid);
-    res.redirect("admin-lister-status");
+    res.redirect("/admin-lister-status");
 }
 exports.rejectLister = async (req,res) => {
     const uid = req.query.uid;
     await accountModel.rejectLister(uid);
-    res.redirect("admin-lister-status");
+    res.redirect("/admin-lister-status");
 };
 
 exports.confirmListerStatus = async (req, res) => {
@@ -212,7 +212,7 @@ exports.confirmListerStatus = async (req, res) => {
 };
 
 exports.updateListerStatus = async (req, res) => {
-    const { id, statusL } = req.body;
+    const { uid, statusL } = req.body;
 
     try {
         if (statusL === 'approved') {
@@ -233,15 +233,15 @@ exports.displayDeleteLister = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
     let listerInfo = await accountModel.retrieveLister(uid);
-    return res.render("admin-delete-lister", { userInfo, error: "" });
+    return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
-exports.deleteLister2 = async (req, res) => {
-    let uid = req.body.uid;
+exports.deleteLister = async (req, res) => {
+    let uid = req.query.uid;
     console.log("UID FOUND:", uid);
-    let userInfo = await accountModel.retrieveLister(uid);
+    let listerInfo = await accountModel.retrieveLister(uid);
     let error = "";
     try {
-        await accountModel.deleteLister2(uid);
+        await accountModel.deleteLister(uid);
         console.log("lister deleted!");
         return res.redirect("/admin-lister");
     } catch (err) {
@@ -262,8 +262,7 @@ exports.displayUpdateLister = async (req, res) => {
     const contactNo = originalDetails.contactNo;
     const currentPets = originalDetails.pets;
     const role = originalDetails.role;
-    return res.render("admin-user-update", {
-        userName,
+    return res.render("admin-lister-update", {
         address,
         contactNo,
         currentPets,
@@ -293,10 +292,6 @@ exports.updateLister = async (req, res) => {
         (await accountModel.checkUserExist(userName))
     ) {
         errors.push("Username already exists");
-    }
-
-    if (password !== password2) {
-        errors.push("Passwords do not match");
     }
 
     if (errors.length > 0) {

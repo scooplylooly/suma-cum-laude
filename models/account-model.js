@@ -190,15 +190,15 @@ async function authenticateLister(userName) {
 };
 
 async function getPendingListers() {
-    return await lister.find({ statusL: false }).lean();
+    return await lister.find({ statusL: 'pending' }).lean();
 };
 
 async function approveLister(userId) {
-    return await lister.updateOne({ _id: userId}, { statusL: "approved"})
+    return await lister.updateOne({ _id: userId}, { $set: {statusL: "approved"} })
 };
 
 async function rejectLister(userId) {
-    return await lister.updateOne({ _id: userId}, { statusL: "rejected"})
+    return await lister.updateOne({ _id: userId}, { $set: {statusL: "rejected"} })
 };
 
 async function retrieveLister(userId) {
@@ -211,7 +211,7 @@ async function addLister(lister) {
 
 async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return users.updateOne({ _id: userId }, { address, contactNo, pets, experience });
+    return users.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
 };
 
 async function deleteLister(userID) {
