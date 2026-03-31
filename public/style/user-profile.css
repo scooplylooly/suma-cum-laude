@@ -6,12 +6,10 @@ body {
     padding: 0;
 }
 
-/* header/footer from your common partials can stay as-is */
-
 .profile-page {
     min-height: calc(100vh - 160px);
     display: flex;
-    flex-direction: column;      /* title + card stacked */
+    flex-direction: column;    
     justify-content: center;
     align-items: center;
     padding: 60px 20px;
@@ -21,7 +19,7 @@ body {
 .profile-page > h2 {
     margin: 0 0 20px 0;
     font-size: 32px;
-    color: #c97d4e;
+    color: #7a4c2f;
 }
 
 .profile-card {
@@ -34,9 +32,9 @@ body {
     text-align: center;
 }
 
-.profile-card h2 {
+.profile-card h4 {
     margin: 0 0 8px 0;
-    font-size: 24px;
+    font-size: 20px;
     color: #c97d4e;
 }
 
@@ -57,11 +55,7 @@ body {
 
 .profile-deets div {
     padding: 6px 0;
-    border-bottom: 1px solid #f0e0d0;
-}
-
-.profile-deets div:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #b38c73;
 }
 
 .actions {
@@ -81,20 +75,21 @@ body {
 }
 
 /* buttons */
-.button1 {
+.edit-button {
     background-color: #c97d4e;
     color: #fff;
 }
 
-.button2 {
+.delete-button {
     background-color: #fff0ea;
     color: #b03a2e;
     border: 1px solid #f0b4a0;
 }
 
-.button3 {
+.logout-button {
     background-color: #f3f3f3;
     color: #555;
+    border: 1px solid #b6b3b3;
 }
 
 .actions a:hover {

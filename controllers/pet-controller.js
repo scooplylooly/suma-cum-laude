@@ -49,6 +49,7 @@ exports.displayPets = async (req, res) => {
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
+    let user = req.session.user
     allPets.reverse();
     let pets = [];
     if (nameSearched != "") {
@@ -67,6 +68,7 @@ exports.searchPet = async (req, res) => {
     return res.render("pet-search", {
         nameSearched,
         pets,
+        user,
     });
 };
 

@@ -30,4 +30,12 @@ router.get(
     adminController.displayDeleteUser,
 );
 router.post("/delete-user-profile", adminController.deleteUser);
+router.get(
+    "/admin-user-update",
+    authMiddleware.isAdmin,
+    adminController.displayUpdateUser,
+);
+router.post("/admin-user-update", adminController.updateUser);
+
+router.get('/admin/dashboard', adminController.showAdminDashboard)
 module.exports = router;

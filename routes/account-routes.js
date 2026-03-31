@@ -7,19 +7,15 @@ const authMiddleware = require("../middleware/auth-middleware.js");
 router.get("/register", accountController.showRegister);
 router.post("/register", accountController.handleRegister);
 
-router.get("/login", authMiddleware.isLoggedIn, accountController.showLogin);
-router.post("/login", authMiddleware.isLoggedIn, accountController.handleLogin);
+router.get("/login", accountController.showLogin);
+router.post("/login", accountController.handleLogin);
 
-router.get("/forget-password", accountController.showReset);
-router.post("/forget-password", accountController.handleReset);
-router.get("/verify-otp", accountController.showVerifyOtp);
-router.post("/verify-otp", accountController.handleVerifyOtp);
-router.get("/new-password", accountController.showNewPassword);
-router.post("/new-password", accountController.handleNewPassword);
-
+router.get("/forget-password", accountController.showVerify);
+router.post("/forget-password", accountController.handleVerify);
+router.get("/reset-password", authMiddleware.verifiedIdentity, accountController.showResetPassword);
+router.post("/reset-password", authMiddleware.verifiedIdentity, accountController.handleResetPassword);
 
 router.get("/profile", authMiddleware.checkUser, accountController.showProfile);
-
 router.get("/edit-profile", authMiddleware.checkUser, accountController.updateProfile);
 router.post("/edit-profile", authMiddleware.checkUser, accountController.processUpdate);
 

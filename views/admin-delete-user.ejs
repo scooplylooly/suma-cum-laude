@@ -14,7 +14,7 @@
             <form action="/delete-user-profile" method="post" class="delete-form">
                 <h2 style="color: red;">Deleting <%=userInfo.userName%></h2> <br>
                 <%for(key in userInfo){%>
-                    <% if (key != '__v' && key != 'password'){%>
+                    <% if (key != '__v' && key != 'password' && key != 'otp' && key != 'otpExpiry'){%>
                     <%if (key == '_id'){%>
                     <p>ID : <%=userInfo[key]%> </p>
                     <%}else if (key == 'DOB'){%>

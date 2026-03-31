@@ -360,3 +360,30 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new:true}
     )
 }
+
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        return Pet.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countTotalApplications = async function () {
+    try {
+        return Application.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countPendingApplications = async function () {
+    try {
+        return Application.countDocuments({ status: 'pending' })
+    } catch(error) {
+        return error
+    }
+}
