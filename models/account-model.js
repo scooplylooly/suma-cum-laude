@@ -204,7 +204,7 @@ const listerSchema = new mongoose.Schema({
 const lister = mongoose.model("lister", listerSchema, "lister");
 
 async function getPendingListers() {
-    return await lister.find({ statusL: false }).lean();
+    return await lister.find({ statusL: "pending" }).lean();
 }
 
 async function approveLister(userId) {
@@ -225,7 +225,7 @@ async function addLister(listerData) {
 
 async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return users.updateOne(
+    return lister.updateOne(
         { uid: userId },
         { address, contactNo, pets, experience },
     );

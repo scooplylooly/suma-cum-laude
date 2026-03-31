@@ -438,7 +438,7 @@ exports.deleteProfile = async (req, res) => {
         });
     }
 };
-// lsiter related controllers below
+// lister related controllers below
 exports.showLister = (req, res) => {
     res.render("apply-lister", {
         address: "",
@@ -452,7 +452,9 @@ exports.showLister = (req, res) => {
 };
 
 exports.handleLister = async (req, res) => {
-    let userId = req.session.user._id;
+    const userId = req.session.user._id;
+    const userName = req.session.user.userName;
+
     let address = (req.body.address ?? "").trim();
     let contactNo = (req.body.contactNo ?? "").trim();
     let reason = (req.body.reason ?? "").trim();
@@ -488,6 +490,7 @@ exports.handleLister = async (req, res) => {
             reason,
             pets,
             experience,
+            errors,
             success: false,
         });
     }
@@ -502,24 +505,28 @@ exports.handleLister = async (req, res) => {
                 reason: "",
                 pets: "",
                 experience: "",
-                success: true,
+                errors,
+                success: false,
             });
         }
-        await accountModel.addLister(
-            userId,
+        await accountModel.addLister({
+            uid: userId.toString(),
+            userName,
             address,
             contactNo,
             reason,
             pets,
             experience,
-        );
+            statusL: 'pending'
+        });
         return res.render("apply-lister", {
             address: "",
             contactNo: "",
             reason: "",
             pets: "",
             experience: "",
-            success: success,
+            errors: [],
+            success: true,
         });
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
@@ -529,6 +536,7 @@ exports.handleLister = async (req, res) => {
             reason,
             pets,
             experience,
+            errors,
             success: false,
         });
     }
