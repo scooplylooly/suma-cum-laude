@@ -8,31 +8,39 @@ function calculateScore(preferences = {}, pet = {}) {
 
     if (preferences.preferredAnimal?.length) {
         total++;
-        const preferred = preferences.preferredAnimal.map(a => a.toLowerCase());
-        if (preferred.includes(pet.type?.toLowerCase())) matches++;
+        const preferred = preferences.preferredAnimal.map((a) => a.toLowerCase());
+        if (preferred.includes(pet.type?.toLowerCase())) {
+            matches++;
+        }
     }
 
     if (preferences.preferredTraits?.length) {
-        total++;
-        const petTraits = (pet.personality || []).map(t => t.toLowerCase());
-        const userTraits = preferences.preferredTraits.map(t => t.toLowerCase());
+        const petTraits = (pet.personality || []).map((t) => t.toLowerCase());
+        const userTraits = preferences.preferredTraits.map((t) => t.toLowerCase());
 
-        const matchCount = userTraits.filter(t => petTraits.includes(t)).length;
+        const matchCount = userTraits.filter((t) => petTraits.includes(t)).length;
 
-        if (matchCount >= userTraits.length / 2) matches++;
+        matches += matchCount;
+        total += userTraits.length;
     }
 
-    if (preferences.activityLevel) {
+    if (preferences.activityLevel && pet.activityLevel) {
         total++;
-        if (pet.activityLevel === preferences.activityLevel) matches++;
+        if (pet.activityLevel === preferences.activityLevel) {
+            matches++;
+        }
     }
 
-    if (preferences.experienceLevel) {
+    if (preferences.experienceLevel && pet.experienceLevel) {
         total++;
-        if (pet.experienceLevel === preferences.experienceLevel) matches++;
+        if (pet.experienceLevel === preferences.experienceLevel) {
+            matches++;
+        }
     }
 
-    if (total === 0) return { score: null };
+    if (total === 0) {
+        return { score: null };
+    }
 
     return { score: Math.round((matches / total) * 100) };
 }
