@@ -124,6 +124,11 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        petType: {
+            type: String,
+            default: ''
+
+        },
         reason: {
             type: String,
             required: true,
@@ -368,3 +373,6 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new: true },
     );
 };
+exports.getAllApplications = async function () {
+    return Application.find().lean()
+}
