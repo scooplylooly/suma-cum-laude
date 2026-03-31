@@ -84,7 +84,9 @@
             <td><%= totalUsers %></td>
         </tr>
     </table>
-
+    <% for (let entry of topPetTypes) { %>
+    <p><%= entry.type %>: <%= entry.count %> applications</p>
+<% } %>
     <h2>Quick Actions</h2>
     <div>
         <a href="/admin/">Manage Pets</a>
