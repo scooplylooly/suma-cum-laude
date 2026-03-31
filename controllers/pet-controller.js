@@ -479,7 +479,12 @@ exports.viewApplications = async (req, res) => {
     let applications = await listing.findApplicationByPet(pid);
     let pet = await listing.findPetById(pid);
     let petName = pet.name;
-    return res.render("view-applications", { applications, user, petName });
+    return res.render("view-applications", {
+        applications,
+        pet,
+        user,
+        petName,
+    });
 };
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
