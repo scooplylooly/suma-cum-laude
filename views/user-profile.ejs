@@ -12,12 +12,13 @@
     
     <main class="profile-page">
             <%if(user.role == 'admin'){%>
-            <h2>Admin: <%= details.userName %></h2> <br>
+            <h2>Hi <%=user.userName%>!</h2>
             <%}else{%>
-            <h2>User: <%= details.userName %></h2> <br>
+            <h2>Hi <%=user.userName%>!</h2>
             <%}%>
+            <p>Edit your profile information over here at anytime!</p>
         <div class="profile-card">
-            <h4>Here are your details</h4>
+            <h4>Here are your details:</h4>
             <div class="profile-deets">
             <div class="detail-box">
                 <strong><span class="label">Name: </span></strong>

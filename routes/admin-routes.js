@@ -64,4 +64,8 @@ router.get(
 router.post("/admin-lister-update", adminController.updateLister);
 
 
+router.get(
+    "/view-user-applications",
+    authMiddleware.isAdmin,
+    adminController.viewUserApplications)
 module.exports = router;

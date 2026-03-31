@@ -70,7 +70,7 @@ exports.handleRegister = async (req, res) => {
         errors.push("Security question input is required")
     }
 
-    if (errors.length === 0) {
+    if (errors.length === 0) {  
         // no errors; user is registered and data added to users schema
         try {
             await accountModel.registerUser(
@@ -179,7 +179,7 @@ exports.handleVerify = async (req, res) => {
     }
     if (errors.length > 0) {
         // re-renders form with identifed input errors
-        res.render('reset-form', {userName, securityKey, errors, success: false });
+        res.render('verify-identity', {userName, securityKey, errors, success: false });
 
     } else {
             try {
@@ -205,12 +205,12 @@ exports.handleVerify = async (req, res) => {
                     console.log("User verified and userName recorded... ")
                     console.log(`Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`);
                 }
-                return res.render('reset-form', {userName, securityKey, errors, success: errors.length === 0 });
+                res.render('verify-identity', {userName, securityKey, errors, success: errors.length === 0 });
 
             } catch (error) {
                 console.error(error);
                 errors.push("Something went wrong. Please try again.");
-                res.render('reset-form', {userName:"", securityKey:"", errors, success: false });
+                res.render('verify-identity', {userName:"", securityKey:"", errors, success: false });
             }
         }
 }
@@ -292,6 +292,7 @@ exports.processUpdate = async (req, res) => {
     const password = (req.body.password ?? "").trim() 
     const password2 = (req.body.password2 ?? "").trim()
     const securityKey = (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
+    const role = originalDetails.role; // role cannot be updated by user; defaulted to original role in database
     let errors = [];
     // if username inputted is not same as original name, check if another user with same username exists
     if (userName !== originalDetails.userName && await accountModel.checkUserExist(userName)) {
@@ -324,7 +325,8 @@ exports.processUpdate = async (req, res) => {
             email,
             DOB,
             password,
-            securityKey
+            securityKey,
+            role
         );
         console.log("Updated details successfully");
         // updates username variable in session; session captures old snapshot with outdated details
