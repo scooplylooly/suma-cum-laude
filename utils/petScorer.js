@@ -15,13 +15,14 @@ function calculateScore(preferences = {}, pet = {}) {
     }
 
     if (preferences.preferredTraits?.length) {
+        total++;
+
         const petTraits = (pet.personality || []).map((t) => t.toLowerCase());
         const userTraits = preferences.preferredTraits.map((t) => t.toLowerCase());
 
         const matchCount = userTraits.filter((t) => petTraits.includes(t)).length;
 
-        matches += matchCount;
-        total += userTraits.length;
+        matches += matchCount / userTraits.length;
     }
 
     if (preferences.activityLevel && pet.activityLevel) {
