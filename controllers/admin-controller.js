@@ -55,11 +55,18 @@ exports.filterListings = async (req, res) => {
 exports.confirmListingStatus = async (req, res) => {
     let pid = req.query.pid;
     let petFound = await petModel.findPetById(pid);
+    let uid = petFound.uid;
+    let ownerInfo = await accountModel.retrieveProfile(uid);
+    petFound.ownerName = ownerInfo.userName;
     return res.render("admin-listing-status", { petFound });
 };
 exports.updateListingStatus = async (req, res) => {
     let action = req.body.action;
     let pid = req.body.pid;
+    let petFound = await petModel.findPetById(pid);
+    let uid = petFound.uid;
+    let ownerInfo = await accountModel.retrieveProfile(uid);
+    petFound.ownerName = ownerInfo.userName;
     let isApproved = action === "approve" ? true : false;
     if (action) {
         await petModel.updatePetApproval(pid, isApproved);
@@ -88,10 +95,11 @@ exports.filterUsers = async (req, res) => {
     } else {
         selectedType = "";
         users = (await accountModel.getAllUsers()).reverse();
+        selectedType = userType;
     }
     return res.render("admin-users", {
         users,
-        selectedType: "",
+        selectedType,
         adminUserId,
     });
 };
@@ -128,11 +136,13 @@ exports.displayUpdateUser = async (req, res) => {
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
     const role = originalDetails.role;
+    const securityKey = originalDetails.securityKey;
     return res.render("admin-user-update", {
         userName,
         email,
         DOB,
         role,
+        securityKey,
         password: "",
         password2: "",
         errors: [],
@@ -151,6 +161,8 @@ exports.updateUser = async (req, res) => {
     const password2 = (req.body.password2 ?? "").trim();
     const DOB = req.body.dob;
     const role = req.body.role;
+    const securityKey =
+        (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
     console.log(role);
 
     let errors = [];
@@ -172,6 +184,7 @@ exports.updateUser = async (req, res) => {
             email,
             DOB,
             role,
+            securityKey,
             password: "",
             password2: "",
             errors,
@@ -181,7 +194,15 @@ exports.updateUser = async (req, res) => {
 
     try {
         // updates fields of user profile in database
-        await accountModel.updateDetails(uid, userName, email, DOB, password, role);
+        await accountModel.updateDetails(
+            uid,
+            userName,
+            email,
+            DOB,
+            password,
+            securityKey,
+            role,
+        );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
         return res.redirect("/admin-users");
@@ -190,17 +211,17 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-exports.showListerApps = async (req,res) => {
+exports.showListerApps = async (req, res) => {
     const pending = await accountModel.getPendingListers();
     res.render("admin-lister-status", { pending });
-}
+};
 
-exports.approveLister = async (req,res) => {
+exports.approveLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.approveLister(uid);
-    res.redirect("/admin-lister-status");
-}
-exports.rejectLister = async (req,res) => {
+    res.redirect("admin-lister-status");
+};
+exports.rejectLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.rejectLister(uid);
     res.redirect("/admin-lister-status");
@@ -215,10 +236,10 @@ exports.updateListerStatus = async (req, res) => {
     const { uid, statusL } = req.body;
 
     try {
-        if (statusL === 'approved') {
-            await accountModel.approveLister(uid);
-        } else if (statusL === 'rejected') {
-            await accountModel.rejectLister(uid);
+        if (statusL === "approved") {
+            await accountModel.approveLister(id);
+        } else if (statusL === "rejected") {
+            await accountModel.rejectLister(id);
         }
 
         res.redirect("/admin-lister-status");
@@ -227,7 +248,6 @@ exports.updateListerStatus = async (req, res) => {
         res.redirect("/admin-lister-status");
     }
 };
-    
 
 exports.displayDeleteLister = async (req, res) => {
     let uid = req.query.uid;
@@ -256,6 +276,7 @@ exports.displayUpdateLister = async (req, res) => {
     // retrieves profile details for user from database
     // and is put as default value for form fields
     const uid = req.query.uid;
+    const userName = (await accountModel.retrieveLister(uid)).userName;
     const originalDetails = await accountModel.retrieveLister(uid);
     console.log("EDITING USER:", originalDetails.userName);
     const address = originalDetails.address;
@@ -279,9 +300,11 @@ exports.updateLister = async (req, res) => {
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const address = (req.body.address ?? "").trim() || originalDetails.address;
-    const contactNo = (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
+    const contactNo =
+        (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
     const pets = (req.body.pets ?? "").trim() || originalDetails.pets;
-    const experience = (req.body.experience ?? "").trim() || originalDetails.experience;
+    const experience =
+        (req.body.experience ?? "").trim() || originalDetails.experience;
     const role = req.body.role;
     console.log(role);
 
@@ -309,11 +332,27 @@ exports.updateLister = async (req, res) => {
 
     try {
         // updates fields of user profile in database
-        await accountModel.updateLister(uid, userName, address, contactNo, pets, experience, role);
+        await accountModel.updateLister(
+            uid,
+            userName,
+            address,
+            contactNo,
+            pets,
+            experience,
+            role,
+        );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
         return res.redirect("/admin-lister");
     } catch (error) {
         console.error("Failed to update lister details, error:", error);
     }
+};
+exports.viewUserApplications = async (req, res) => {
+    const uid = req.query.uid;
+    const applications = await petModel.findApplicationbyUID(uid);
+    console.log("APPLICATIONS FOUND:", applications);
+    const user = await accountModel.retrieveProfile(uid);
+    console.log("USER FOUND:", user);
+    return res.render("admin-application-status", { applications, user });
 };

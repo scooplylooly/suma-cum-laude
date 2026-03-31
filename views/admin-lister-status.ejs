@@ -26,18 +26,12 @@
                         
                         <form action="/admin-lister-status" method="post">
                             <input type="hidden" name="uid" id="user._id">
-                            <label>
-                                <input type="radio" name="statusL" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
-                                Pending
-                            </label>
-                            <label>
-                                <input type="radio" name="statusL" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
-                                Approved
-                            </label>
-                            <label>
-                                <input type="radio" name="statusL" value="rejected" <%= lister.statusL === 'rejected' ? 'checked' : ''%>>
-                                Rejected
-                            </label>
+                             <input type="radio" name="statusL" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
+                            <label>Pending</label>
+                            <input type="radio" name="statusL" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
+                            <label>Approved</label>
+                            <label>Rejected</label>
+                            <input type="radio" name="statusL" value="rejected" <%= lister.statusL === 'rejected' ? 'checked' : ''%>> 
 
                             <button type="submit">Update status</button>
 

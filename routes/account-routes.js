@@ -21,7 +21,7 @@ router.post("/edit-profile", authMiddleware.checkUser, accountController.process
 
 router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation1);
 router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
-
+// Lister routes
 router.get('/apply-lister', authMiddleware.checkUser, accountController.showLister)
 router.post('/apply-lister', authMiddleware.checkUser, accountController.handleLister)
 
@@ -30,7 +30,7 @@ router.get("/lister-application-status", authMiddleware.checkUser, accountContro
 router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
 router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
 
-router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmation2);
+router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmationForLister);
 router.post("/delete-lister", authMiddleware.checkUser, accountController.deleteLister);
 
 router.get("/logout", accountController.logout);

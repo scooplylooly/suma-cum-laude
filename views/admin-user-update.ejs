@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= userName %>'s</title>
+    <title>Update <%= userName %>'s Profile</title>
     <link rel="stylesheet" type="text/css" href="./style/update-profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <%- include('common/header') %>
@@ -24,6 +23,9 @@
                         <option value="lister" <%=role == 'lister' ? 'selected' : ''%>>Lister</option>
                         <option value="admin" <%=role == 'admin' ? 'selected' : ''%>>Admin</option>
                 </select><br>
+                Security Question:<br>
+                <input type="text" name="securityKey" placeholder="What is your dream pet?" value="<%= securityKey %>">
+                <br>
                 Update Password:
                 <div class="password-wrapper">
                     <input type="password" id="password" name="password" value="<%= password %>" >

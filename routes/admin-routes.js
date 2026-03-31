@@ -47,8 +47,8 @@ router.post(
     authMiddleware.isAdmin,
     adminController.updateListerStatus,
 );
-router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
-router.post("/admin-lister", adminController.filterLister);
+// router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
+// router.post("/admin-lister", adminController.filterLister);
 
 router.get(
     "/delete-lister-profile",
@@ -61,7 +61,14 @@ router.get(
     authMiddleware.isAdmin,
     adminController.displayUpdateLister,
 );
-router.post("/admin-lister-update", adminController.updateLister);
+// router.post("/admin-lister-update", adminController.updateLister);
 
+router.get(
+    "/view-user-applications",
+    authMiddleware.isAdmin,
+    adminController.viewUserApplications,
+);
 
 module.exports = router;
+
+

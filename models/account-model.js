@@ -29,15 +29,17 @@ const usersSchema = new mongoose.Schema({
         type: String,
         default: "user",
         required: [true, "User role must be stated"],
-    }
+    },
 });
 
 const users = mongoose.model("users", usersSchema, "users");
 
-async function registerUser(userName, email, DOB, password, securityKey, role ) {
+async function registerUser(userName, email, DOB, password, securityKey, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
-        throw new Error("Username already exists. Please choose another username.");
+        throw new Error(
+            "Username already exists. Please choose another username.",
+        );
     } else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
@@ -46,12 +48,12 @@ async function registerUser(userName, email, DOB, password, securityKey, role ) 
             DOB,
             password: hashedPassword, // hashes the password for security
             securityKey,
-            role
+            role,
         };
         // create new user profile + add to users schema
         await addUser(newUser);
     }
-};
+}
 
 async function authenticateUser(userName, password) {
     // checks if user exists in DB
@@ -67,20 +69,22 @@ async function authenticateUser(userName, password) {
     } else {
         return null;
     }
-};
+}
 
 // function checks if password meets mininum requirements to ensure security
-function securePassword(password){
+function securePassword(password) {
     let errors = [];
-    if (password.length < 5){
-        errors.push("Password must be at least 5 characters")
-    } 
+    if (password.length < 5) {
+        errors.push("Password must be at least 5 characters");
+    }
     if (!/[!@#$%^&*]/.test(password)) {
-        errors.push("Password must contain at least one special character: !@#$%^&*")
+        errors.push(
+            "Password must contain at least one special character: !@#$%^&*",
+        );
     }
 
     if (errors.length === 0) {
-        return true 
+        return true;
     }
     // returns array of errors back to caller
     return errors;
@@ -88,9 +92,9 @@ function securePassword(password){
 
 async function checkSecurityKey(userName, securityKey) {
     // checks if securityKey matches; case insensitive
-    const data = await users.findOne({userName}).lean()
+    const data = await users.findOne({ userName }).lean();
     if (!data) {
-        return false
+        return false;
     }
     // authenticates security key: case insensitive
     return data.securityKey.toLowerCase() === securityKey.toLowerCase();
@@ -98,63 +102,85 @@ async function checkSecurityKey(userName, securityKey) {
 
 async function updatePassword(userName, hashedPassword) {
     return await users.updateOne(
-        {userName},
-        {$set: {password: hashedPassword}}
+        { userName },
+        { $set: { password: hashedPassword } },
     );
 }
 
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
-};
+}
 
 async function addUser(user) {
     // creates a new record under user schema
     return await users.create(user);
-};
+}
 
 async function checkUserExist(userName) {
     // checks if current user exists in database
-    if (await users.findOne({userName})) {
+    if (await users.findOne({ userName })) {
         return true;
     }
     return false;
 }
+async function findUserByName(userName) {
+    return await users.findOne({ userName }).lean();
+}
 
-async function updateDetails(userId, userName, email, DOB, password, securityKey) {
+async function updateDetails(
+    userId,
+    userName,
+    email,
+    DOB,
+    password,
+    securityKey,
+    role,
+) {
     // updates the profile details of specified user
     const originalDetails = await retrieveProfile(userId);
-    return users.updateOne({ _id: userId },
-        {$set: {userName, 
-            email, 
-            DOB, 
-            // if no password was inputted in form, value defaulted to original password
-            password: password ? await bcrypt.hash(password, 10) : originalDetails.password,
-            securityKey}
-        })
-} 
+    return users.updateOne(
+        { _id: userId },
+        {
+            $set: {
+                userName,
+                email,
+                DOB,
+                // if no password was inputted in form, value defaulted to original password
+                password: password
+                    ? await bcrypt.hash(password, 10)
+                    : originalDetails.password,
+                securityKey,
+                role,
+            },
+        },
+    );
+}
 
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
-};
+}
 async function getAllUsers() {
     return users.find().lean();
-};
-
+}
+// Lister schema + functions
 const listerSchema = new mongoose.Schema({
     userName: {
         type: String,
-        required: [true, "A user must have an address"]
+        required: [true, "A user must have an address"],
     },
-
+    uid: {
+        type: String,
+        required: [true, "A user must have a uid"],
+    },
     address: {
         type: String,
-        required: [true, "A user must have an address"]
+        required: [true, "A user must have an address"],
     },
     contactNo: {
         type: String,
-        required: [true, "A user must have a contact number"]
+        required: [true, "A user must have a contact number"],
     },
     reason: {
         type: String,
@@ -173,55 +199,45 @@ const listerSchema = new mongoose.Schema({
         default: "pending",
         required: [true, "A user will have a status"],
     },
-    role: {
-        type: String,
-        default: "user",
-        required: [true, "User role must be stated"],
-    },
 });
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
-async function authenticateLister(userName) {
-    const exists = await lister.findOne({ userName });
-
-    if (!exists) return null;
-
-};
-
 async function getPendingListers() {
-    return await lister.find({ statusL: 'pending' }).lean();
-};
+    return await lister.find({ statusL: false }).lean();
+}
 
 async function approveLister(userId) {
-    return await lister.updateOne({ _id: userId}, { $set: {statusL: "approved"} })
-};
+    return await lister.updateOne({ uid: userId }, { statusL: "approved" });
+}
 
 async function rejectLister(userId) {
-    return await lister.updateOne({ _id: userId}, { $set: {statusL: "rejected"} })
-};
+    return await lister.updateOne({ uid: userId }, { statusL: "rejected" });
+}
 
 async function retrieveLister(userId) {
-    return await lister.findOne({ _id: userId }).lean();
-};
+    return await lister.findOne({ uid: userId }).lean();
+}
 
 async function addLister(listerData) {
     return await lister.create(listerData);
-};
+}
 
 async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return lister.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
-};
+    return users.updateOne(
+        { uid: userId },
+        { address, contactNo, pets, experience },
+    );
+}
 
 async function getListerByUserName (userName) {
     return await lister.findOne({ userName }).lean()
 }
 
 async function deleteLister(userID) {
-    return lister.deleteOne({ _id: userID });
-};
-
+    return lister.deleteOne({ uid: userID });
+}
 
 module.exports = {
     authenticateUser,
@@ -230,7 +246,6 @@ module.exports = {
     deleteUser,
     updateDetails,
     getAllUsers,
-    authenticateLister,
     getPendingListers,
     approveLister,
     rejectLister,
@@ -242,5 +257,6 @@ module.exports = {
     checkUserExist,
     updatePassword,
     checkSecurityKey,
-    securePassword
+    securePassword,
+    findUserByName,
 };

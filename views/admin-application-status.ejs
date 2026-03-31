@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= user.userName %>'s Applications</title>
+    <link rel="stylesheet" type="text/css" href="/style/application.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="applications-page">
+        <section class="applications-hero">
+            <h1><%= user.userName %>'s Applications</h1>
+            <p>View and manage <%= user.userName %>'s pet adoption applications below.</p>
+        </section>
+        <input type="hidden" name="uid" value="<%= user._id %>">
+        <% if (applications.length == 0) { %>
+            <section class="empty-state">
+                <h3><%= user.userName %> have not applied for any pets.</h3>
+            </section>
+        <% } else { %>
+            <section class="applications-list">
+                <% for (let application of applications) { %>
+                    <article class="application-card">
+                        <div class="application-card-top">
+                            <div>
+                                <h2><%= application.petName %></h2>
+                                <p class="application-number">Application #<%= application.applicationNumber %></p>
+                            </div>
+
+                            <% if (application.status === "approved") { %>
+                                <span class="status approved">Approved</span>
+                            <% } else if (application.status === "pending") { %>
+                                <span class="status pending">Pending</span>
+                            <% } else { %>
+                                <span class="status denied">Denied</span>
+                            <% } %>
+                        </div>
+
+                        <div class="application-details">
+                            <div class="detail full">
+                                <span class="label">Reason</span>
+                                <p><%= application.reason %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Housing Type</span>
+                                <p><%= application.houseType %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Monthly Income</span>
+                                <p><%= application.income %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Prior Pet Experience</span>
+                                <p><%= application.petExperience %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Existing Pets</span>
+                                <p><%= application.existingPets %></p>
+                            </div>
+
+                            <div class="detail">
+                                <span class="label">Contact No</span>
+                                <p>+65-<%= application.contactNo %></p>
+                            </div>
+                        </div>
+
+                        <div class="application-actions">
+                            <% if (application.status !== 'denied') { %>
+                                <a href="/pet-profile?pid=<%= application.pid %>">
+                                    <button type="button">View Pet</button>
+                                </a>
+                            <% } %>
+
+                            <% if (application.status === 'pending') { %>
+                                <a href="/updateApplication?appID=<%= application._id %>">
+                                    <button type="button">Update Application</button>
+                                </a>
+                            <% } %>
+
+                            <a href="/deleteApplication?appID=<%= application._id %>">
+                                <button type="button" class="danger-btn">Delete Application</button>
+                            </a>
+                        </div>
+                    </article>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
+
+    <%- include('common/footer') %>
+</body>
+</html>

@@ -15,23 +15,28 @@
 
             <div class="pet-card">
                 <% for (key in petFound) { %>
-                    <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key !== '__v' && key != 'approved') { %>
-
+                    <% if (key != 'type'&&key!='uid'&& key != "createdAt" && key != 'updatedAt' && key !== '__v' && key != 'approved') { %>
                         <% if (key == "img") { %>
                             <img src="/images/<%= petFound[key] %>.jpg" alt="<%= petFound.name %>">
                         <% } else if (key == "name") { %>
                             <h3><%= petFound[key] %></h3>
+                        <%} else if (key == '_id') { %>
+                            <p>#<%= petFound[key] %></p>
                         <% } else if (key == "dob") { %>
                             <p><span>Date of Birth:</span> <%= petFound[key] %></p>
                         <% } else if (petFound[key] == true) { %>
                             <% if (key == 'hdbApproved') { %>
                                 <p><span>HDB Approved:</span> Yes</p>
+                            <% } else if (key == 'createdByAdmin') { %>
+                                <p><span>Created by Admin:</span> Yes</p>
                             <% } else { %>
                                 <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> Yes</p>
                             <% } %>
                         <% } else if (petFound[key] == false) { %>
                             <% if (key == 'hdbApproved') { %>
                                 <p><span>HDB Approved:</span> No</p>
+                            <% } else if (key == 'createdByAdmin') { %>
+                                <p><span>Created by Admin:</span> No</p>
                             <% } else { %>
                                 <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> No</p>
                             <% } %>
@@ -41,6 +46,8 @@
                             <% } else { %>
                                 <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> <%= petFound[key].join(', ') %></p>
                             <% } %>
+                        <% } else if (key == 'ownerName') { %>
+                            <p><span>Listed by:</span> <%= petFound[key] %></p>
                         <% } else { %>
                             <p>
                                 <span><%= key[0].toUpperCase() + key.slice(1) %>:</span>
