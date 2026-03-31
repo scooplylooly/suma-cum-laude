@@ -219,20 +219,31 @@ async function retrieveLister(userId) {
     return await lister.findOne({ uid: userId }).lean();
 }
 
+async function getAllListers() {
+    return await lister.find( { statusL: "approved" }).lean();
+}
+
 async function addLister(listerData) {
     return await lister.create(listerData);
 }
 
-async function updateLister(userId, address, contactNo, pets, experience) {
+async function updateLister(userId, address, contactNo, pets, experience, role) {
     // updates the profile details of speificied user
     return lister.updateOne(
         { uid: userId },
-        { address, contactNo, pets, experience },
+        { address, contactNo, pets, experience, role },
     );
 }
 
 async function getListerByUserName (userName) {
     return await lister.findOne({ userName }).lean()
+}
+
+async function updateUserRole (userId, role) {
+    return users.updateOne(
+        {uid : userId },
+        { role }
+    );
 }
 
 async function deleteLister(userID) {
@@ -252,7 +263,9 @@ module.exports = {
     retrieveLister,
     updateLister,
     getListerByUserName,
+    updateUserRole,
     deleteLister,
+    getAllListers,
     addLister,
     checkUserExist,
     updatePassword,

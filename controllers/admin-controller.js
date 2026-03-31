@@ -218,8 +218,15 @@ exports.showListerApps = async (req, res) => {
 
 exports.approveLister = async (req, res) => {
     const uid = req.query.uid;
-    await accountModel.approveLister(uid);
-    res.redirect("admin-lister-status");
+    try {
+        await accountModel.approveLister(uid);
+        await accountModel.updateUserRole(uid, "lister");
+
+        return res.redirect("admin-lister-status");
+    } catch (err) {
+        console.error("Error approving listers:", err)
+        return res.redirect("admin-lister-status");
+    }
 };
 exports.rejectLister = async (req, res) => {
     const uid = req.query.uid;
@@ -237,17 +244,36 @@ exports.updateListerStatus = async (req, res) => {
 
     try {
         if (statusL === "approved") {
-            await accountModel.approveLister(id);
+            await accountModel.approveLister(uid);
+            await accountModel.updateUserRole(uid, "lister");
         } else if (statusL === "rejected") {
-            await accountModel.rejectLister(id);
+            await accountModel.rejectLister(uid);
         }
 
-        res.redirect("/admin-lister-status");
+        res.redirect("/admin-page");
     } catch (err) {
         console.log(err);
-        res.redirect("/admin-lister-status");
+        res.redirect("/admin-page");
     }
 };
+
+exports.showListerListings = async (req, res) => {
+    try {
+        const listers = await accountModel.getAllListers();
+        const adminUserId = req.session.user._id;
+
+        return res.render("admin-lister", {
+            listers,
+            adminUserId,
+        });
+    } catch (err) {
+        console.error("Error fetching listers:", err)
+        return res.render("admin-lister", {
+            listers: [],
+            adminUserId: req.session.user._id,
+        });
+    }
+}
 
 exports.displayDeleteLister = async (req, res) => {
     let uid = req.query.uid;
@@ -256,7 +282,7 @@ exports.displayDeleteLister = async (req, res) => {
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
 exports.deleteLister = async (req, res) => {
-    let uid = req.query.uid;
+    let uid = req.body.uid;
     console.log("UID FOUND:", uid);
     let listerInfo = await accountModel.retrieveLister(uid);
     let error = "";
@@ -276,20 +302,27 @@ exports.displayUpdateLister = async (req, res) => {
     // retrieves profile details for user from database
     // and is put as default value for form fields
     const uid = req.query.uid;
-    const userName = (await accountModel.retrieveLister(uid)).userName;
     const originalDetails = await accountModel.retrieveLister(uid);
+
+    if(!originalDetails || originalDetails.statusL !== "approved") {
+        console.log("Lister not found or approved:", uid);
+        return res.redirect("/admin-lister");
+    }
+
     console.log("EDITING USER:", originalDetails.userName);
+    const userName = originalDetails.userName;
     const address = originalDetails.address;
     const contactNo = originalDetails.contactNo;
     const currentPets = originalDetails.pets;
+    const experience = originalDetails.experience;
     const role = originalDetails.role;
     return res.render("admin-lister-update", {
+        userName,
         address,
         contactNo,
         currentPets,
+        experience,
         role,
-        password: "",
-        password2: "",
         errors: [],
         uid,
     });
@@ -297,6 +330,12 @@ exports.displayUpdateLister = async (req, res) => {
 exports.updateLister = async (req, res) => {
     const uid = req.body.uid;
     const originalDetails = await accountModel.retrieveLister(uid);
+
+    if(!originalDetails || originalDetails.statusL !== "approved") {
+        console.log("Lister not found or approved:", uid);
+        return res.redirect("/admin-lister");
+    }
+
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const address = (req.body.address ?? "").trim() || originalDetails.address;
@@ -319,7 +358,6 @@ exports.updateLister = async (req, res) => {
 
     if (errors.length > 0) {
         return res.render("update-lister-profile", {
-            userName,
             address,
             contactNo,
             role,
@@ -334,12 +372,11 @@ exports.updateLister = async (req, res) => {
         // updates fields of user profile in database
         await accountModel.updateLister(
             uid,
-            userName,
             address,
             contactNo,
             pets,
             experience,
-            role,
+            role
         );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details

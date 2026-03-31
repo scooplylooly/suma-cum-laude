@@ -452,7 +452,7 @@ exports.showLister = (req, res) => {
 };
 
 exports.handleLister = async (req, res) => {
-    const userId = req.session.user._id;
+    const userId = req.session.user.uid;
     const userName = req.session.user.userName;
 
     let address = (req.body.address ?? "").trim();
@@ -519,15 +519,8 @@ exports.handleLister = async (req, res) => {
             experience,
             statusL: 'pending'
         });
-        return res.render("apply-lister", {
-            address: "",
-            contactNo: "",
-            reason: "",
-            pets: "",
-            experience: "",
-            errors: [],
-            success: true,
-        });
+        return res.redirect("/adopt");
+        
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
@@ -543,7 +536,7 @@ exports.handleLister = async (req, res) => {
 };
 
 exports.updateLister = async (req, res) => {
-    const userId = req.session.user._id;
+    const userId = req.session.user.uid;
     const originalDetails = await accountModel.retrieveLister(userId);
     res.render("edit-lister-profile", { originalDetails });
 };
@@ -556,7 +549,7 @@ exports.processLister = async (req, res) => {
 
     try {
         await accountModel.updateDetails(
-            req.session.lister._id,
+            req.session.lister.uid,
             address,
             contactNo,
             pets,
@@ -570,10 +563,11 @@ exports.processLister = async (req, res) => {
 };
 
 exports.showListerStatus = async (req, res) => {
-    const userId = req.user._id;
+    const userId = req.session.user.uid;
+    const userName = req.session.userName;
 
     try {
-        const application = await accountModel.getListerByUserName(userName);
+        const application = await accountModel.retrieveLister(userId);
 
         if (!application) {
             return res.render("lister-application-status", {
@@ -606,11 +600,11 @@ exports.deleteLister = async (req, res) => {
     const password = req.body.password;
     // authenticates inputted password before processing deletion
     const match = await accountModel.authenticateUser(
-        req.session.user.user._id,
+        req.session.user.user.uid,
         password,
     );
     if (match) {
-        await accountModel.deleteUser(req.session.user._id); // deletes user
+        await accountModel.deleteUser(req.session.user.uid); // deletes user
         console.log("Deleting user...");
         console.log("Destroying the session");
         req.session.destroy(() => {

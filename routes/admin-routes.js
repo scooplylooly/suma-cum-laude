@@ -47,8 +47,27 @@ router.post(
     authMiddleware.isAdmin,
     adminController.updateListerStatus,
 );
-// router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
+router.get("/admin-lister", authMiddleware.isAdmin, adminController.showListerListings);
 // router.post("/admin-lister", adminController.filterLister);
+
+router.get(
+    "/admin-lister-approve",
+    authMiddleware.isAdmin,
+    adminController.approveLister,
+);
+
+router.get(
+    "/admin-lister-reject",
+    authMiddleware.isAdmin,
+    adminController.rejectLister,
+);
+
+router.get(
+    "/admin-lister-update",
+    authMiddleware.isAdmin,
+    adminController.displayUpdateLister,
+);
+router.post("/admin-lister-update", adminController.updateLister);
 
 router.get(
     "/delete-lister-profile",
@@ -56,12 +75,6 @@ router.get(
     adminController.displayDeleteLister,
 );
 router.post("/delete-lister-profile", adminController.deleteLister);
-router.get(
-    "/admin-lister-update",
-    authMiddleware.isAdmin,
-    adminController.displayUpdateLister,
-);
-// router.post("/admin-lister-update", adminController.updateLister);
 
 router.get(
     "/view-user-applications",
