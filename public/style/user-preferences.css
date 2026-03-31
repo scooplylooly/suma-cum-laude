@@ -1,0 +1,102 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    flex: 1;
+    padding: 40px 20px;
+}
+
+.preferences-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #fdf3e7;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.preferences-container h1 {
+    text-align: center;
+    color: #c97d4e;
+    margin-bottom: 30px;
+    font-size: 36px;
+}
+
+.preferences-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.preferences-form div {
+    background-color: #f0e0d0;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.preferences-form label {
+    font-size: 18px;
+    color: #7a4c2f;
+}
+
+.preferences-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #c97d4e;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: "Palatino Linotype", Palatino, serif;
+    background-color: white;
+    color: #333;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 20px;
+    margin-top: 15px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    accent-color: #c97d4e;
+}
+
+.checkbox-item label {
+    font-size: 16px;
+    color: #333;
+}
+
+.preferences-form button {
+    background-color: #c97d4e;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    font-size: 18px;
+    font-family: "Palatino Linotype", Palatino, serif;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 200px;
+    align-self: center;
+}
+
+.preferences-form button:hover {
+    background-color: #b86d3f;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

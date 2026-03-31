@@ -61,3 +61,11 @@ exports.createFaq = async (faq) => {
     console.log(error)
   }
 }
+
+exports.countFaqs = async () => {
+  try {
+    return FAQ.countDocuments({})
+  } catch(error) {
+    return error
+  }
+}

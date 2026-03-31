@@ -22,6 +22,6 @@ router.post("/edit-profile", authMiddleware.checkUser, accountController.process
 router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation);
 router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
 
-router.get("/logout", accountController.logout);
+router.get("/logout", authMiddleware.checkUser, accountController.logout);
 
 module.exports = router;
