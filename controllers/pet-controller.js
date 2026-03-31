@@ -1,6 +1,7 @@
 const { configDotenv } = require("dotenv");
 const listing = require("../models/pet-model");
-const account = require("../models/account-model");
+const accountModel = require("../models/account-model");
+const petScorer = require("../utils/petScorer");
 const path = require("path");
 
 // ... rest of your code
@@ -44,7 +45,18 @@ exports.displayPets = async (req, res) => {
     for (let application of applications) {
         pids.push(application.pid.toString())
     }
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+
     pets.reverse();
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         pets,
         nameSearched: "",
@@ -64,12 +76,15 @@ exports.searchPet = async (req, res) => {
         pids.push(application.pid.toString())
     }
     let pets = [];
-    if (nameSearched != "") {
+
+    if (nameSearched !== "") {
+        const search = nameSearched.toLowerCase();
+
         for (let pet of allPets) {
             if (
-                pet.name.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.type.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.breed.toLowerCase().includes(nameSearched.toLowerCase())
+                pet.name.toLowerCase().includes(search) ||
+                pet.type.toLowerCase().includes(search) ||
+                pet.breed.toLowerCase().includes(search)
             ) {
                 pets.push(pet);
             }
@@ -77,6 +92,17 @@ exports.searchPet = async (req, res) => {
     } else {
         pets = allPets;
     }
+
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         nameSearched,
         pets,
@@ -160,7 +186,7 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.createPetListing = async (req, res) => {
     let user = req.body.ownerName
-        ? await account.findUserByName(req.body.ownerName)
+        ? await accountModel.findUserByName(req.body.ownerName)
         : req.session.user;
     console.log("user", user);
     let type = req.body.type;
