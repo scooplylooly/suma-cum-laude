@@ -1,17 +1,3 @@
-exports.isLoggedIn = (req, res, next) => {
-    const user = req.session.user;
-
-    if (!user) {
-        return next(); // not logged in → continue to login page
-    }
-
-    if (user && user.userName === "") {
-        return next();
-    }
-
-    return res.redirect("/adopt");
-};
-
 exports.isAdmin = (req, res, next) => {
     if (!req.session.user || req.session.user.role !== "admin") {
         console.log("Not an admin user, redirecting to /login");
