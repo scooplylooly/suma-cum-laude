@@ -6,7 +6,7 @@ const accModel = require("../models/account-model")
 
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
-    const allApplications = await petModel.getAllApplications()
+    const allApplications = await petModel.checkExistingApplications()
     const typeCounts = {};
     for (let app of allApplications) {
         if (app.petType) {
@@ -19,6 +19,7 @@ exports.showAdminPage = async (req, res) => {
     }
     topPetTypes.sort((a, b) => b.count - a.count);
     topPetTypes = topPetTypes.slice(0, 3);
+
     const totalPets = await petModel.countPets({})
     console.log("Total Pets: " + totalPets)
     const totalApplications = await petModel.countTotalApplications({})
