@@ -53,7 +53,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
         // create new user profile + add to users schema
         await addUser(newUser);
     }
-}
+};
 
 async function authenticateUser(userName, password) {
     // checks if user exists in DB
@@ -69,7 +69,7 @@ async function authenticateUser(userName, password) {
     } else {
         return null;
     }
-}
+};
 
 // function checks if password meets mininum requirements to ensure security
 function securePassword(password) {
@@ -110,12 +110,12 @@ async function updatePassword(userName, hashedPassword) {
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
-}
+};
 
 async function addUser(user) {
     // creates a new record under user schema
     return await users.create(user);
-}
+};
 
 async function checkUserExist(userName) {
     // checks if current user exists in database
@@ -160,10 +160,87 @@ async function updateDetails(
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
-}
+};
 async function getAllUsers() {
     return users.find().lean();
-}
+};
+
+const listerSchema = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: [true, "A user must have an address"]
+    },
+
+    address: {
+        type: String,
+        required: [true, "A user must have an address"]
+    },
+    contactNo: {
+        type: String,
+        required: [true, "A user must have a contact number"]
+    },
+    reason: {
+        type: String,
+        required: [true, "A user must have a reason"],
+    },
+    pets: {
+        type: String,
+        required: [true, "A user must have at least a pet"],
+    },
+    experience: {
+        type: String,
+        required: [true, "A user must have experience"],
+    },
+    statusL: {
+        type: String,
+        default: "pending",
+        required: [true, "A user will have a status"],
+    },
+    role: {
+        type: String,
+        default: "user",
+        required: [true, "User role must be stated"],
+    },
+});
+
+const lister = mongoose.model("lister", listerSchema, "lister");
+
+async function authenticateLister(userName) {
+    const exists = await lister.findOne({ userName });
+
+    if (!exists) return null;
+
+};
+
+async function getPendingListers() {
+    return await lister.find({ statusL: 'pending' }).lean();
+};
+
+async function approveLister(userId) {
+    return await lister.updateOne({ _id: userId}, { $set: {statusL: "approved"} })
+};
+
+async function rejectLister(userId) {
+    return await lister.updateOne({ _id: userId}, { $set: {statusL: "rejected"} })
+};
+
+async function retrieveLister(userId) {
+    return await lister.findOne({ _id: userId }).lean();
+};
+
+async function addLister(lister) {
+    return await lister.create(lister);
+};
+
+async function updateLister(userId, address, contactNo, pets, experience) {
+    // updates the profile details of speificied user
+    return users.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
+};
+
+async function deleteLister(userID) {
+    return lister.deleteOne({ _id: userID });
+};
+
 
 module.exports = {
     authenticateUser,
@@ -172,6 +249,14 @@ module.exports = {
     deleteUser,
     updateDetails,
     getAllUsers,
+    authenticateLister,
+    getPendingListers,
+    approveLister,
+    rejectLister,
+    retrieveLister,
+    updateLister,
+    deleteLister,
+    addLister,
     checkUserExist,
     updatePassword,
     checkSecurityKey,

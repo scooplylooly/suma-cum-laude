@@ -338,7 +338,7 @@ exports.processUpdate = async (req, res) => {
     }
 };
 
-exports.deleteConfirmation = (req, res) => {
+exports.deleteConfirmation1 = (req, res) => {
     // displays form for user to enter password to verify deletion
     res.render("delete-user-profile", { error: "" });
 };
@@ -360,6 +360,187 @@ exports.deleteProfile = async (req, res) => {
         });
     } else {
         res.render("delete-user-profile", {
+            error: "Wrong password. Please try again.",
+        });
+    }
+};
+
+exports.showLister = (req, res) => {
+    res.render("apply-lister", 
+        {address: "",
+        contactNo: "",
+        reason: "", 
+        pets: "", 
+        experience: "",
+        errors: [],
+        success: false,
+    });
+}
+
+exports.handleLister = async (req, res) => {
+    let address = (req.body.address ?? "").trim()
+    let contactNo = (req.body.contactNo ?? "").trim()
+    let reason = (req.body.reason ?? "").trim()
+    let pets = (req.body.pets ?? "").trim()
+    let experience = (req.body.experience ?? "").trim()
+    
+
+    let errors = []
+
+    if (!address) {
+        errors.push("Address is required")
+    }
+
+    if (!contactNo) {
+        errors.push("Contact Number is required")
+    }
+
+    if (!reason) {
+        errors.push("A reason is required")
+    }
+
+    if (!pets) {
+        errors.push("Pet(s) is required")
+    }
+
+    if (!experience) {
+        errors.push("Experience field is required")
+    }
+
+    if (errors.length > 0) {
+        return res.render("apply-lister", {
+          address,
+          contactNo,
+          reason,
+          pets,
+          experience,
+          success: false,
+        });
+    }
+
+    try {
+        const exists = await accountModel.retrieveLister(userId);
+        if (exists && exists.statusL === "pending") {
+            errors.push("Your application is pending.");
+            return res.render("apply-lister", {
+                address: "",
+              contactNo: "",
+              reason: "",
+              pets: "",
+              experience: "",
+              success: success,
+            }); 
+        }
+        await accountModel.addLister(userId, address, contactNo, reason, pets, experience, "lister");
+        return res.render("apply-lister", {
+          address: "",
+          contactNo: "",
+          reason: "",
+          pets: "",
+          experience: "",
+          success: success,
+        });    
+    } catch (err) {
+        errors.push(err.message || "Failed to register as lister");
+        return res.render("apply-lister", {
+          address,
+          contactNo,
+          reason,
+          pets,
+          experience,
+          success: false,
+        });
+    }
+}
+
+exports.showLoginL = (req, res) => {
+    res.render("login-lister", {
+        userName: "",
+        errors: [],
+        success: false,
+    });
+};
+
+exports.handleLoginL = async (req, res) => {
+    const userName = (req.body.userName ?? "").trim();
+    let errors = [];
+
+    // checks for empty fields and records the error in an array
+    if (!userName) {
+        errors.push("User Name is required");
+    }
+    
+    if (errors.length === 0) {
+        const user = await accountModel.authenticateLister(userName);
+        if (!user) {
+            errors.push(
+                "Invalid username. <br> Try <a href='/apply-lister'>applying</a> first, or wait for your application to be approved.",
+            );
+            return res.render("login-lister", {
+                userName,
+                errors,
+                success: false,
+            });
+        } else {
+            return res.render("login-lister", {
+                userName,
+                errors,
+                success: true,
+            });
+        }
+    }
+    res.render("login-lister", { userName, errors, success: false });
+};
+
+exports.updateLister = async (req, res) => {
+    const userId = req.session.user._id;
+    const originalDetails = await accountModel.retrieveLister(userId);
+    res.render("edit-lister-profile", { originalDetails });
+};
+
+exports.processLister = async (req, res) => {
+    const address = (req.body.address ?? "").trim();
+    const contactNo = (req.body.contactNo ?? "").trim();
+    const pets = (req.body.pets ?? "").trim();
+    const experience = (req.body.experience ?? "").trim();
+
+    try {
+        await accountModel.updateDetails(
+            req.session.lister._id,
+            address,
+            contactNo,
+            pets,
+            experience,
+        );
+        console.log("Updated details successfully");
+    } catch (error) {
+        console.error("Failed to update user details", error);
+    }
+    res.redirect("/user-profile");
+};
+
+exports.deleteConfirmation2 = (req, res) => {
+    // displays form for user to enter password to verify deletion
+    res.render("delete-lister-profile", { error: "" });
+};
+
+exports.deleteLister = async (req, res) => {
+    const password = req.body.password;
+    // authenticates inputted password before processing deletion
+    const match = await accountModel.authenticateUser(
+        req.session.user.user._id,
+        password,
+    );
+    if (match) {
+        await accountModel.deleteUser(req.session.user._id); // deletes user
+        console.log("Deleting user...");
+        console.log("Destroying the session");
+        req.session.destroy(() => {
+            // session destroyed
+            res.redirect("/index.html"); // redirected to homepage
+        });
+    } else {
+        res.render("delete-lister-profile", {
             error: "Wrong password. Please try again.",
         });
     }

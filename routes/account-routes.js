@@ -19,8 +19,17 @@ router.get("/profile", authMiddleware.checkUser, accountController.showProfile);
 router.get("/edit-profile", authMiddleware.checkUser, accountController.updateProfile);
 router.post("/edit-profile", authMiddleware.checkUser, accountController.processUpdate);
 
-router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation);
+router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation1);
 router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
+
+router.get('/apply-lister', authMiddleware.checkUser, accountController.showLister)
+router.post('/apply-lister', authMiddleware.checkUser, accountController.handleLister)
+
+router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
+router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
+
+router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmation2);
+router.post("/delete-lister", authMiddleware.checkUser, accountController.deleteLister);
 
 router.get("/logout", accountController.logout);
 

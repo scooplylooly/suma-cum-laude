@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/style/register.css">
+    <title>Register to be a Lister</title>
+</head>
+<body>
+    <div id="form">
+        <form action="/apply-lister" method="post">
+            Address: <input type="text" name="address" id="address"><br><br>
+            Contact number: <input type="number" name="contactNo" value="<%= contactNo %>"><br><br>
+            Reason of becoming a lister: <input type="text" name="reason" id="reason"><br><br>
+            Current pet(s) owned: <input type="text" name="pets" value="<%= pets %>"><br><br> 
+            Experience with adoption: <input type="text" name="experience" value="<%= experience %>"><br><br>
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= lister.userNameL %>'s</title>
+    <link rel="stylesheet" type="text/css" href="./style/edit-lister-profile.css">
+</head>
+<body>
+    <%- include('common/header') %>
+    <main class="edit-page">
+        <div id="form" class="edit-card">
+            <form action="/update-lister-profile" class="edit-form" method="post">
+                <h2>Please update your details.</h2>
+                Address: <input type="text" name="address" value="<%= originalDetails.address %>"> <br>
+                Contact number: <input type="number" name="contactNo" value="<%= originalDetails.contactNo %>"> <br>
+                Current pet(s) owned: <input type="text" name="pets" value="<%= originalDetails.pets %>"> <br>
+                Experience with adoption: <input type="text" name="experience" value="<%= originalDetails.experience %>"> <br>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </main>
+    <%- include('common/footer') %>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lister Status</title>
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="status-page">
+        <form action="/admin-lister-status" method="post" class="status-form">
+            <h2>Pending Lister Applications</h2>
+            <%if (!pending || pending.length === 0) {%>
+                <p>No pending applications.</p>
+            <%} else {%>
+                <ul>
+                    <%pending.forEach(lister => {%>
+                        <li><h4><%= lister.userId.userName %></h4>
+                        <p><span>Address</span>:<%= lister.address %></p>
+                        <p><span>Contact number:</span> <%= lister.contactNo %></p>
+                        <p><span>Reason of becoming a lister:</span> <%= lister.reason %></p>
+                        <p><span>Current pet(s) owned</span>:<%= lister.pets %></p>
+                        <p><span>Experience with adoptions:</span> <%= lister.experience %></p>
+                        <p><span>Current status:</span> <%= lister.statusL %></p>
+                        
+                        <form action="/admin-lister-status" method="post">
+                            <input type="hidden" name="uid" id="user._id">
+                            <label>
+                                <input type="radio" name="statusL" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
+                                Pending
+                            </label>
+                            <label>
+                                <input type="radio" name="statusL" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
+                                Approved
+                            </label>
+                            <label>
+                                <input type="radio" name="statusL" value="rejected" <%= lister.statusL === 'rejected' ? 'checked' : ''%>>
+                                Rejected
+                            </label>
+
+                            <button type="submit">Update status</button>
+
+                        </form>
+                    
+                        </li>
+                    <%})%>
+                </ul>
+
+
+    </main>
+
+    <%- include('common/footer') %>
+</body>
+</html>
