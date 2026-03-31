@@ -211,17 +211,17 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-exports.showListerApps = async (req,res) => {
+exports.showListerApps = async (req, res) => {
     const pending = await accountModel.getPendingListers();
     res.render("admin-lister-status", { pending });
-}
+};
 
-exports.approveLister = async (req,res) => {
+exports.approveLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.approveLister(uid);
     res.redirect("admin-lister-status");
-}
-exports.rejectLister = async (req,res) => {
+};
+exports.rejectLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.rejectLister(uid);
     res.redirect("admin-lister-status");
@@ -236,10 +236,10 @@ exports.updateListerStatus = async (req, res) => {
     const { id, statusL } = req.body;
 
     try {
-        if (statusL === 'approved') {
-            await accountModel.approveLister(uid);
-        } else if (statusL === 'rejected') {
-            await accountModel.rejectLister(uid);
+        if (statusL === "approved") {
+            await accountModel.approveLister(id);
+        } else if (statusL === "rejected") {
+            await accountModel.rejectLister(id);
         }
 
         res.redirect("/admin-lister-status");
@@ -248,13 +248,12 @@ exports.updateListerStatus = async (req, res) => {
         res.redirect("/admin-lister-status");
     }
 };
-    
 
 exports.displayDeleteLister = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
     let listerInfo = await accountModel.retrieveLister(uid);
-    return res.render("admin-delete-lister", { userInfo, error: "" });
+    return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
 exports.deleteLister2 = async (req, res) => {
     let uid = req.body.uid;
@@ -262,7 +261,7 @@ exports.deleteLister2 = async (req, res) => {
     let userInfo = await accountModel.retrieveLister(uid);
     let error = "";
     try {
-        await accountModel.deleteLister2(uid);
+        await accountModel.deleteLister(uid);
         console.log("lister deleted!");
         return res.redirect("/admin-lister");
     } catch (err) {
@@ -277,6 +276,7 @@ exports.displayUpdateLister = async (req, res) => {
     // retrieves profile details for user from database
     // and is put as default value for form fields
     const uid = req.query.uid;
+    const userName = (await accountModel.retrieveLister(uid)).userName;
     const originalDetails = await accountModel.retrieveLister(uid);
     console.log("EDITING USER:", originalDetails.userName);
     const address = originalDetails.address;
@@ -301,9 +301,11 @@ exports.updateLister = async (req, res) => {
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const address = (req.body.address ?? "").trim() || originalDetails.address;
-    const contactNo = (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
+    const contactNo =
+        (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
     const pets = (req.body.pets ?? "").trim() || originalDetails.pets;
-    const experience = (req.body.experience ?? "").trim() || originalDetails.experience;
+    const experience =
+        (req.body.experience ?? "").trim() || originalDetails.experience;
     const role = req.body.role;
     console.log(role);
 
@@ -314,10 +316,6 @@ exports.updateLister = async (req, res) => {
         (await accountModel.checkUserExist(userName))
     ) {
         errors.push("Username already exists");
-    }
-
-    if (password !== password2) {
-        errors.push("Passwords do not match");
     }
 
     if (errors.length > 0) {
@@ -335,7 +333,15 @@ exports.updateLister = async (req, res) => {
 
     try {
         // updates fields of user profile in database
-        await accountModel.updateLister(uid, userName, address, contactNo, pets, experience, role);
+        await accountModel.updateLister(
+            uid,
+            userName,
+            address,
+            contactNo,
+            pets,
+            experience,
+            role,
+        );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
         return res.redirect("/admin-lister");
