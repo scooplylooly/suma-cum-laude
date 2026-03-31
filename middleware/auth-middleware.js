@@ -17,7 +17,7 @@ exports.isAdmin = (req, res, next) => {
 exports.checkUser = (req, res, next) => {
     if (!req.session.user || !req.session.user._id) {
         return res.send(`
-            <h2>Session expired! Redirecting to log in page...</h2>
+            <h2>Session expired / Not logged in! Redirecting to log in page...</h2>
             <script>
                 setTimeout(() => {
                     location.href = "/login"
@@ -30,7 +30,7 @@ exports.checkUser = (req, res, next) => {
 
 exports.verifiedIdentity = (req, res, next) => {
     if (!req.session.verified) {
-        return res.redirect("/verify-identity");
+        return res.redirect("/forget-password");
     }
     next();
 };
