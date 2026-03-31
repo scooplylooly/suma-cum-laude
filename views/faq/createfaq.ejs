@@ -8,12 +8,12 @@
 </head>
 <body>
     
-    <%- include("../common/header")  %>
+    <%- include("../common/header") %>
 
     <h1 class="page-title">Add a New FAQ</h1>
 
     <% if (!faq) { %>
-     <form action="/faq/new" method="post" class="faq-form">
+     <form action="/admin/faq/new" method="post" class="faq-form">
         <table class="faq-table">
             <tr>
                 <th>Question: </th>
@@ -53,8 +53,10 @@
         </table>
      </form>
     <% } %>
+
     <% if (msg) { %>
         <p class="form-message"><%= msg %></p>
     <% } %>
+
 </body>
 </html>

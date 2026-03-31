@@ -65,6 +65,37 @@
                 <!-- will see all meet-ups that have been scheduled by users and can approve/reject them. can edit and delete them too-->
             </section>
         </main>
+        <h1>Admin Dashboard</h1>
+    
+    <h2>Stats</h2>
+    <table border="1">
+        <tr>
+            <th>Total Pets</th>
+            <th>Total Applications</th>
+            <th>Pending Applications</th>
+            <th>Total FAQs</th>
+            <th>Total Users</th>
+        </tr>
+        <tr>
+            <td><%= totalPets %></td>
+            <td><%= totalApplications %></td>
+            <td><%= pendingApplications %></td>
+            <td><%= totalFaqs %></td>
+            <td><%= totalUsers %></td>
+        </tr>
+    </table>
+    <% for (let entry of topPetTypes) { %>
+    <p><%= entry.type %>: <%= entry.count %> applications</p>
+<% } %>
+    <h2>Quick Actions</h2>
+    <div>
+        <a href="/admin/">Manage Pets</a>
+        <a href="/admin/listings">Manage Listings</a>
+        <a>Manage Applications</a>
+        <a href="/admin/faq">Manage FAQs</a>
+        <a href="/admin/users">Manage Users</a>
+    </div>
+
 
         <%- include('common/footer') %>
     </body>

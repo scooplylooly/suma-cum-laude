@@ -151,6 +151,7 @@ exports.applyInterest = async (req, res) => {
         pid: pet?._id ?? null,
         userName: req.session.user?.userName ?? null,
         petName: petName,
+        petType: pet.type,
         reason: req.body.applyReason,
         houseType: req.body.houseType,
         existingPets: req.body.existingPets,

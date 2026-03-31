@@ -124,6 +124,11 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        petType: {
+            type: String,
+            default: ''
+
+        },
         reason: {
             type: String,
             required: true,
@@ -373,3 +378,33 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new: true },
     );
 };
+exports.getAllApplications = async function () {
+    return Application.find().lean()
+}
+
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        return Pet.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countTotalApplications = async function () {
+    try {
+        return Application.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countPendingApplications = async function () {
+    try {
+        return Application.countDocuments({ status: 'pending' })
+    } catch(error) {
+        return error
+    }
+}
