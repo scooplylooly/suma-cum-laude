@@ -19,7 +19,7 @@ function calculateScore(preferences = {}, pet = {}) {
 
         const matchCount = userTraits.filter(t => petTraits.includes(t)).length;
 
-        if (matchCount >= userTraits.length / 2) matches++;
+        matches += matchCount / userTraits.length;
     }
 
     if (preferences.activityLevel) {
