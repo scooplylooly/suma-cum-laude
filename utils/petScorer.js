@@ -17,9 +17,16 @@ function derivePetExperienceLevel(type = "") {
     const beginnerPets = ["hamster", "other"];
     const experiencedPets = ["rabbit", "guinea pig", "bird"];
 
-    if (beginnerPets.includes(type.toLowerCase())) return "beginner";
-    if (experiencedPets.includes(type.toLowerCase())) return "experienced";
-    return "intermediate"; // dog, cat
+    if (beginnerPets.includes(type.toLowerCase())){
+        return "beginner"
+    }
+    else if (experiencedPets.includes(type.toLowerCase())) {
+        return "experienced"
+    }
+    else{
+        return "intermediate"
+    };
+    
 }
 
 // Calculates a match score (0-100) between user preferences and a pet
@@ -44,7 +51,9 @@ function calculateScore(preferences = {}, pet = {}) {
     // Housing: HDB users need hdbApproved pets; Condo/Landed have no restriction
     if (preferences.housingType) {
         if (preferences.housingType === "HDB") {
-            if (pet.hdbApproved) earned.housing = MAX_POINTS.housing;
+            if (pet.hdbApproved) {
+                earned.housing = MAX_POINTS.housing
+            }
         } else {
             // Condo or Landed — no housing restriction
             earned.housing = MAX_POINTS.housing;
@@ -87,14 +96,26 @@ function calculateScore(preferences = {}, pet = {}) {
 
     // Only count criteria the user has actually set
     let totalPossible = 0;
-    if (preferences.housingType) totalPossible += MAX_POINTS.housing;
-    if (preferences.preferredAnimal?.length > 0) totalPossible += MAX_POINTS.animalType;
-    if (preferences.preferredTraits?.length > 0) totalPossible += MAX_POINTS.traits;
-    if (preferences.activityLevel) totalPossible += MAX_POINTS.activityLevel;
-    if (preferences.experienceLevel) totalPossible += MAX_POINTS.experienceLevel;
+    if (preferences.housingType) {
+        totalPossible += MAX_POINTS.housing
+    };
+    if (preferences.preferredAnimal?.length > 0) {
+        totalPossible += MAX_POINTS.animalType
+    };
+    if (preferences.preferredTraits?.length > 0) {
+        totalPossible += MAX_POINTS.traits
+    };
+    if (preferences.activityLevel) {
+        totalPossible += MAX_POINTS.activityLevel
+    };
+    if (preferences.experienceLevel) {
+        totalPossible += MAX_POINTS.experienceLevel
+    };
 
     // If user has set no preferences, return null (no score to show)
-    if (totalPossible === 0) return { score: null, breakdown: earned };
+    if (totalPossible === 0) {
+        return { score: null, breakdown: earned }
+    };
 
     const totalEarned = Object.values(earned).reduce((a, b) => a + b, 0);
     const score = Math.round((totalEarned / totalPossible) * 100);
