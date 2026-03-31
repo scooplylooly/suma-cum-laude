@@ -120,7 +120,6 @@ exports.showPetProfile = async (req, res) => {
     let pid = req.query.pid;
     if (!pid) {
         return res.redirect("/adopt");
-        return;
     } else {
         let result = await listing.findPetById(pid);
         console.log(result);
