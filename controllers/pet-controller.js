@@ -42,9 +42,16 @@ exports.displayPets = async (req, res) => {
     const user = req.session.user;
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
+
     pets.reverse();
-    pets = pets.map((pet) => ({ ...pet, score: petScorer.calculateScore(preferences, pet).score }));
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         pets,
         nameSearched: "",
@@ -56,14 +63,19 @@ exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
     let user = req.session.user;
+
     allPets.reverse();
+
     let pets = [];
-    if (nameSearched != "") {
+
+    if (nameSearched !== "") {
+        const search = nameSearched.toLowerCase();
+
         for (let pet of allPets) {
             if (
-                pet.name.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.type.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.breed.toLowerCase().includes(nameSearched.toLowerCase())
+                pet.name.toLowerCase().includes(search) ||
+                pet.type.toLowerCase().includes(search) ||
+                pet.breed.toLowerCase().includes(search)
             ) {
                 pets.push(pet);
             }
@@ -74,7 +86,12 @@ exports.searchPet = async (req, res) => {
 
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
-    pets = pets.map((pet) => ({ ...pet, score: petScorer.calculateScore(preferences, pet).score }));
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
 
     return res.render("pet-search", {
