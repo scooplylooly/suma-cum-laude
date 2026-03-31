@@ -31,8 +31,8 @@
             <%if (pet.score !== null){%>
                 <h5>Match: <%=pet.score%>%</h5>
             <%}%>
-            <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
-            <h5>Date Of Birth: <%=pet.dob%></h5>
+            <h5><b>Breed:</b> <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+            <h5><b>Date Of Birth:</b> <%=pet.dob%></h5>
             <% const isOwner = user && String(user._id) === String(pet.uid); %>
             <% const hasApplied = Array.isArray(pids) && pids.includes(String(pet._id)); %>
             <%if (!pet.adopted && !isOwner && !hasApplied) {%>
