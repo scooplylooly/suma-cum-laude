@@ -195,7 +195,7 @@ exports.updateUser = async (req, res) => {
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
-    // note that password fields could be left empty if user does not key im values
+    // note that password fields could be left empty if user does not key in values
     // passwords are not shown for security in update page
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
