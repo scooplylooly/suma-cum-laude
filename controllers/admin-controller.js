@@ -1,4 +1,3 @@
-const e = require("express");
 const accountModel = require("../models/account-model");
 const petModel = require("../models/pet-model");
 const faqModel = require("../models/faq-model");

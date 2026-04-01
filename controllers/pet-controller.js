@@ -1,10 +1,7 @@
-const { configDotenv } = require("dotenv");
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
-const path = require("path");
 
-// ... rest of your code
 const petPersonalities = [
     "affectionate",
     "independent",
@@ -138,22 +135,46 @@ exports.applyInterest = async (req, res) => {
     let errorMsg = "";
     let successMsg = "";
     // let petFound = null;
-    const user = req.session.user;
     let petName = req.body.petName;
     let pet = await listing.findPet(petName).lean();
+    let uid = req.session.user._id;
+    let userName = req.session.user.userName;
+    let pid = pet._id;
+    let reason = req.body.applyReason;
+    let houseType = req.body.houseType;
+    let existingPets = req.body.existingPets;
+    let petExperience = req.body.petExperience;
+    let income = req.body.income;
+    let contactNo = req.body.contactNo;
+
+    if (
+        !reason ||
+        !houseType ||
+        !existingPets ||
+        !petExperience ||
+        !income ||
+        !contactNo
+    ) {
+        errorMsg += "Please fill in all fields to apply for adoption.";
+        return res.render("pet-profile", {
+            petFound: pet,
+            errorMsg: errorMsg,
+            successMsg: successMsg,
+        });
+    }
 
     let application = {
-        uid: req.session.user?._id ?? null,
-        pid: pet?._id ?? null,
-        userName: req.session.user?.userName ?? null,
+        uid: uid,
+        pid: pid,
+        userName: userName,
         petName: petName,
         petType: pet.type,
-        reason: req.body.applyReason,
-        houseType: req.body.houseType,
-        existingPets: req.body.existingPets,
-        petExperience: req.body.petExperience,
-        income: req.body.income,
-        contactNo: req.body.contactNo,
+        reason: reason,
+        houseType: houseType,
+        existingPets: existingPets,
+        petExperience: petExperience,
+        income: income,
+        contactNo: contactNo,
     };
 
     try {
@@ -371,13 +392,18 @@ exports.petUpdated = async (req, res) => {
     let gender = (req.body.gender ?? "").trim() || pet.gender;
     let desc = (req.body.desc ?? "").trim() || pet.description;
     let dob = (req.body.dob ?? "").trim() || pet.dob;
-    let hdbApproved = (req.body.hdbApproved ?? "").trim() || pet.hdbApproved.toString();
-    let vaccinated = (req.body.vaccinated ?? "").trim() || pet.vaccinated.toString();
-    let sterilized = (req.body.sterilized ?? "").trim() || pet.sterilized.toString();
+    let hdbApproved =
+        (req.body.hdbApproved ?? "").trim() || pet.hdbApproved.toString();
+    let vaccinated =
+        (req.body.vaccinated ?? "").trim() || pet.vaccinated.toString();
+    let sterilized =
+        (req.body.sterilized ?? "").trim() || pet.sterilized.toString();
     let personality = req.body.personality || pet.personality;
     let createdByAdmin = user.role == "admin" ? true : false;
-    let activityLevel = (req.body.activityLevel ?? "").trim() || pet.activityLevel;
-    let experienceLevel = (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
+    let activityLevel =
+        (req.body.activityLevel ?? "").trim() || pet.activityLevel;
+    let experienceLevel =
+        (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
 
     let errorMsg = "";
     let successMsg = "";

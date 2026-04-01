@@ -1,6 +1,5 @@
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcrypt");
-const pet = require('./pet-controller')
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
