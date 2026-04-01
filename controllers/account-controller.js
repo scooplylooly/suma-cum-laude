@@ -59,7 +59,8 @@ exports.handleRegister = async (req, res) => {
     } else {
         // checks if password meets mininum requirements for security purposes
         const checkSecure = accountModel.securePassword(password);
-        if (checkSecure !== true) { // catches the errors and append to error array
+        if (checkSecure !== true) {
+            // catches the errors and append to error array
             for (let error of checkSecure) {
                 errors.push(error);
             }
@@ -67,10 +68,10 @@ exports.handleRegister = async (req, res) => {
     }
 
     if (!securityKey) {
-        errors.push("Security question input is required")
+        errors.push("Security question input is required");
     }
 
-    if (errors.length === 0) {  
+    if (errors.length === 0) {
         // no errors; user is registered and data added to users schema
         try {
             await accountModel.registerUser(
@@ -79,7 +80,7 @@ exports.handleRegister = async (req, res) => {
                 DOB,
                 password,
                 securityKey,
-                role
+                role,
             );
             console.log("Registering user...");
             if (req.session.user && req.session.user.role === "admin") {
@@ -161,7 +162,12 @@ exports.handleLogin = async (req, res) => {
 
 exports.showVerify = (req, res) => {
     // renders vefification form with empty fields
-    res.render('verify-identity', {userName:"", securityKey: "", errors:[], success:false });
+    res.render("verify-identity", {
+        userName: "",
+        securityKey: "",
+        errors: [],
+        success: false,
+    });
 };
 
 // handle verification form - validates user + verify security key
@@ -175,49 +181,76 @@ exports.handleVerify = async (req, res) => {
         errors.push("Username is required");
     }
     if (!securityKey) {
-        errors.push("Please answer the security question to verify your identity");
+        errors.push(
+            "Please answer the security question to verify your identity",
+        );
     }
     if (errors.length > 0) {
         // re-renders form with identifed input errors
-        res.render('verify-identity', {userName, securityKey, errors, success: false });
-
+        res.render("verify-identity", {
+            userName,
+            securityKey,
+            errors,
+            success: false,
+        });
     } else {
-            try {
-                // checks whether another user with matching username exists in database; to ensure username is unique
-                let errors = [];
-                const user = await accountModel.checkUserExist(userName);
-                if (!user) {
-                    // prompts user to register if user not found in database
-                    errors.push("No account found with that username. <br> Try <a href='/register'>registering</a> first.");
-                    console.log("User does not exist")
-                
-                // authentication of security key
-                } else {
-                    const checkPass = await accountModel.checkSecurityKey(userName, securityKey);
-                    if (!checkPass) {
-                        errors.push("Incorrect security key");
-                    }
-                }
-                if (errors.length === 0) {
-                    // setting up user data and verification flag in session temporarily
-                    req.session.resetUser = userName;
-                    req.session.verified = true;
-                    console.log("User verified and userName recorded... ")
-                    console.log(`Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`);
-                }
-                res.render('verify-identity', {userName, securityKey, errors, success: errors.length === 0 });
+        try {
+            // checks whether another user with matching username exists in database; to ensure username is unique
+            let errors = [];
+            const user = await accountModel.checkUserExist(userName);
+            if (!user) {
+                // prompts user to register if user not found in database
+                errors.push(
+                    "No account found with that username. <br> Try <a href='/register'>registering</a> first.",
+                );
+                console.log("User does not exist");
 
-            } catch (error) {
-                console.error(error);
-                errors.push("Something went wrong. Please try again.");
-                res.render('verify-identity', {userName:"", securityKey:"", errors, success: false });
+                // authentication of security key
+            } else {
+                const checkPass = await accountModel.checkSecurityKey(
+                    userName,
+                    securityKey,
+                );
+                if (!checkPass) {
+                    errors.push("Incorrect security key");
+                }
             }
+            if (errors.length === 0) {
+                // setting up user data and verification flag in session temporarily
+                req.session.resetUser = userName;
+                req.session.verified = true;
+                console.log("User verified and userName recorded... ");
+                console.log(
+                    `Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`,
+                );
+            }
+            res.render("verify-identity", {
+                userName,
+                securityKey,
+                errors,
+                success: errors.length === 0,
+            });
+        } catch (error) {
+            console.error(error);
+            errors.push("Something went wrong. Please try again.");
+            res.render("verify-identity", {
+                userName: "",
+                securityKey: "",
+                errors,
+                success: false,
+            });
         }
-}
+    }
+};
 
 // renders reset password form with empty fields
 exports.showResetPassword = (req, res) => {
-    res.render('reset-password', { password: "", password2:"", errors: [], success: false });
+    res.render("reset-password", {
+        password: "",
+        password2: "",
+        errors: [],
+        success: false,
+    });
 };
 
 // handle new password submission
@@ -242,25 +275,42 @@ exports.handleResetPassword = async (req, res) => {
     }
 
     if (errors.length > 0) {
-        return res.render('reset-password', { password, password2, errors, success: false });
+        return res.render("reset-password", {
+            password,
+            password2,
+            errors,
+            success: false,
+        });
     }
 
     try {
         // hashes password for security
         const hashedPassword = await bcrypt.hash(password, 10);
         // resets password for specified user in database
-        await accountModel.updatePassword(req.session.resetUser, hashedPassword);
+        await accountModel.updatePassword(
+            req.session.resetUser,
+            hashedPassword,
+        );
         console.log("Resetting password...");
         // deletes verifiation flag and temporary user data in session
         delete req.session.verified;
         delete req.session.resetUser;
-         console.log("Deleting verified flag...")
+        console.log("Deleting verified flag...");
         // deletes the verified check from session;
-        res.render('reset-password', { password, password2, errors: [], success: true });
-
+        res.render("reset-password", {
+            password,
+            password2,
+            errors: [],
+            success: true,
+        });
     } catch (error) {
         console.error(error);
-        res.render('reset-password', { password, password2, errors: ["Failed to reset password."], success: false });
+        res.render("reset-password", {
+            password,
+            password2,
+            errors: ["Failed to reset password."],
+            success: false,
+        });
     }
 };
 
@@ -272,31 +322,48 @@ exports.showProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     // retrieves profile details for user from database + details put as default value for form fields when form is rendered
-    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
+    const originalDetails = await accountModel.retrieveProfile(
+        req.session.user._id,
+    );
     const userName = originalDetails.userName;
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
     const securityKey = originalDetails.securityKey;
     // password is not displayed in the fields for securiy reasons
-    res.render("update-user-profile", {userName, email, DOB, password:"", password2:"", securityKey, errors: []});
-}
+    res.render("update-user-profile", {
+        userName,
+        email,
+        DOB,
+        password: "",
+        password2: "",
+        securityKey,
+        errors: [],
+    });
+};
 
 exports.processUpdate = async (req, res) => {
     // if inputs are not valid, field inputs are by default set to data recorded in user's orginal profile
-    const originalDetails = await accountModel.retrieveProfile(req.session.user._id);
-    const userName = (req.body.userName ?? "").trim() || originalDetails.userName;
+    const originalDetails = await accountModel.retrieveProfile(
+        req.session.user._id,
+    );
+    const userName =
+        (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
     // note that password fields could be left empty if user does not key im values
     // passwords are not shown for security in update page
     const DOB = req.body.dob;
-    const password = (req.body.password ?? "").trim() 
-    const password2 = (req.body.password2 ?? "").trim()
-    const securityKey = (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
+    const password = (req.body.password ?? "").trim();
+    const password2 = (req.body.password2 ?? "").trim();
+    const securityKey =
+        (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
     const role = originalDetails.role; // role cannot be updated by user; defaulted to original role in database
     let errors = [];
     // if username inputted is not same as original name, check if another user with same username exists
-    if (userName !== originalDetails.userName && await accountModel.checkUserExist(userName)) {
-        errors.push("Username already exists")
+    if (
+        userName !== originalDetails.userName &&
+        (await accountModel.checkUserExist(userName))
+    ) {
+        errors.push("Username already exists");
     }
 
     if (password !== password2) {
@@ -314,9 +381,16 @@ exports.processUpdate = async (req, res) => {
 
     if (errors.length > 0) {
         return res.render("update-user-profile", {
-            userName, email, DOB, password, password2, securityKey, errors})
+            userName,
+            email,
+            DOB,
+            password,
+            password2,
+            securityKey,
+            errors,
+        });
     }
-    
+
     try {
         // updates fields of user profile in database
         await accountModel.updateDetails(
@@ -326,12 +400,14 @@ exports.processUpdate = async (req, res) => {
             DOB,
             password,
             securityKey,
-            role
+            role,
         );
         console.log("Updated details successfully");
         // updates username variable in session; session captures old snapshot with outdated details
-        req.session.user.userName = userName; 
-        console.log("Updated current session userName: " + req.session.user.userName);
+        req.session.user.userName = userName;
+        console.log(
+            "Updated current session userName: " + req.session.user.userName,
+        );
         res.redirect("/profile");
     } catch (error) {
         console.error("Failed to update user details, error:", error);
@@ -348,7 +424,7 @@ exports.deleteProfile = async (req, res) => {
     // authenticates inputted password before processing deletion
     const match = await accountModel.authenticateUser(
         req.session.user.userName,
-        password
+        password,
     );
     if (match) {
         await accountModel.deleteUser(req.session.user._id); // deletes user
@@ -376,9 +452,17 @@ exports.logout = (req, res) => {
 
 //Preferences Logic
 
-const animalTypes = ["dog", "cat", "rabbit", "hamster", "bird", "guinea pig", "other"]
+const animalTypes = [
+    "dog",
+    "cat",
+    "rabbit",
+    "hamster",
+    "bird",
+    "guinea pig",
+    "other",
+];
 
-exports.userPreferenceForm = (req, res) => {
+exports.userPreferenceForm = async (req, res) => {
     try {
         const petPersonalities = [
             "affectionate",
@@ -409,36 +493,39 @@ exports.userPreferenceForm = (req, res) => {
             "chatty",
             "foodie",
             "active",
-        ]
-        const userId = req.session.user._id
-        res.render('user-preferences', {
+        ];
+        const userId = req.session.user._id;
+        const userInfo = await accountModel.retrieveProfile(userId);
+        const userPref = userInfo.preferences;
+        console.log("user preferences:", userPref);
+        res.render("user-preferences", {
+            userPref,
             userId,
             animalTypes,
-            petPersonalities
-            })
-    } catch(error) {
-        console.log(error)
-        res.redirect('/preferences')
+            petPersonalities,
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect("/preferences");
     }
-}
+};
 
 exports.updatePreferences = async (req, res) => {
     try {
-        const userId = req.session.user._id
+        const userId = req.session.user._id;
 
         const preferences = {
             housingType: req.body.housingType,
             preferredAnimal: req.body.preferredAnimal || [],
             preferredTraits: req.body.preferredTraits || [],
             experienceLevel: req.body.experienceLevel,
-            activityLevel: req.body.activityLevel
-        }
-
-        await accountModel.updatePreferences(userId, preferences)
-        console.log("Success")
-        res.redirect('/profile')
+            activityLevel: req.body.activityLevel,
+        };
+        await accountModel.updatePreferences(userId, preferences);
+        console.log("Success");
+        res.redirect("/profile");
     } catch (error) {
-        console.log(error)
-        res.redirect('/preferences')
+        console.log(error);
+        res.redirect("/preferences");
     }
-}
+};

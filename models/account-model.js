@@ -39,7 +39,7 @@ const usersSchema = new mongoose.Schema({
             activityLevel: String,
         },
         default: {
-            housingType: "HDB",
+            housingType: "",
             preferredAnimal: [],
             preferredTraits: [],
             experienceLevel: "beginner",
@@ -186,9 +186,8 @@ async function getAllUsers() {
 }
 
 const updatePreferences = async (userId, preferences) => {
-    return await users.findByIdAndUpdate(userId, {preferences})
-}
-
+    return await users.findByIdAndUpdate(userId, { preferences });
+};
 
 const countUsers = async () => {
     try {
