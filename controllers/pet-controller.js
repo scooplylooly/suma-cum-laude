@@ -69,13 +69,10 @@ exports.searchPet = async (req, res) => {
     const applications = await listing.findApplicationbyUID(user._id);
 
     allPets.reverse();
-<<<<<<< HEAD
     let pids = []
     for (let application of applications) {
         pids.push(application.pid.toString())
     }
-=======
->>>>>>> 08f2f1b7f5c3aa9b9550ee07200791ab2a34a62c
     let pets = [];
 
     if (nameSearched !== "") {
@@ -123,7 +120,6 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
-    let userInfo = await accountModel.retrieveProfile(user._id);
     let pid = req.query.pid;
     if (!pid) {
         return res.redirect("/adopt");
@@ -135,7 +131,6 @@ exports.showPetProfile = async (req, res) => {
             errorMsg: "",
             successMsg: "",
             user,
-            userInfo,
         });
     }
 };
@@ -144,7 +139,7 @@ exports.applyInterest = async (req, res) => {
     let errorMsg = "";
     let successMsg = "";
     // let petFound = null;
-    const user = req.session.user;
+
     let petName = req.body.petName;
     let pet = await listing.findPet(petName).lean();
 
@@ -179,13 +174,11 @@ exports.applyInterest = async (req, res) => {
 };
 
 exports.showPetListingForm = async (req, res) => {
-    const user = req.session.user;
     return res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
         petPersonalities,
         formData: null,
-        user,
     });
 };
 
@@ -209,8 +202,6 @@ exports.createPetListing = async (req, res) => {
     let sterilized = req.body.sterilized;
     let personality = req.body.personality;
     let createdByAdmin = req.session.user.role == "admin" ? true : false;
-    let activityLevel = req.body.activityLevel;
-    let experienceLevel = req.body.experienceLevel;
     console.log("created by admin:", createdByAdmin);
     let errorMsg = "";
     let successMsg = "";
@@ -222,8 +213,6 @@ exports.createPetListing = async (req, res) => {
     if (!gender) missingFields.push("Gender");
     if (!desc) missingFields.push("Description");
     if (!dob) missingFields.push("Date of Birth");
-    if (!activityLevel) missingFields.push("Activity Level");
-    if (!experienceLevel) missingFields.push("Experience Level");
     if (user.role == "user")
         missingFields.push("The owner must be a lister to create a listing");
     if (missingFields.length > 0) {
@@ -259,8 +248,6 @@ exports.createPetListing = async (req, res) => {
         uid: user ? user._id : null,
         approved: false, // New listings start as unapproved
         createdByAdmin: createdByAdmin,
-        activityLevel: activityLevel,
-        experienceLevel: experienceLevel,
     };
 
     try {
@@ -269,7 +256,6 @@ exports.createPetListing = async (req, res) => {
 
         // Clear form data on success
         return res.render("pet-create-listing", {
-            user,
             errorMsg: "",
             successMsg: successMsg,
             petPersonalities,
@@ -280,7 +266,6 @@ exports.createPetListing = async (req, res) => {
         console.error("Error creating pet listing:", error);
 
         return res.render("pet-create-listing", {
-            user,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities,
@@ -373,17 +358,15 @@ exports.petUpdated = async (req, res) => {
     console.log("Old image:", oldImageName);
     console.log("New image filename:", imageFilename);
     let user = req.session.user;
-    let name = (req.body.name ?? "").trim() || pet.name;
-    let gender = (req.body.gender ?? "").trim() || pet.gender;
-    let desc = (req.body.desc ?? "").trim() || pet.description;
-    let dob = (req.body.dob ?? "").trim() || pet.dob;
-    let hdbApproved = (req.body.hdbApproved ?? "").trim() || pet.hdbApproved.toString();
-    let vaccinated = (req.body.vaccinated ?? "").trim() || pet.vaccinated.toString();
-    let sterilized = (req.body.sterilized ?? "").trim() || pet.sterilized.toString();
-    let personality = req.body.personality || pet.personality;
+    let name = req.body.name;
+    let gender = req.body.gender;
+    let desc = req.body.desc;
+    let dob = req.body.dob;
+    let hdbApproved = req.body.hdbApproved;
+    let vaccinated = req.body.vaccinated;
+    let sterilized = req.body.sterilized;
+    let personality = req.body.personality;
     let createdByAdmin = user.role == "admin" ? true : false;
-    let activityLevel = (req.body.activityLevel ?? "").trim() || pet.activityLevel;
-    let experienceLevel = (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
 
     let errorMsg = "";
     let successMsg = "";
@@ -395,10 +378,7 @@ exports.petUpdated = async (req, res) => {
     if (!gender) missingFields.push("Gender");
     if (!desc) missingFields.push("Description");
     if (!dob) missingFields.push("Date of Birth");
-    if (!activityLevel) missingFields.push("Activity Level");
-    if (!experienceLevel) missingFields.push("Experience Level");
-    if (user.role == "user")
-        missingFields.push("The owner must be a lister to update a listing");
+
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
@@ -433,8 +413,6 @@ exports.petUpdated = async (req, res) => {
         uid: pet.uid || null,
         approved: false, // Reset approval status on update
         createdByAdmin: createdByAdmin, // set admin creation status on update
-        activityLevel: activityLevel,
-        experienceLevel: experienceLevel,
     };
 
     console.log("Updating pet with data:", newPet);
