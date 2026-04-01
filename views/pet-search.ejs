@@ -29,7 +29,7 @@
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.name%></h4>
             <%if (pet.score !== null){%>
-                <h5>Match: <%=pet.score%>%</h5>
+                <h5><b>Match:</b> <%=pet.score%>%</h5>
             <%}%>
             <h5><b>Breed:</b> <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
             <h5><b>Date Of Birth:</b> <%=pet.dob%></h5>
