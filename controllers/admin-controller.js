@@ -70,7 +70,7 @@ exports.showIncomingListings = async (req, res) => {
 exports.filterListings = async (req, res) => {
     let status = req.body.status;
     let selectedStatus = "";
-    let pet;
+    let pets;
 
     if (status === "approved") {
         pets = (await petModel.getAllPets())
@@ -195,7 +195,7 @@ exports.updateUser = async (req, res) => {
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
-    // note that password fields could be left empty if user does not key im values
+    // note that password fields could be left empty if user does not key in values
     // passwords are not shown for security in update page
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
@@ -337,10 +337,10 @@ exports.adminDeleteLister = async (req, res) => {
         if (uid) {
             await accountModel.updateUserRole(uid, "user");
         }
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     } catch (err) {
         console.error("Could not delete lister:", err);
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     }
 };
 
