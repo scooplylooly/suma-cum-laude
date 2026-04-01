@@ -293,7 +293,7 @@ exports.updateListerStatus = async (req, res) => {
                 await accountModel.rejectLister(lid);
             }
         }
-        return res.redirect("/admin/admin-page");
+        return res.redirect("/admin/lister");
     } catch (err) {
         console.log(err);
         res.redirect("/admin/admin-page");
