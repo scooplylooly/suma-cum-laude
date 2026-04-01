@@ -2,6 +2,7 @@ const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
 const { act } = require("react");
+const { adminFaqs } = require("./faq-controller");
 
 const petPersonalities = [
     "affectionate",
@@ -129,6 +130,7 @@ exports.showPetProfile = async (req, res) => {
             errorMsg: "",
             successMsg: "",
             user,
+            userInfo: await accountModel.retrieveProfile(user._id),
         });
     }
 };
@@ -192,6 +194,8 @@ exports.applyInterest = async (req, res) => {
         petFound: pet,
         errorMsg: errorMsg,
         successMsg: successMsg,
+        user,
+        userInfo: await accountModel.retrieveProfile(uid),
     });
 };
 
