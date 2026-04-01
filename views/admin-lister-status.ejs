@@ -26,7 +26,7 @@
                             <p><span>Current status:</span> <%= lister.statusL %></p>
 
                             <input type="hidden" name="listers[<%= index %>][lid]" value="<%= lister._id%>">
-                            <input type="hidden" name="listers[<%= index %>][uid]" value="<%= lister._id%>">
+                            <input type="hidden" name="listers[<%= index %>][uid]" value="<%= lister.uid%>">
                             <input type="radio" name="listers[<%= index %>][statusL]" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
                             <label>Pending</label>
                             <input type="radio" name="listers[<%= index %>][statusL]" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>

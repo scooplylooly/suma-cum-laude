@@ -245,6 +245,7 @@ async function getListerByUserName (userName) {
 }
 
 async function updateUserRole (userId, role) {
+    
     return users.updateOne(
         { _id : userId },
         { role }
