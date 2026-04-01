@@ -240,17 +240,20 @@ exports.confirmListerStatus = async (req, res) => {
 };
 
 exports.updateListerStatus = async (req, res) => {
-    const { uid, statusL } = req.body;
+    const listers = req.body.listers ?? [];
 
     try {
-        if (statusL === "approved") {
-            await accountModel.approveLister(uid);
-            await accountModel.updateUserRole(uid, "lister");
-        } else if (statusL === "rejected") {
-            await accountModel.rejectLister(uid);
+        for (const lister of listers) {
+            const { lid, statusL } = lister;
         }
+            if (statusL === "approved") {
+                await accountModel.approveLister(lid);
+                await accountModel.updateUserRole(lid, "lister");
+            } else if (statusL === "rejected") {
+                await accountModel.rejectLister(lid);
+            }
 
-        res.redirect("/admin-page");
+        return res.redirect("/admin-page");
     } catch (err) {
         console.log(err);
         res.redirect("/admin-page");
@@ -301,11 +304,11 @@ exports.displayUpdateLister = async (req, res) => {
     // shows update details form for user
     // retrieves profile details for user from database
     // and is put as default value for form fields
-    const uid = req.query.uid;
-    const originalDetails = await accountModel.retrieveLister(uid);
+    const uid = req.query.lid;
+    const originalDetails = await accountModel.retrieveLister(lid);
 
     if(!originalDetails || originalDetails.statusL !== "approved") {
-        console.log("Lister not found or approved:", uid);
+        console.log("Lister not found or approved:", lid);
         return res.redirect("/admin-lister");
     }
 
@@ -324,12 +327,12 @@ exports.displayUpdateLister = async (req, res) => {
         experience,
         role,
         errors: [],
-        uid,
+        lid,
     });
 };
 exports.updateLister = async (req, res) => {
-    const uid = req.body.uid;
-    const originalDetails = await accountModel.retrieveLister(uid);
+    const lid = req.body.lid;
+    const originalDetails = await accountModel.retrieveLister(lid);
 
     if(!originalDetails || originalDetails.statusL !== "approved") {
         console.log("Lister not found or approved:", uid);
@@ -364,14 +367,14 @@ exports.updateLister = async (req, res) => {
             pets: "",
             experience: "",
             errors,
-            uid,
+            lid,
         });
     }
 
     try {
         // updates fields of user profile in database
         await accountModel.updateLister(
-            uid,
+            lid,
             address,
             contactNo,
             pets,

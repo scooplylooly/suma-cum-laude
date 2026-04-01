@@ -18,11 +18,11 @@
                 <p><strong>approved</strong></p>
                 <p>You can now create pet listings</p>
             <%} else if (status === 'pending') {%>
-                <p>pending</p>
+                <p><strong>pending</strong></p>
                 <p>Your application is now being reviewed.</p>
             <%} else if (status === 'rejected') {%>
-                <p>rejected</p>
-                <p>You can try again after some time.</p>
+                <p><strong>rejected</strong></p>
+                <p>You can try to apply again after some time.</p>
             <%}%>
         <%}%>
     </main>

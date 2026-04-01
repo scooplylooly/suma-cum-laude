@@ -208,15 +208,15 @@ async function getPendingListers() {
 }
 
 async function approveLister(userId) {
-    return await lister.updateOne({ uid: userId }, { statusL: "approved" });
+    return await lister.updateOne({ _id: userId }, { statusL: "approved" });
 }
 
 async function rejectLister(userId) {
-    return await lister.updateOne({ uid: userId }, { statusL: "rejected" });
+    return await lister.updateOne({ _id: userId }, { statusL: "rejected" });
 }
 
 async function retrieveLister(userId) {
-    return await lister.findOne({ uid: userId }).lean();
+    return await lister.findOne({ _id: userId }).lean();
 }
 
 async function getAllListers() {
@@ -230,7 +230,7 @@ async function addLister(listerData) {
 async function updateLister(userId, address, contactNo, pets, experience, role) {
     // updates the profile details of speificied user
     return lister.updateOne(
-        { uid: userId },
+        { _id: userId },
         { address, contactNo, pets, experience, role },
     );
 }
@@ -241,13 +241,13 @@ async function getListerByUserName (userName) {
 
 async function updateUserRole (userId, role) {
     return users.updateOne(
-        {uid : userId },
+        { _id : userId },
         { role }
     );
 }
 
 async function deleteLister(userID) {
-    return lister.deleteOne({ uid: userID });
+    return lister.deleteOne({ _id: userID });
 }
 
 module.exports = {

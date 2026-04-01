@@ -41,11 +41,11 @@
                         
                         <div class="card-actions">
                             <%if (lister.statusL === "approved") {%>
-                                <a href="/admin-lister-update?uid=<%=lister.uid%>">
+                                <a href="/admin-lister-update?lid=<%=lister._id%>">
                                     <button type="button">Update details</button>
                                 </a>
                             <%}%>
-                            <a href="/delete-lister-profile?uid=<%=lister.uid%>">
+                            <a href="/delete-lister-profile?lid=<%=lister._id%>">
                                 <button type="button">Delete User</button>
                             </a>
                         </div>

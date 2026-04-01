@@ -452,7 +452,7 @@ exports.showLister = (req, res) => {
 };
 
 exports.handleLister = async (req, res) => {
-    const userId = req.session.user.uid;
+    const userId = req.session.user._id;
     const userName = req.session.user.userName;
 
     let address = (req.body.address ?? "").trim();
@@ -563,8 +563,8 @@ exports.processLister = async (req, res) => {
 };
 
 exports.showListerStatus = async (req, res) => {
-    const userId = req.session.user.uid;
-    const userName = req.session.userName;
+    const userId = req.session.user._id.toString();
+    const userName = req.session.user.userName;
 
     try {
         const application = await accountModel.retrieveLister(userId);

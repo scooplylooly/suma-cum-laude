@@ -25,7 +25,7 @@
                             <p><span>Experience with adoptions:</span> <%= lister.experience %></p>
                             <p><span>Current status:</span> <%= lister.statusL %></p>
 
-                            <input type="hidden" name="listers[<%= index %>][uid]" value="<%= lister.uid%>">
+                            <input type="hidden" name="listers[<%= index %>][lid]" value="<%= lister._id%>">
                             <input type="radio" name="listers[<%= index %>][statusL]" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
                             <label>Pending</label>
                             <input type="radio" name="listers[<%= index %>][statusL]" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
