@@ -1,102 +1,220 @@
 body {
     font-family: "Palatino Linotype", Palatino, serif;
-    background-color: #fff8f0;
+    background: linear-gradient(180deg, #fffaf5 0%, #fdf1e6 100%);
     color: #333;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 main {
     flex: 1;
-    padding: 40px 20px;
+    padding: 50px 20px;
 }
 
+/* ===== MAIN CONTAINER ===== */
 .preferences-container {
-    max-width: 900px;
-    margin: 40px auto;
-    background-color: #fdf3e7;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 950px;
+    margin: 0 auto;
+    background: rgba(255, 250, 245, 0.92);
+    border: 1px solid rgba(201, 125, 78, 0.14);
+    border-radius: 26px;
+    padding: 42px 38px;
+    box-shadow: 0 18px 40px rgba(130, 84, 54, 0.08);
+    backdrop-filter: blur(4px);
 }
 
+/* ===== TITLE ===== */
 .preferences-container h1 {
     text-align: center;
-    color: #c97d4e;
-    margin-bottom: 30px;
-    font-size: 36px;
+    color: #b86a3f;
+    margin: 0 0 32px;
+    font-size: 38px;
+    letter-spacing: 0.3px;
 }
-
+.preferences-container p {
+    text-align: center;
+    color: #666;
+    margin: 0 0 32px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+/* ===== FORM ===== */
 .preferences-form {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 22px;
 }
 
-.preferences-form div {
-    background-color: #f0e0d0;
-    padding: 20px;
-    border-radius: 10px;
+/* ===== FORM SECTIONS ===== */
+.preferences-form > div {
+    background: #fff7f1;
+    border: 1px solid rgba(201, 125, 78, 0.12);
+    border-radius: 18px;
+    padding: 22px 22px 20px;
+    box-shadow: 0 8px 18px rgba(130, 84, 54, 0.05);
 }
 
 .preferences-form label {
+    display: inline-block;
     font-size: 18px;
+    font-weight: 700;
     color: #7a4c2f;
+    margin-bottom: 8px;
 }
 
+/* ===== SELECTS ===== */
 .preferences-form select {
     width: 100%;
-    padding: 10px;
+    padding: 12px 14px;
     margin-top: 10px;
-    border: 1px solid #c97d4e;
-    border-radius: 6px;
+    border: 1px solid #d7a07a;
+    border-radius: 10px;
     font-size: 16px;
-    font-family: "Palatino Linotype", Palatino, serif;
-    background-color: white;
+    font-family: inherit;
+    background: #fff;
     color: #333;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+    box-sizing: border-box;
 }
 
+.preferences-form select:focus {
+    border-color: #c97d4e;
+    box-shadow: 0 0 0 3px rgba(201, 125, 78, 0.15);
+    background-color: #fffdfb;
+}
+
+/* ===== CHECKBOX GRID ===== */
 .checkbox-group {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px 20px;
-    margin-top: 15px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 18px;
+    margin-top: 14px;
 }
 
+/* ===== CHECKBOX ITEM ===== */
 .checkbox-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    background: rgba(255, 248, 242, 0.9);
+    border: 1px solid rgba(201, 125, 78, 0.1);
+    border-radius: 12px;
+    padding: 10px 12px;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.checkbox-item:hover {
+    background: #fff3ea;
+    border-color: rgba(201, 125, 78, 0.2);
+    transform: translateY(-1px);
 }
 
 .checkbox-item input[type="checkbox"] {
     accent-color: #c97d4e;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex-shrink: 0;
 }
 
 .checkbox-item label {
-    font-size: 16px;
-    color: #333;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    color: #4b3a31;
+    cursor: pointer;
 }
 
+/* ===== BUTTON ===== */
 .preferences-form button {
-    background-color: #c97d4e;
+    background: linear-gradient(135deg, #d08858, #b86a3f);
     color: white;
     border: none;
-    padding: 14px 20px;
-    font-size: 18px;
-    font-family: "Palatino Linotype", Palatino, serif;
-    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    border-radius: 14px;
     cursor: pointer;
-    width: 200px;
+    min-width: 180px;
     align-self: center;
+    box-shadow:
+        0 10px 20px rgba(184, 106, 63, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 }
 
 .preferences-form button:hover {
-    background-color: #b86d3f;
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 24px rgba(184, 106, 63, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    filter: brightness(1.03);
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+.preferences-form button:active {
+    transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .preferences-container {
+        padding: 30px 22px;
+        border-radius: 20px;
+    }
+
+    .preferences-container h1 {
+        font-size: 32px;
+        margin-bottom: 26px;
+    }
+
+    .checkbox-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    main {
+        padding: 30px 14px;
+    }
+
+    .preferences-container {
+        padding: 24px 16px;
+        border-radius: 18px;
+    }
+
+    .preferences-form > div {
+        padding: 18px 16px;
+        border-radius: 14px;
+    }
+
+    .preferences-container h1 {
+        font-size: 28px;
+    }
+
+    .preferences-form label {
+        font-size: 16px;
+    }
+
+    .checkbox-group {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .preferences-form button {
+        width: 100%;
+    }
 }

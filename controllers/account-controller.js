@@ -1,6 +1,5 @@
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcrypt");
-const pet = require('./pet-controller')
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
@@ -188,7 +187,7 @@ exports.handleVerify = async (req, res) => {
     }
     if (errors.length > 0) {
         // re-renders form with identifed input errors
-        res.render("reset-form", {
+        res.render("verify-identity", {
             userName,
             securityKey,
             errors,
@@ -225,7 +224,7 @@ exports.handleVerify = async (req, res) => {
                     `Current session user: ${req.session.resetUser}, verified identity: (${req.session.verified})`,
                 );
             }
-            return res.render("reset-form", {
+            res.render("verify-identity", {
                 userName,
                 securityKey,
                 errors,
@@ -234,7 +233,7 @@ exports.handleVerify = async (req, res) => {
         } catch (error) {
             console.error(error);
             errors.push("Something went wrong. Please try again.");
-            res.render("reset-form", {
+            res.render("verify-identity", {
                 userName: "",
                 securityKey: "",
                 errors,
@@ -363,6 +362,7 @@ exports.processUpdate = async (req, res) => {
     const password2 = (req.body.password2 ?? "").trim();
     const securityKey =
         (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
+    const role = originalDetails.role; // role cannot be updated by user; defaulted to original role in database
     let errors = [];
     // if username inputted is not same as original name, check if another user with same username exists
     if (
@@ -406,6 +406,7 @@ exports.processUpdate = async (req, res) => {
             DOB,
             password,
             securityKey,
+            role,
         );
         console.log("Updated details successfully");
         // updates username variable in session; session captures old snapshot with outdated details
@@ -655,69 +656,87 @@ exports.logout = (req, res) => {
 
 //Preferences Logic
 
-const animalTypes = ["dog", "cat", "rabbit", "hamster", "bird", "guinea pig", "other"]
-
-exports.userPreferenceForm = (req, res) => {
+const animalTypes = [
+    "dog",
+    "cat",
+    "rabbit",
+    "hamster",
+    "bird",
+    "guinea pig",
+    "other",
+];
+const petPersonalities = [
+    "affectionate",
+    "independent",
+    "playful",
+    "curious",
+    "gentle",
+    "vocal",
+    "shy",
+    "bold",
+    "couch potato",
+    "hunter",
+    "social",
+    "energetic",
+    "loyal",
+    "friendly",
+    "protective",
+    "calm",
+    "smart",
+    "goofy",
+    "cuddly",
+    "adventurous",
+    "sweet",
+    "relaxed",
+    "outgoing",
+    "loving",
+    "resilient",
+    "chatty",
+    "foodie",
+    "active",
+];
+petPersonalities.sort();
+exports.userPreferenceForm = async (req, res) => {
     try {
-        const petPersonalities = [
-            "affectionate",
-            "independent",
-            "playful",
-            "curious",
-            "gentle",
-            "vocal",
-            "shy",
-            "bold",
-            "couch potato",
-            "hunter",
-            "social",
-            "energetic",
-            "loyal",
-            "friendly",
-            "protective",
-            "calm",
-            "smart",
-            "goofy",
-            "cuddly",
-            "adventurous",
-            "sweet",
-            "relaxed",
-            "outgoing",
-            "loving",
-            "resilient",
-            "chatty",
-            "foodie",
-            "active",
-        ]
-        const userId = req.session.user._id
-        res.render('user-preferences', {
+        const userId = req.session.user._id;
+        const userInfo = await accountModel.retrieveProfile(userId);
+        const userPref = userInfo.preferences;
+        console.log("user preferences:", userPref);
+        res.render("user-preferences", {
+            userPref,
             userId,
             animalTypes,
-            petPersonalities
-            })
-    } catch(error) {
-        console.log(error)
-        res.redirect('/preferences')
+            petPersonalities,
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect("/preferences");
     }
-}
+};
 
 exports.updatePreferences = async (req, res) => {
     try {
-        const userId = req.session.user._id
+        const userId = req.session.user._id ;
+        const userInfo = await accountModel.retrieveProfile(userId);
+        const userPref = userInfo.preferences;
+        const housingType = req.body.housingType || "";
+        const preferredAnimal = req.body.preferredAnimal || [];
+        const preferredTraits = req.body.preferredTraits || [];
+        const experienceLevel = req.body.experienceLevel || userPref.experienceLevel;
+        const activityLevel = req.body.activityLevel || userPref.activityLevel;
 
         const preferences = {
-            housingType: req.body.housingType,
-            preferredAnimal: req.body.preferredAnimal || [],
-            preferredTraits: req.body.preferredTraits || [],
-            experienceLevel: req.body.experienceLevel,
-            activityLevel: req.body.activityLevel
-        }
-
-        await accountModel.updatePreferences(userId, preferences)
-        console.log("Success")
-        res.redirect('/profile')
+            housingType: housingType,
+            preferredAnimal: preferredAnimal,
+            preferredTraits: preferredTraits,
+            experienceLevel: experienceLevel,
+            activityLevel: activityLevel,
+        };
+        await accountModel.updatePreferences(userId, preferences);
+        console.log("Success");
+        res.redirect("/profile");
     } catch (error) {
-        console.log(error)
-        res.redirect('/preferences')
+        console.log(error);
+        res.redirect("/preferences");
     }
-}
+};
