@@ -1,9 +1,37 @@
 const e = require("express");
 const accountModel = require("../models/account-model");
 const petModel = require("../models/pet-model");
+const faqModel = require("../models/faq-model");
+const accModel = require("../models/account-model");
 
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
+    const allApplications = await petModel.checkExistingApplications();
+    const typeCounts = {};
+    for (let app of allApplications) {
+        if (app.petType) {
+            typeCounts[app.petType] = (typeCounts[app.petType] || 0) + 1;
+        }
+    }
+    let topPetTypes = [];
+    for (let type in typeCounts) {
+        topPetTypes.push({ type: type, count: typeCounts[type] });
+    }
+    topPetTypes.sort((a, b) => b.count - a.count);
+    topPetTypes = topPetTypes.slice(0, 3);
+    const totalPets = await petModel.countPets({})
+    console.log("Total Pets: " + totalPets)
+    const totalApplications = await petModel.countTotalApplications({})
+    console.log("Total Applications: " + totalApplications)
+    const pendingApplications = await petModel.countPendingApplications({ status: 'pending' })
+    console.log("Total Pending Applications: " + pendingApplications)
+    const totalUsers = await accModel.countUsers({})
+    console.log("Total Users: " + totalUsers)
+    const totalFaqs = await faqModel.countFaqs({})
+    console.log("Total FAQs: " + totalFaqs)
+    const avgDaysUnadopted = await petModel.avgDaysUnadopted();
+    const avgDaysUnadoptedByType = await petModel.avgDaysUnadoptedByType();
+    const adoptionRateByType = await petModel.adoptionRateByType();
     if (!user) {
         return res.send(`
             <h1 style="color: red;">Unauthorized</h1>
@@ -15,7 +43,18 @@ exports.showAdminPage = async (req, res) => {
             </script>
         `);
     } else if (user.role == "admin") {
-        return res.render("admin-page", { user });
+        return res.render("admin-page", {
+            user,
+            totalPets,
+            totalApplications,
+            pendingApplications,
+            totalFaqs,
+            totalUsers,
+            topPetTypes,
+            avgDaysUnadopted,
+            avgDaysUnadoptedByType,
+            adoptionRateByType,
+        });
     } else {
         return res.redirect("/adopt");
     }
@@ -72,7 +111,7 @@ exports.updateListingStatus = async (req, res) => {
         await petModel.updatePetApproval(pid, isApproved);
         console.log(`Listing ${isApproved} successfully`);
     }
-    return res.redirect("/admin-listings");
+    return res.redirect("/admin/listings");
 };
 
 exports.showUsers = async (req, res) => {
@@ -117,7 +156,7 @@ exports.deleteUser = async (req, res) => {
     try {
         await accountModel.deleteUser(uid);
         console.log("user deleted!");
-        return res.redirect("/admin-users");
+        return res.redirect("/admin/users");
     } catch (err) {
         console.error(err);
         error = "Error deleting user";
@@ -205,7 +244,7 @@ exports.updateUser = async (req, res) => {
         );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
-        return res.redirect("/admin-users");
+        return res.redirect("/admin/dashboard");
     } catch (error) {
         console.error("Failed to update user details, error:", error);
     }
@@ -401,4 +440,29 @@ exports.viewUserApplications = async (req, res) => {
     const user = await accountModel.retrieveProfile(uid);
     console.log("USER FOUND:", user);
     return res.render("admin-application-status", { applications, user });
+};
+exports.showAdminDashboard = async (req, res) => {
+    const totalPets = await petModel.countPets({});
+    console.log("Total Pets: " + totalPets);
+    const totalApplications = await petModel.countTotalApplications({});
+    console.log("Total Applications: " + totalApplications);
+    const pendingApplications = await petModel.countPendingApplications({
+        status: "pending",
+    });
+    console.log("Total Pending Applications: " + pendingApplications);
+    const totalUsers = await accModel.countUsers({});
+    console.log("Total Users: " + totalUsers);
+    const totalFaqs = await faqModel.countFaqs({});
+    console.log("Total FAQs: " + totalFaqs);
+    try {
+        res.render("admin-dashboard", {
+            totalPets,
+            totalApplications,
+            pendingApplications,
+            totalFaqs,
+            totalUsers,
+        });
+    } catch (error) {
+        console.error(error);
+    }
 };

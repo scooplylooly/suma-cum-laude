@@ -1,6 +1,7 @@
 const { configDotenv } = require("dotenv");
 const listing = require("../models/pet-model");
-const account = require("../models/account-model");
+const accountModel = require("../models/account-model");
+const petScorer = require("../utils/petScorer");
 const path = require("path");
 
 // ... rest of your code
@@ -39,12 +40,20 @@ petPersonalities.sort();
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
-    const applications = await listing.findApplicationbyUID(user._id)
-    let pids = []
-    for (let application of applications) {
-        pids.push(application.pid.toString())
-    }
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+    const applications = await listing.findApplicationbyUID(user._id);
+    const pids = applications.map((application) => String(application.pid));
+
     pets.reverse();
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         pets,
         nameSearched: "",
@@ -56,20 +65,24 @@ exports.displayPets = async (req, res) => {
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
-    allPets.reverse();
     const user = req.session.user;
-    const applications = await listing.findApplicationbyUID(user._id)
+    const applications = await listing.findApplicationbyUID(user._id);
+
+    allPets.reverse();
     let pids = []
     for (let application of applications) {
         pids.push(application.pid.toString())
     }
     let pets = [];
-    if (nameSearched != "") {
+
+    if (nameSearched !== "") {
+        const search = nameSearched.toLowerCase();
+
         for (let pet of allPets) {
             if (
-                pet.name.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.type.toLowerCase().includes(nameSearched.toLowerCase()) ||
-                pet.breed.toLowerCase().includes(nameSearched.toLowerCase())
+                pet.name.toLowerCase().includes(search) ||
+                pet.type.toLowerCase().includes(search) ||
+                pet.breed.toLowerCase().includes(search)
             ) {
                 pets.push(pet);
             }
@@ -77,6 +90,17 @@ exports.searchPet = async (req, res) => {
     } else {
         pets = allPets;
     }
+
+    const userDetails = await accountModel.retrieveProfile(user._id);
+    const preferences = userDetails?.preferences ?? {};
+
+    pets = pets.map((pet) => ({
+        ...pet,
+        score: petScorer.calculateScore(preferences, pet).score,
+    }));
+
+    pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+
     return res.render("pet-search", {
         nameSearched,
         pets,
@@ -99,7 +123,6 @@ exports.showPetProfile = async (req, res) => {
     let pid = req.query.pid;
     if (!pid) {
         return res.redirect("/adopt");
-        return;
     } else {
         let result = await listing.findPetById(pid);
         console.log(result);
@@ -125,6 +148,7 @@ exports.applyInterest = async (req, res) => {
         pid: pet?._id ?? null,
         userName: req.session.user?.userName ?? null,
         petName: petName,
+        petType: pet.type,
         reason: req.body.applyReason,
         houseType: req.body.houseType,
         existingPets: req.body.existingPets,

@@ -33,6 +33,9 @@ router.post("/update-lister-profile", authMiddleware.checkUser, accountControlle
 router.get("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteConfirmationForLister);
 router.post("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteLister);
 
-router.get("/logout", accountController.logout);
+router.get("/preferences", authMiddleware.checkUser, accountController.userPreferenceForm);
+router.post("/preferences", authMiddleware.checkUser, accountController.updatePreferences);
+
+router.get("/logout", authMiddleware.checkUser, accountController.logout);
 
 module.exports = router;

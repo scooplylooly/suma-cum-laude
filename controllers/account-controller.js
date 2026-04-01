@@ -1,5 +1,6 @@
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcrypt");
+const pet = require('./pet-controller')
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
@@ -648,3 +649,72 @@ exports.logout = (req, res) => {
         res.redirect("/index.html"); // redirected to introduction homepage
     });
 };
+
+//Preferences Logic
+
+const animalTypes = ["dog", "cat", "rabbit", "hamster", "bird", "guinea pig", "other"]
+
+exports.userPreferenceForm = (req, res) => {
+    try {
+        const petPersonalities = [
+            "affectionate",
+            "independent",
+            "playful",
+            "curious",
+            "gentle",
+            "vocal",
+            "shy",
+            "bold",
+            "couch potato",
+            "hunter",
+            "social",
+            "energetic",
+            "loyal",
+            "friendly",
+            "protective",
+            "calm",
+            "smart",
+            "goofy",
+            "cuddly",
+            "adventurous",
+            "sweet",
+            "relaxed",
+            "outgoing",
+            "loving",
+            "resilient",
+            "chatty",
+            "foodie",
+            "active",
+        ]
+        const userId = req.session.user._id
+        res.render('user-preferences', {
+            userId,
+            animalTypes,
+            petPersonalities
+            })
+    } catch(error) {
+        console.log(error)
+        res.redirect('/preferences')
+    }
+}
+
+exports.updatePreferences = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+
+        const preferences = {
+            housingType: req.body.housingType,
+            preferredAnimal: req.body.preferredAnimal || [],
+            preferredTraits: req.body.preferredTraits || [],
+            experienceLevel: req.body.experienceLevel,
+            activityLevel: req.body.activityLevel
+        }
+
+        await accountModel.updatePreferences(userId, preferences)
+        console.log("Success")
+        res.redirect('/profile')
+    } catch (error) {
+        console.log(error)
+        res.redirect('/preferences')
+    }
+}

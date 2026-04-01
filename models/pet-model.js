@@ -21,61 +21,60 @@ const petSchema = new mongoose.Schema(
                 "other",
             ],
         },
-
         img: {
             type: String,
             default: "",
         },
-
         name: {
             type: String,
             required: true,
             trim: true,
         },
-
         breed: {
             type: String,
             required: true,
             trim: true,
         },
-
         gender: {
             type: String,
             enum: ["male", "female"],
             required: true,
         },
-
         description: {
             type: String,
             required: true,
         },
-
         hdbApproved: {
             type: Boolean,
             default: false,
         },
-
         dob: {
             type: String,
             required: true,
             min: 0,
         },
-
         vaccinated: {
             type: Boolean,
             default: false,
         },
-
         sterilized: {
             type: Boolean,
             default: false,
         },
-
         personality: {
             type: [String],
             default: [],
         },
-
+        activityLevel: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium",
+        },
+        experienceLevel: {
+            type: String,
+            enum: ["beginner", "intermediate", "experienced"],
+            default: "intermediate",
+        },
         uid: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "users",
@@ -125,6 +124,10 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        petType: {
+            type: String,
+            default: "",
+        },
         reason: {
             type: String,
             required: true,
@@ -153,6 +156,18 @@ const applicationSchema = new mongoose.Schema(
         },
         contactNo: {
             type: Number,
+            required: true,
+        },
+        activityLevel: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium",
+            required: true,
+        },
+        experienceLevel: {
+            type: String,
+            enum: ["beginner", "intermediate", "experienced"],
+            default: "beginner",
             required: true,
         },
     },
@@ -341,12 +356,12 @@ exports.updateApplicationbyID = async function (ID, value) {
         return error;
     }
 };
-exports.updatePetStatusbyID = async function (pid,value) {
-    try{
-        await Pet.updateOne({_id:pid}, {$set: {adopted: value}})
-        return "Pet Adopted"
-    }catch(error){
-        return error
+exports.updatePetStatusbyID = async function (pid, value) {
+    try {
+        await Pet.updateOne({ _id: pid }, { $set: { adopted: value } });
+        return "Pet Adopted";
+    } catch (error) {
+        return error;
     }
 };
 exports.deleteApplication = async function (appID) {
@@ -364,3 +379,138 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new: true },
     );
 };
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        return Pet.countDocuments({});
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.countTotalApplications = async function () {
+    try {
+        return Application.countDocuments({});
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.countPendingApplications = async function () {
+    try {
+        return Application.countDocuments({ status: "pending" });
+    } catch (error) {
+        return error;
+    }
+}
+
+exports.avgDaysUnadopted = async function () {
+    try {
+        const adoptedApplications = await Application.find({ status: 'approved' }).lean();
+        // checks if applications exist yet
+        if (adoptedApplications.length === 0){
+            return null;
+        }
+
+        let totalTime = 0;
+        let count = 0;
+
+        for (let app of adoptedApplications) {
+            const pet = await Pet.findOne({_id: app.pid}).lean(); // find the pid of each adopted pet
+            if (!pet){ // guard for errors if pet is deleted from database
+                continue;
+            }; 
+
+            const listedAt = pet.createdAt;
+            const adoptedAt = app.updatedAt; // updatedAt reflects when status was last changed to adopted
+            totalTime += (new Date(adoptedAt) - new Date(listedAt)); // time is in miliseconds
+            count++;
+        }
+
+        if (count === 0){
+            return null; // to ensure that we do not get a undefined stats value: a non-zero num / zero is undefined
+        }
+
+        const avgTime = totalTime / count;
+        const avgDays = (avgTime / (1000 * 60 * 60 * 24)).toFixed(1); // converts time from ms to days
+        return avgDays;
+
+    } catch (error) {
+        console.error('Error calculating avg time unadopted:', error);
+        return null;
+    }
+};
+
+exports.avgDaysUnadoptedByType = async function () {
+    try {
+        const adoptedApplications = await Application.find({status: 'approved'}).lean();
+        if (adoptedApplications.length === 0){ // check if applications exist yet
+             return null;
+        }
+
+        let avgByType = {};
+        let typeCount = {};
+
+        for (let app of adoptedApplications) {
+            const pet = await Pet.findOne({_id: app.pid}).lean()
+            if (!pet){
+                continue; 
+            }
+            const listedAt = pet.createdAt;
+            const adoptedAt = app.updatedAt; // updatedAt reflects when status was last changed to adopted
+            const diff = (new Date(adoptedAt) - new Date(listedAt));
+            if (diff <= 0) {
+                continue; // skips aggregating insignificant data
+            }
+           // records unadopted time for each pet in ms
+            avgByType[pet.type] = (avgByType[pet.type] ?? 0) + diff;
+            // records count for each type
+            typeCount[pet.type] = (typeCount[pet.type] ?? 0) + 1
+        }
+
+        Object.keys(avgByType).forEach(type => {
+            const currentAvg = avgByType[type] / typeCount[type];
+            avgByType[type] = (currentAvg / (1000 * 60 * 60 * 24)).toFixed(1); // converts time from ms to days
+        });
+        return avgByType;
+
+    } catch (error) {
+        console.error('Error calculating avg time unadopted by pet type:', error);
+    }
+};
+
+exports.adoptionRateByType = async function () {
+    try {
+        const adoptedPets = await Pet.find({ approved: true }).lean();
+
+        if (adoptedPets.length === 0){
+            return null;
+        }
+
+        const total = {};
+        const adopted = {};
+
+        for (let pet of adoptedPets) {
+            const type = pet.type;
+
+            total[type] = (total[type] || 0) + 1;
+            if (pet.adopted) {
+                adopted[type] = (adopted[type] || 0) + 1;
+            }
+        }
+
+        const rates = {};
+        for (let type in total) {
+            const rate = ((adopted[type] || 0) / total[type] * 100).toFixed(1);
+            rates[type] = { adopted: adopted[type] || 0, total: total[type], rate: `${rate}%` };
+        }
+
+        return rates;
+
+    } catch (error) {
+        console.error('Error calculating adoption rate by type:', error);
+        return {};
+    }
+}

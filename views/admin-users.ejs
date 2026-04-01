@@ -22,7 +22,7 @@
             </a>
         </div>
 
-        <form action="/admin-users" method="post" class="filter-form">
+        <form action="/admin/users" method="post" class="filter-form">
             <label for="userType">Pick a user type:</label>
             <select name="userType" id="userType">
                 <option value="" <%= selectedType == "" ? "selected" : "" %>>All</option>
@@ -51,13 +51,13 @@
                         <p><span>Role:</span> <%= user.role == "user" ? "Default User" : user.role == "lister" ? "Lister" : user.role === "admin" ? "Admin" : "None" %></p>
                         
                         <div class="card-actions">
-                            <a href="/admin-user-update?uid=<%=user._id%>">
+                            <a href="/admin/user-update?uid=<%=user._id%>">
                                 <button type="button">Update details</button>
                             </a>
-                            <a href="/delete-user-profile?uid=<%=user._id%>">
+                            <a href="/admin/delete-user?uid=<%=user._id%>">
                                 <button type="button">Delete User</button>
                             </a>
-                            <a href="/view-user-applications?uid=<%=user._id%>">
+                            <a href="/admin/view-user-applications?uid=<%=user._id%>">
                                 <button type="button">View user's applications</button>
                             </a>
                         </div>
