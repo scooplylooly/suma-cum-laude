@@ -1,0 +1,344 @@
+[{
+  "_id": {
+    "$oid": "69c22c389a990f910f307701"
+  },
+  "userName": "test123",
+  "email": "test123@gmail.com",
+  "DOB": "2026-03-31",
+  "password": "$2b$10$3L43auSYEXX6l965LBn.v.uNJeykMs67RX80ufmQQq4Qu/Wv3ky1W",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c2699dfc85e056c882555e"
+  },
+  "userName": "admin_user",
+  "email": "admin_user@gmail.com",
+  "DOB": "2026-03-18",
+  "password": "$2b$10$8T8mLvkVKhQgk3fSW.z60Oo1RwZfUXgoP6sSxMQrJa0CLF8a0TcpC",
+  "__v": 0,
+  "role": "admin",
+  "securityKey": "chihuahua",
+  "preferences": {
+    "housingType": "HDB",
+    "preferredAnimal": [
+      "dog",
+      "cat",
+      "rabbit",
+      "hamster",
+      "guinea pig"
+    ],
+    "preferredTraits": [
+      "affectionate",
+      "independent",
+      "playful",
+      "curious",
+      "gentle",
+      "shy",
+      "hunter",
+      "energetic",
+      "loyal",
+      "friendly",
+      "calm",
+      "cuddly",
+      "relaxed",
+      "active"
+    ],
+    "experienceLevel": "intermediate",
+    "activityLevel": "medium"
+  }
+},
+{
+  "_id": {
+    "$oid": "69c37e8bc1cfff7233ce4181"
+  },
+  "userName": "normal_user",
+  "email": "normal_user5678@gmail.com",
+  "DOB": "2026-03-18",
+  "password": "$2b$10$h/NRSf2ZzHpFbsgpvxzLMum5QTwUKOq7bbz.OIBeMfGqrMRoN7.U6",
+  "role": "lister",
+  "__v": 0,
+  "securityKey": "dog"
+},
+{
+  "_id": {
+    "$oid": "69c395477db1f20cdceff26e"
+  },
+  "userName": "JonnyTest",
+  "email": "pleasedontdelete@test.com",
+  "DOB": "2000-02-25",
+  "password": "$2b$10$lyTAlqw1EKXW8FQTkpSxb.6wVbV.5TyGuDknJN4Tl.XP.bAsTa5Yi",
+  "role": "user",
+  "__v": 0,
+  "preferences": {
+    "housingType": "Condo",
+    "preferredAnimal": [
+      "dog",
+      "hamster",
+      "bird"
+    ],
+    "preferredTraits": [
+      "affectionate",
+      "independent",
+      "playful",
+      "curious",
+      "gentle",
+      "vocal",
+      "shy",
+      "bold",
+      "couch potato",
+      "hunter",
+      "social",
+      "energetic",
+      "loyal",
+      "friendly",
+      "protective",
+      "calm",
+      "smart",
+      "goofy",
+      "cuddly",
+      "adventurous",
+      "sweet",
+      "relaxed"
+    ],
+    "experienceLevel": "beginner",
+    "activityLevel": "medium"
+  }
+},
+{
+  "_id": {
+    "$oid": "69c3a1b6e9a7087a104a6d79"
+  },
+  "userName": "JonnyTest2",
+  "email": "test@test.com",
+  "DOB": "1999-01-01",
+  "password": "$2b$10$N5YgqktV1VJdP2CsW5pLIeSrYsZpsA9dCNuuc18QLoFdpFpIB/w7q",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3bbea44d264458e448ed1"
+  },
+  "userName": "lister_user",
+  "email": "lister_user@gmail.com",
+  "DOB": "2026-03-19",
+  "password": "$2b$10$qB4gqcqkPDL1vDS/lfC2petMcoNhQnsRUW.2Ye1VLwwA86Mmk4pN.",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3bf76c019fc606952f6c2"
+  },
+  "userName": "Lister2",
+  "email": "lister2@gmail.com",
+  "DOB": "2026-03-19",
+  "password": "$2b$10$CPt.8Mc3PF/c/txgiOScG.A9l9HhTzYq53u/lU3EHvf5BsUcI7nla",
+  "role": "lister",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3c010e20a3ed63bf1315f"
+  },
+  "userName": "test_user1",
+  "email": "test_user1@gmail.com",
+  "DOB": "2026-03-09",
+  "password": "$2b$10$u1HwMUje3NTPo7AhpjwL3ODXSivKQDFGIQ/TxNG6TRr.CPyR1nZsO",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c68cd72517a48851ac4743"
+  },
+  "userName": "newAdminUser",
+  "email": "newadmin345@smu.com",
+  "DOB": "2026-03-25",
+  "password": "$2b$10$DENozTpvad2ALF54tn67YeBLSfkKKrvrQiMH3WhNfVaDSJGzqnzTa",
+  "role": "admin",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c68da53e353519c5c4dc00"
+  },
+  "userName": "newUser123",
+  "email": "newuser@nafa.sg.com",
+  "DOB": "2026-03-24",
+  "password": "$2b$10$luT0zrA/o8V6TpvhlyicPOmXsFN3Nldouh4RPcnqjclExTvors6nS",
+  "role": "user",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c694c42a083a9f94459146"
+  },
+  "userName": "Trump",
+  "email": "trumpD@yahoo.com",
+  "DOB": "2026-03-25",
+  "password": "$2b$10$2hpavOy8EGc22qEEnuq6UO41nUQh4xRFzQZhYicfARqtNmPAenHTW",
+  "role": "user",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c6951f2a083a9f9445914a"
+  },
+  "userName": "Trump45",
+  "email": "trumpD@yahoo.com",
+  "DOB": "2026-03-25",
+  "password": "$2b$10$LwQkvSGmJm044xlA2iZqWuYiftBV/PqITaEhH5Grcj9aWRtq1TJIO",
+  "role": "user",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c6957e2a083a9f94459150"
+  },
+  "userName": "karen",
+  "email": "karen@gmail.com",
+  "DOB": "2026-03-10",
+  "password": "$2b$10$OS.iRn5ojB3oNHxVc4tjb.HwP3F2EvlDXPNIHZOG1oXuRCz43tCHi",
+  "role": "lister",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c695c13a09594bd4b321ad"
+  },
+  "userName": "jacob445",
+  "email": "jacob445@gmail.com",
+  "DOB": "2026-03-18",
+  "password": "$2b$10$X314UYLfZfl5P4r6wc/MZeM41uKfkimNra34oKj1SJxatn2nxhxby",
+  "role": "user",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c696ce3a09594bd4b321c5"
+  },
+  "userName": "putin",
+  "email": "putin@gmail.com",
+  "DOB": "2026-03-17",
+  "password": "$2b$10$aOAh.nPCizZCAckVHc0fB.BfK1WDRtW7BxSX4/L6Zlglvffn4JcAm",
+  "role": "lister",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c8b4411b5aa36a85e58b7e"
+  },
+  "userName": "ting",
+  "email": "ting@gmail.com",
+  "DOB": "2026-03-02",
+  "password": "$2b$10$6XgFUvxu/3oFJSIK22JPiuKLLFemfxkozVWpsnxJ5q2FO2BgvzB76",
+  "securityKey": "dog",
+  "role": "user",
+  "__v": 0,
+  "preferences": {
+    "housingType": "",
+    "preferredAnimal": [
+      "dog",
+      "other"
+    ],
+    "preferredTraits": [
+      "gentle",
+      "friendly"
+    ],
+    "experienceLevel": "beginner",
+    "activityLevel": "low"
+  }
+},
+{
+  "_id": {
+    "$oid": "69c8ca87855e3be9006ee87a"
+  },
+  "userName": "TestTest",
+  "email": "test@test.com",
+  "DOB": "2000-01-01",
+  "password": "$2b$10$kCBbm0Og4K9e1a52Uu33K.tys18oJR32Jgr/4c5WtQELlNa8t4ts2",
+  "role": "user",
+  "otp": "",
+  "otpExpiry": null,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c8db2802bf13330c39c87e"
+  },
+  "userName": "lx_test",
+  "email": "lx_test@gmail.com",
+  "DOB": "2026-03-09",
+  "password": "$2b$10$SghaJcAS6Kipq8COl5eyv.ztU.XRiCNAMUJ/rOrAoa5WaSh0CgsC.",
+  "securityKey": "cat",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c9f3a6ee2a810016d65863"
+  },
+  "userName": "putin23",
+  "email": "putin23@gmail.com",
+  "DOB": "2026-03-18",
+  "password": "$2b$10$GAX8.4jssbZqhknRU9944eETcGTsyQGbyBYHhLXvyikgEZoQVXySS",
+  "securityKey": "dog",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69cc2c4cd4e344773859daa2"
+  },
+  "userName": "cw123",
+  "email": "cw123@gmail.com",
+  "DOB": "2026-03-29",
+  "password": "$2b$10$hzTkRyTM3XiwK9INlMuYUOlK4CUQazvohFtTNmhO0xW6s3kS3dupG",
+  "securityKey": "pig",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69cc61432072b723dedf6c23"
+  },
+  "userName": "charlene",
+  "email": "charlene@gmail.com",
+  "DOB": "2026-03-31",
+  "password": "$2b$10$PaGWA8fqo.aRzqHPhZ7GYeO5Y/dHgkd2SXSciW5oNrZoywfTtAowO",
+  "securityKey": "cat",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69cc8ad57dc057c9f0705a6f"
+  },
+  "userName": "NewUser10",
+  "email": "imanewuser@gmail.com",
+  "DOB": "2026-04-19",
+  "password": "$2b$10$Ki1vp2WqPrkU6Rn53.NDdOV5pwbFsLLGYef7MRq47xLHrsDlqZfke",
+  "securityKey": "cow",
+  "role": "user",
+  "preferences": {
+    "preferredAnimal": [],
+    "preferredTraits": []
+  },
+  "__v": 0
+}]

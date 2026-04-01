@@ -35,8 +35,15 @@ const usersSchema = new mongoose.Schema({
         preferredAnimal: [String],
         preferredTraits: [String],
         experienceLevel: String,
-        activityLevel: String
-    }
+        activityLevel: String,
+        default: {
+            housingType: "HDB",
+            preferredAnimal: [],
+            preferredTraits: [],
+            experienceLevel: "beginner",
+            activityLevel: "low",
+        },
+    },
 });
 
 const users = mongoose.model("users", usersSchema, "users");
@@ -44,13 +51,14 @@ const users = mongoose.model("users", usersSchema, "users");
 async function registerUser(userName, email, DOB, password, securityKey, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
-        throw new Error("Username already exists. Please choose another username.");
-    } 
-    
-    if (await users.findOne({ email: email })) {
-        throw new Error("Email already exists. Please use another email.")
+        throw new Error(
+            "Username already exists. Please choose another username.",
+        );
     }
-    else {
+
+    if (await users.findOne({ email: email })) {
+        throw new Error("Email already exists. Please use another email.");
+    } else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
             userName,
@@ -176,15 +184,15 @@ async function getAllUsers() {
 }
 
 const updatePreferences = async (userId, preferences) => {
-    return await users.findByIdAndUpdate(userId, {preferences})
-}
+    return await users.findByIdAndUpdate(userId, { preferences });
+};
 const countUsers = async () => {
     try {
-        return users.countDocuments({})
-    } catch(error) {
-        return error
+        return users.countDocuments({});
+    } catch (error) {
+        return error;
     }
-}
+};
 
 module.exports = {
     authenticateUser,
@@ -199,5 +207,5 @@ module.exports = {
     securePassword,
     findUserByName,
     updatePreferences,
-    countUsers
+    countUsers,
 };

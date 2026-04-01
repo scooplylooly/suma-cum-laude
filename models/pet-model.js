@@ -126,8 +126,7 @@ const applicationSchema = new mongoose.Schema(
         },
         petType: {
             type: String,
-            default: ''
-
+            default: "",
         },
         reason: {
             type: String,
@@ -162,13 +161,15 @@ const applicationSchema = new mongoose.Schema(
         activityLevel: {
             type: String,
             enum: ["low", "medium", "high"],
-            default: "medium"
+            default: "medium",
+            required: true,
         },
         experienceLevel: {
             type: String,
-            enum: ["beginner","intermediate","experienced"],
-            default: "intermediate",
-        }
+            enum: ["beginner", "intermediate", "experienced"],
+            default: "beginner",
+            required: true,
+        },
     },
     {
         timestamps: true,
@@ -355,12 +356,12 @@ exports.updateApplicationbyID = async function (ID, value) {
         return error;
     }
 };
-exports.updatePetStatusbyID = async function (pid,value) {
-    try{
-        await Pet.updateOne({_id:pid}, {$set: {adopted: value}})
-        return "Pet Adopted"
-    }catch(error){
-        return error
+exports.updatePetStatusbyID = async function (pid, value) {
+    try {
+        await Pet.updateOne({ _id: pid }, { $set: { adopted: value } });
+        return "Pet Adopted";
+    } catch (error) {
+        return error;
     }
 };
 exports.deleteApplication = async function (appID) {
@@ -379,30 +380,28 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
     );
 };
 
-
-
 //For Admin Dashboard
 
 exports.countPets = async function () {
     try {
-        return Pet.countDocuments({})
-    } catch(error) {
-        return error
+        return Pet.countDocuments({});
+    } catch (error) {
+        return error;
     }
-}
+};
 
 exports.countTotalApplications = async function () {
     try {
-        return Application.countDocuments({})
-    } catch(error) {
-        return error
+        return Application.countDocuments({});
+    } catch (error) {
+        return error;
     }
-}
+};
 
 exports.countPendingApplications = async function () {
     try {
-        return Application.countDocuments({ status: 'pending' })
-    } catch(error) {
-        return error
+        return Application.countDocuments({ status: "pending" });
+    } catch (error) {
+        return error;
     }
-}
+};

@@ -85,6 +85,9 @@
             </table>
 
             <div class="pet-type-list">
+                <h3>Top Pet Types</h3>  
+                <%if (topPetTypes.length > 0){%>
+                    <p>Most applied for pet types based on applications.</p>
                 <% for (let entry of topPetTypes) { %>
                     <div class="pet-type-item">
                         <div class="pet-type-label">
@@ -92,12 +95,17 @@
                             <span><%= Math.round((entry.count / totalApplications) * 100) %>%</span>
                         </div>
                         <div class="pet-type-bar">
-                            <div>
+                            <div
                                 class="pet-type-fill"
                                 style="width: <%= Math.round((entry.count / totalApplications) * 100) %>%;">
                             </div>
-                        </div>
                     </div>
+                    </div>
+                
+                <%}%>
+                </div>
+                <%}else{%>
+                    <p>No pet types available.</p>
                 <% } %>
             </div>
         </section>
@@ -111,9 +119,6 @@
                 <a href="/admin/listers">Manage Listers</a>
             </div>
         </section>
-            <% for (let entry of topPetTypes) { %>
-            <p><%= entry.type %>: <%= Math.round((entry.count/totalApplications)*100) %>%</p>
-        <% } %>
 
         <%- include('common/footer') %>
     </body>
