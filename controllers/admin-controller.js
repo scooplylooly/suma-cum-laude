@@ -155,6 +155,7 @@ exports.deleteUser = async (req, res) => {
     let userInfo = await accountModel.retrieveProfile(uid);
     let error = "";
     try {
+        await accountModel.deleteListerByUid(uid);
         await accountModel.deleteUser(uid);
         console.log("user deleted!");
         return res.redirect("/admin/users");
