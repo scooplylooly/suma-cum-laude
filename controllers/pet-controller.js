@@ -40,13 +40,10 @@ petPersonalities.sort();
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
-    const applications = await listing.findApplicationbyUID(user._id)
-    let pids = []
-    for (let application of applications) {
-        pids.push(application.pid.toString())
-    }
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
+    const applications = await listing.findApplicationbyUID(user._id);
+    const pids = applications.map((application) => String(application.pid));
 
     pets.reverse();
 
@@ -68,13 +65,11 @@ exports.displayPets = async (req, res) => {
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
-    allPets.reverse();
     const user = req.session.user;
-    const applications = await listing.findApplicationbyUID(user._id)
-    let pids = []
-    for (let application of applications) {
-        pids.push(application.pid.toString())
-    }
+    const applications = await listing.findApplicationbyUID(user._id);
+    const pids = applications.map((application) => String(application.pid));
+
+    allPets.reverse();
     let pets = [];
 
     if (nameSearched !== "") {
@@ -186,7 +181,7 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.createPetListing = async (req, res) => {
     let user = req.body.ownerName
-        ? await accountModel.findUserByName(req.body.ownerName)
+        ? await account.findUserByName(req.body.ownerName)
         : req.session.user;
     console.log("user", user);
     let type = req.body.type;

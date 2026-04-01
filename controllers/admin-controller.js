@@ -19,7 +19,6 @@ exports.showAdminPage = async (req, res) => {
     }
     topPetTypes.sort((a, b) => b.count - a.count);
     topPetTypes = topPetTypes.slice(0, 3);
-
     const totalPets = await petModel.countPets({})
     console.log("Total Pets: " + totalPets)
     const totalApplications = await petModel.countTotalApplications({})
@@ -33,7 +32,6 @@ exports.showAdminPage = async (req, res) => {
     const avgDaysUnadopted = await petModel.avgDaysUnadopted();
     const avgDaysUnadoptedByType = await petModel.avgDaysUnadoptedByType();
     const adoptionRateByType = await petModel.adoptionRateByType();
-    
     if (!user) {
         return res.send(`
             <h1 style="color: red;">Unauthorized</h1>
@@ -261,8 +259,6 @@ exports.viewUserApplications = async (req, res) => {
     console.log("USER FOUND:", user);
     return res.render("admin-application-status", { applications, user });
 };
-
-
 exports.showAdminDashboard = async (req, res) => {
     const totalPets = await petModel.countPets({})
     console.log("Total Pets: " + totalPets)

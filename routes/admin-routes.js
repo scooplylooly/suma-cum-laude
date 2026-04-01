@@ -39,7 +39,7 @@ router.post("/admin-user-update", adminController.updateUser);
 router.get(
     "/view-user-applications",
     authMiddleware.isAdmin,
-    adminController.viewUserApplications)
-
-router.get('/admin/dashboard', adminController.showAdminDashboard)
+    adminController.viewUserApplications,
+);
+router.get("/admin/dashboard", authMiddleware.isAdmin, adminController.showAdminDashboard);
 module.exports = router;
