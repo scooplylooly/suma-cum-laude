@@ -13,7 +13,7 @@
     <div>
         
         <%for(key in petFound){%>
-        <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
+        <% if (key != 'type' && key != 'uid' && key != 'createdByAdmin' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
         <% if(key == "img") {%>
           <img src="/images/<%=petFound[key]%>.jpg" alt="<%= petFound.name%>">
         <%}else if (key == "name"){%>

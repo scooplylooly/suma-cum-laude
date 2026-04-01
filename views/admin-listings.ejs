@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Incoming Listings</title>
+    <title>Listing Management</title>
     <link rel="stylesheet" href="/style/admin-listings.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
 
         <div class="top-actions">
             <a href="/create-listing" class="top-link">
-                <button type="button">Create Listing</button>
+                <button type="button">Create Listing for User</button>
             </a>
         </div>
 
@@ -73,6 +73,9 @@
                             </a>
                             <a href="/delete-pet?pid=<%= listing._id %>">
                                 <button type="button" class="danger">Delete Listing</button>
+                            </a>
+                            <a href="/view-applications?pid=<%=listing._id%>">
+                                <button type="button">View Applications</button>
                             </a>
                         </div>
                     </div>

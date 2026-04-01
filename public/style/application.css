@@ -28,6 +28,7 @@ body {
     margin: 0;
     font-size: 18px;
     color: #6a4b37;
+    text-align: center;
 }
 
 .empty-state {
@@ -215,4 +216,20 @@ button:hover {
     .application-actions button {
         width: 100%;
     }
+}
+.adopted-state {
+    max-width: 520px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(202, 247, 226, 0.9);
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.adopted-state h3 {
+    margin: 0;
+    color: #2f7a39;
+    font-size: 22px;
+    font-weight: normal;
 }

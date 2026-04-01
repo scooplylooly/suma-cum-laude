@@ -16,6 +16,14 @@
         </section>
 
         <form action="/create-listing" method="post" enctype="multipart/form-data" class="listing-form">
+            <%if (user.role === "admin"){%>
+            <div class="form-group">
+                <h3>Creating listing for user as Admin</h3>
+                <p>Leave "Owner's user name" field empty to create listing for yourself!</p>
+                <label for="ownerName_input">Owner's user name:</label>
+                <input type="text" id="ownerName_input" name="ownerName">
+            </div>
+            <%}%>
             <div class="form-group">
                 <label for="type_input">Type of Pet:</label>
                 <select id="type_input" name="type">

@@ -49,6 +49,7 @@ body {
 .top-link button {
     background: linear-gradient(to right, #c97d4e, #b5673c);
     color: white;
+    margin: 10px;
     border: none;
     padding: 13px 22px;
     border-radius: 999px;
@@ -357,4 +358,38 @@ h4 {
 .pet-id::before {
     content: "#";
     opacity: 0.6;
+}
+/* ===== PREVENT TEXT CUT OFF ===== */
+
+/* allow text to wrap nicely inside cards */
+.item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* make ALL text flexible */
+.item p,
+.item h4 {
+    word-break: break-word;
+}
+
+/* fix long IDs specifically */
+.pet-id {
+    max-width: 100%;
+    overflow-wrap: anywhere; /* 🔥 key for long IDs */
+}
+
+/* prevent flex items (like status) from overflowing */
+.status-row {
+    flex-wrap: wrap;
+}
+
+/* ensure buttons don’t overflow */
+.card-actions button {
+    white-space: normal;
+}
+
+/* prevent grid from breaking */
+.container-flex {
+    min-width: 0;
 }

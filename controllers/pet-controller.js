@@ -175,7 +175,10 @@ exports.showPetListingForm = async (req, res) => {
 };
 
 exports.createPetListing = async (req, res) => {
-    const user = req.session.user;
+    let user = req.body.ownerName
+        ? await account.findUserByName(req.body.ownerName)
+        : req.session.user;
+    console.log("user", user);
     let type = req.body.type;
     let breed = req.body.breed;
     const imageFilename = req.file
@@ -190,7 +193,8 @@ exports.createPetListing = async (req, res) => {
     let vaccinated = req.body.vaccinated;
     let sterilized = req.body.sterilized;
     let personality = req.body.personality;
-
+    let createdByAdmin = req.session.user.role == "admin" ? true : false;
+    console.log("created by admin:", createdByAdmin);
     let errorMsg = "";
     let successMsg = "";
 
@@ -201,7 +205,8 @@ exports.createPetListing = async (req, res) => {
     if (!gender) missingFields.push("Gender");
     if (!desc) missingFields.push("Description");
     if (!dob) missingFields.push("Date of Birth");
-
+    if (user.role == "user")
+        missingFields.push("The owner must be a lister to create a listing");
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
@@ -234,6 +239,7 @@ exports.createPetListing = async (req, res) => {
         personality: personality,
         uid: user ? user._id : null,
         approved: false, // New listings start as unapproved
+        createdByAdmin: createdByAdmin,
     };
 
     try {
@@ -343,7 +349,7 @@ exports.petUpdated = async (req, res) => {
 
     console.log("Old image:", oldImageName);
     console.log("New image filename:", imageFilename);
-
+    let user = req.session.user;
     let name = req.body.name;
     let gender = req.body.gender;
     let desc = req.body.desc;
@@ -352,6 +358,7 @@ exports.petUpdated = async (req, res) => {
     let vaccinated = req.body.vaccinated;
     let sterilized = req.body.sterilized;
     let personality = req.body.personality;
+    let createdByAdmin = user.role == "admin" ? true : false;
 
     let errorMsg = "";
     let successMsg = "";
@@ -397,6 +404,7 @@ exports.petUpdated = async (req, res) => {
         personality: personality,
         uid: pet.uid || null,
         approved: false, // Reset approval status on update
+        createdByAdmin: createdByAdmin, // set admin creation status on update
     };
 
     console.log("Updating pet with data:", newPet);
@@ -471,7 +479,7 @@ exports.viewApplications = async (req, res) => {
     let applications = await listing.findApplicationByPet(pid);
     let pet = await listing.findPetById(pid);
     let petName = pet.name;
-    return res.render("view-applications", { applications, petName, user });
+    return res.render("view-applications", { applications, user, petName });
 };
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;

@@ -5,7 +5,6 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    
 }
 
 .create-listing-page {
@@ -157,4 +156,16 @@ button:hover {
         flex-direction: column;
         gap: 8px;
     }
+}
+.form-group h3 {
+    color: #7a4c2f;
+    font-size: 22px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+.form-group p {
+    color: #6a4b37;
+    font-size: 15px;
+    margin-top: 0;
+    text-align: center;
 }

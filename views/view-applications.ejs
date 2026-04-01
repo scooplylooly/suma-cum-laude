@@ -15,12 +15,17 @@
             <p>Review and manage adoption requests for this pet.</p>
         </section>
 
-        <% if (!applications || applications.length === 0) { %>
+        <% if (!applications || applications.length == 0) { %>
             <section class="empty-state">
                 <h3>No applications yet for <%= petName %>.</h3>
             </section>
         <% } else { %>
             <section class="applications-list">
+                <%if (pet.adopted == true) { %>
+                <section class="adopted-state">
+                    <h3><%= petName %> has been adopted!</h3>
+                </section>
+                <%}%>
                 <% for (let application of applications) { %>
                     <% if (application.status === "approved" || application.status === "pending") { %>
                         <article class="application-card">
