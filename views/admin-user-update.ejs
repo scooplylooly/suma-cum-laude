@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update <%= userName %>'s Profile</title>
-    <link rel="stylesheet" type="text/css" href="./style/update-profile.css">
+    <link rel="stylesheet" type="text/css" href="/style/update-profile.css">
 </head>
 <body>
     <%- include('common/header') %>
     <main class="edit-page">
         <div id="form" class="edit-card">
-            <form action="/admin-user-update" class="edit-form" method="post">
+            <form action="/admin/user-update" class="edit-form" method="post">
                 <h2>Please update <%=userName%> details.</h2>
                 <input type="hidden" name="uid" value="<%=uid%>"
                 Username: <input type="text" name="userName" value="<%=userName %>"> <br>
