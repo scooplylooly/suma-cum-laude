@@ -217,15 +217,16 @@ exports.showListerApps = async (req, res) => {
 };
 
 exports.approveLister = async (req, res) => {
-    const uid = req.query.uid;
+    const lid = req.query.lid;
     try {
-        await accountModel.approveLister(uid);
-        await accountModel.updateUserRole(uid, "lister");
+        const application = await accountModel.retrieveLister(lid);
+        await accountModel.approveLister(lid);
+        await accountModel.updateUserRole(application.uid, "lister");
 
-        return res.redirect("admin-lister-status");
+        return res.redirect("/admin-lister-status");
     } catch (err) {
         console.error("Error approving listers:", err)
-        return res.redirect("admin-lister-status");
+        return res.redirect("/admin-lister-status");
     }
 };
 exports.rejectLister = async (req, res) => {
@@ -241,18 +242,18 @@ exports.confirmListerStatus = async (req, res) => {
 
 exports.updateListerStatus = async (req, res) => {
     const listers = req.body.listers ?? [];
-
     try {
         for (const lister of listers) {
-            const { lid, statusL } = lister;
-        }
+            const { lid, uid, statusL } = lister;
+
             if (statusL === "approved") {
                 await accountModel.approveLister(lid);
-                await accountModel.updateUserRole(lid, "lister");
+                await accountModel.updateUserRole(uid, "lister");
             } else if (statusL === "rejected") {
                 await accountModel.rejectLister(lid);
             }
 
+        }
         return res.redirect("/admin-page");
     } catch (err) {
         console.log(err);
@@ -279,18 +280,22 @@ exports.showListerListings = async (req, res) => {
 }
 
 exports.displayDeleteLister = async (req, res) => {
-    let uid = req.query.uid;
-    console.log("UID FOUND:", uid);
-    let listerInfo = await accountModel.retrieveLister(uid);
+    let lid = req.query.lid;
+    console.log("LID FOUND:", lid);
+    const listerInfo = await accountModel.retrieveLister(lid);
+
+    if (!listerInfo) {
+        return res.redirect("/admin-lister")
+    }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
 exports.deleteLister = async (req, res) => {
-    let uid = req.body.uid;
-    console.log("UID FOUND:", uid);
-    let listerInfo = await accountModel.retrieveLister(uid);
+    let lid = req.body.lid;
+    console.log("LID FOUND:", lid);
+    let listerInfo = await accountModel.retrieveLister(lid);
     let error = "";
     try {
-        await accountModel.deleteLister(uid);
+        await accountModel.deleteLister(lid);
         console.log("lister deleted!");
         return res.redirect("/admin-lister");
     } catch (err) {
@@ -304,7 +309,7 @@ exports.displayUpdateLister = async (req, res) => {
     // shows update details form for user
     // retrieves profile details for user from database
     // and is put as default value for form fields
-    const uid = req.query.lid;
+    const lid = req.query.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
 
     if(!originalDetails || originalDetails.statusL !== "approved") {
@@ -335,7 +340,7 @@ exports.updateLister = async (req, res) => {
     const originalDetails = await accountModel.retrieveLister(lid);
 
     if(!originalDetails || originalDetails.statusL !== "approved") {
-        console.log("Lister not found or approved:", uid);
+        console.log("Lister not found or approved:", lid);
         return res.redirect("/admin-lister");
     }
 

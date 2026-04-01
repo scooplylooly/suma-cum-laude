@@ -20,7 +20,7 @@
                 <p>Current pet(s) owned : <%= listerInfo.pets %></p>
                 <p>Experience with adoption : <%= listerInfo.experience %></p>
                 <p>Current status : <%= listerInfo.statusL %></p>
-                <input type="hidden" value="<%=listerInfo.uid%>" name="uid">
+                <input type="hidden" value="<%=listerInfo._id%>" name="lid">
                 <button type="submit" onclick="return confirm ('WARNING: Are you sure? This action cannot be undone and all data will be lost')">Confirm Deletion</button>
             </form>
         </div>

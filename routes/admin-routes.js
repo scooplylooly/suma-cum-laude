@@ -75,7 +75,7 @@ router.get(
     adminController.displayDeleteLister,
 );
 router.post("/delete-lister-profile", adminController.deleteLister);
-
+ 
 router.get(
     "/view-user-applications",
     authMiddleware.isAdmin,

@@ -215,8 +215,13 @@ async function rejectLister(userId) {
     return await lister.updateOne({ _id: userId }, { statusL: "rejected" });
 }
 
-async function retrieveLister(userId) {
-    return await lister.findOne({ _id: userId }).lean();
+async function retrieveLister(id) {
+    let found = await lister.findOne({ uid: id }).lean();
+    
+    if (!found) {
+        found = await lister.findOne({ _id: id }).lean();
+    }
+    return found;
 }
 
 async function getAllListers() {
@@ -246,8 +251,8 @@ async function updateUserRole (userId, role) {
     );
 }
 
-async function deleteLister(userID) {
-    return lister.deleteOne({ _id: userID });
+async function deleteLister(listerID) {
+    return lister.deleteOne({ _id: listerID });
 }
 
 module.exports = {
