@@ -30,6 +30,9 @@ exports.showAdminPage = async (req, res) => {
     console.log("Total Users: " + totalUsers)
     const totalFaqs = await faqModel.countFaqs({})
     console.log("Total FAQs: " + totalFaqs)
+    const avgDaysUnadopted = await petModel.avgDaysUnadopted();
+    const avgDaysUnadoptedByType = await petModel.avgDaysUnadoptedByType();
+    const adoptionRateByType = await petModel.adoptionRateByType();
     
     if (!user) {
         return res.send(`
@@ -50,6 +53,9 @@ exports.showAdminPage = async (req, res) => {
             totalFaqs,
             totalUsers,
             topPetTypes,
+            avgDaysUnadopted,
+            avgDaysUnadoptedByType,
+            adoptionRateByType
 
          });
     } else {
@@ -274,7 +280,7 @@ exports.showAdminDashboard = async (req, res) => {
             totalApplications,
             pendingApplications,
             totalFaqs,
-            totalUsers 
+            totalUsers
         })
     } catch(error) {
         console.error(error)
