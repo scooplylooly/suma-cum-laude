@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Page</title>
-        <link rel="stylesheet" type="text/css" href="./style/admin-page.css" />
+        <link rel="stylesheet" type="text/css" href="/style/admin-page.css" />
     </head>
     <body>
         <%- include('common/header') %>
@@ -21,7 +21,7 @@
             <!-- Admin functionalities can be added here -->
             <section class="admin-grid">
                 <div class="admin-card">
-                    <a href="/admin-listings">
+                    <a href="/admin/listings">
                         <button>Manage Listings</button>
                     </a>
                     <p>
@@ -33,7 +33,7 @@
             for admin to review and approve/reject listings. can edit and delete them too-->
 
                 <div class="admin-card">
-                    <a href="/admin-users">
+                    <a href="/admin/users">
                         <button>Manage Users</button>
                     </a>
                     <p>
@@ -44,7 +44,7 @@
                 <!-- will see all users info in the db and can edit/delete users if needed -->
 
                 <div class="admin-card">
-                    <a href="/">
+                    <a href="/admin/listers">
                         <button>Manage Listers</button>
                     </a>
                     <p>
@@ -54,7 +54,7 @@
                 <!-- will see all listers that have applied to be listers and can approve/reject them -->
 
                 <div class="admin-card">
-                    <a href="/">
+                    <a href="/admin/faq">
                         <button>Manage FAQ</button>
                     </a>
                     <p>
@@ -65,37 +65,55 @@
                 <!-- will see all meet-ups that have been scheduled by users and can approve/reject them. can edit and delete them too-->
             </section>
         </main>
-        <h1>Admin Dashboard</h1>
-    
-    <h2>Stats</h2>
-    <table border="1">
-        <tr>
-            <th>Total Pets</th>
-            <th>Total Applications</th>
-            <th>Pending Applications</th>
-            <th>Total FAQs</th>
-            <th>Total Users</th>
-        </tr>
-        <tr>
-            <td><%= totalPets %></td>
-            <td><%= totalApplications %></td>
-            <td><%= pendingApplications %></td>
-            <td><%= totalFaqs %></td>
-            <td><%= totalUsers %></td>
-        </tr>
-    </table>
-    <% for (let entry of topPetTypes) { %>
-    <p><%= entry.type %>: <%= Math.round((entry.count/totalApplications)*100) %>%</p>
-<% } %>
-    <h2>Quick Actions</h2>
-    <div>
-        <a href="/admin/">Manage Pets</a>
-        <a href="/admin/listings">Manage Listings</a>
-        <a>Manage Applications</a>
-        <a href="/admin/faq">Manage FAQs</a>
-        <a href="/admin/users">Manage Users</a>
-    </div>
+       <section class="admin-section">
+            <h2>Dashboard</h2>
+            <table class="admin-stats-table">
+                <tr>
+                    <th>Total Pets</th>
+                    <th>Total Applications</th>
+                    <th>Pending Applications</th>
+                    <th>Total FAQs</th>
+                    <th>Total Users</th>
+                </tr>
+                <tr>
+                    <td><%= totalPets %></td>
+                    <td><%= totalApplications %></td>
+                    <td><%= pendingApplications %></td>
+                    <td><%= totalFaqs %></td>
+                    <td><%= totalUsers %></td>
+                </tr>
+            </table>
 
+            <div class="pet-type-list">
+                <% for (let entry of topPetTypes) { %>
+                    <div class="pet-type-item">
+                        <div class="pet-type-label">
+                            <span><%= entry.type %></span>
+                            <span><%= Math.round((entry.count / totalApplications) * 100) %>%</span>
+                        </div>
+                        <div class="pet-type-bar">
+                            <div>
+                                class="pet-type-fill"
+                                style="width: <%= Math.round((entry.count / totalApplications) * 100) %>%;">
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="/admin/listings">Manage Listings</a>
+                <a href="/admin/faq">Manage FAQs</a>
+                <a href="/admin/users">Manage Users</a>
+                <a href="/admin/listers">Manage Listers</a>
+            </div>
+        </section>
+            <% for (let entry of topPetTypes) { %>
+            <p><%= entry.type %>: <%= Math.round((entry.count/totalApplications)*100) %>%</p>
+        <% } %>
 
         <%- include('common/footer') %>
     </body>
