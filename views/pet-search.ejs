@@ -31,11 +31,10 @@
             <%if (pet.score !== null){%>
                 <h5>Match: <%=pet.score%>%</h5>
             <%}%>
-            <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
-            <h5>Date Of Birth: <%=pet.dob%></h5>
-            
-          
-            
+            <%if (pet.adopted == false && pet.uid != user._id) {%>
+            <h5><b>Breed:</b> <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+            <h5><b>Date Of Birth:</b> <%=pet.dob%></h5>
+            <%}%>
             <%if ((pet.adopted == false && pet.uid != user._id) && pids.includes(pet._id.toString()) == false) {%>
                 <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
             <% } else if (pet.adopted == true) {%>
