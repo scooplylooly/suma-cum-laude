@@ -367,17 +367,17 @@ exports.petUpdated = async (req, res) => {
     console.log("Old image:", oldImageName);
     console.log("New image filename:", imageFilename);
     let user = req.session.user;
-    let name = req.body.name;
-    let gender = req.body.gender;
-    let desc = req.body.desc;
-    let dob = req.body.dob;
-    let hdbApproved = req.body.hdbApproved;
-    let vaccinated = req.body.vaccinated;
-    let sterilized = req.body.sterilized;
-    let personality = req.body.personality;
+    let name = (req.body.name ?? "").trim() || pet.name;
+    let gender = (req.body.gender ?? "").trim() || pet.gender;
+    let desc = (req.body.desc ?? "").trim() || pet.description;
+    let dob = (req.body.dob ?? "").trim() || pet.dob;
+    let hdbApproved = (req.body.hdbApproved ?? "").trim() || pet.hdbApproved.toString();
+    let vaccinated = (req.body.vaccinated ?? "").trim() || pet.vaccinated.toString();
+    let sterilized = (req.body.sterilized ?? "").trim() || pet.sterilized.toString();
+    let personality = req.body.personality || pet.personality;
     let createdByAdmin = user.role == "admin" ? true : false;
-    let activityLevel = req.body.activityLevel;
-    let experienceLevel = req.body.experienceLevel;
+    let activityLevel = (req.body.activityLevel ?? "").trim() || pet.activityLevel;
+    let experienceLevel = (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
 
     let errorMsg = "";
     let successMsg = "";
