@@ -164,6 +164,11 @@ const applicationSchema = new mongoose.Schema(
             enum: ["low", "medium", "high"],
             default: "medium"
         },
+        experienceLevel: {
+            type: String,
+            enum: ["beginner","intermediate","experienced"],
+            default: "intermediate",
+        }
     },
     {
         timestamps: true,

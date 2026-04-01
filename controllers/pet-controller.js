@@ -69,10 +69,13 @@ exports.searchPet = async (req, res) => {
     const applications = await listing.findApplicationbyUID(user._id);
 
     allPets.reverse();
+<<<<<<< HEAD
     let pids = []
     for (let application of applications) {
         pids.push(application.pid.toString())
     }
+=======
+>>>>>>> 08f2f1b7f5c3aa9b9550ee07200791ab2a34a62c
     let pets = [];
 
     if (nameSearched !== "") {

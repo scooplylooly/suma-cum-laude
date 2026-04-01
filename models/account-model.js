@@ -58,7 +58,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
             DOB,
             password: hashedPassword, // hashes the password for security
             securityKey,
-            role: "user"
+            role,
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -178,6 +178,7 @@ async function getAllUsers() {
 const updatePreferences = async (userId, preferences) => {
     return await users.findByIdAndUpdate(userId, {preferences})
 }
+
 
 const countUsers = async () => {
     try {
