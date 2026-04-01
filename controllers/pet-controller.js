@@ -629,13 +629,18 @@ exports.updateApplication = async (req, res) => {
     });
 };
 exports.updateApplicationDetails = async (req, res) => {
+    const user = req.session.user;
+    
+    if (!user) {
+        return res.redirect("/login")
+    };
+
     const houseType = req.body.houseType;
     const existingPets = req.body.existingPets;
-    const reason = req.body.reason;
+    const reason = req.body.applyReason;
     const contactNo = req.body.contactNo;
     const income = req.body.income;
     const petExperience = req.body.petExperience;
-    const user = req.session.user;
     const appID = req.body.appID;
     const uid = user._id;
     if (
