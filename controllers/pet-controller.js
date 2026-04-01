@@ -42,14 +42,16 @@ exports.displayPets = async (req, res) => {
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
     const applications = await listing.findApplicationbyUID(user._id);
-    const pids = applications.map((application) => String(application.pid));
+    let pids = [];
+    for (let application of applications) {
+        pids.push(application.pid.toString())
+    };
 
     pets.reverse();
 
-    pets = pets.map((pet) => ({
-        ...pet,
-        score: petScorer.calculateScore(preferences, pet).score,
-    }));
+    for (let pet of pets) {
+    pet.score = petScorer.calculateScore(preferences, pet).score;
+    }
 
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
 
@@ -93,10 +95,9 @@ exports.searchPet = async (req, res) => {
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
 
-    pets = pets.map((pet) => ({
-        ...pet,
-        score: petScorer.calculateScore(preferences, pet).score,
-    }));
+    for (let pet of pets) {
+    pet.score = petScorer.calculateScore(preferences, pet).score;
+    };
 
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
 
@@ -336,13 +337,6 @@ exports.showPetlistingProfile = async (req, res) => {
     });
 };
 
-exports.changePetlistingProfile = async (req, res) => {
-    const pid = req.query.pid;
-    let pet = await listing.findPetById(pid);
-    res.render("edit-pet-listing", {
-        pet,
-    });
-};
 
 exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
