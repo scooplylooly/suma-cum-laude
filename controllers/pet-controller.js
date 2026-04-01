@@ -1,8 +1,6 @@
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
-const { act } = require("react");
-const { adminFaqs } = require("./faq-controller");
 
 const petPersonalities = [
     "affectionate",
@@ -44,13 +42,13 @@ exports.displayPets = async (req, res) => {
     const applications = await listing.findApplicationbyUID(user._id);
     let pids = [];
     for (let application of applications) {
-        pids.push(application.pid.toString())
-    };
+        pids.push(application.pid.toString());
+    }
 
     pets.reverse();
 
     for (let pet of pets) {
-    pet.score = petScorer.calculateScore(preferences, pet).score;
+        pet.score = petScorer.calculateScore(preferences, pet).score;
     }
 
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
@@ -96,8 +94,8 @@ exports.searchPet = async (req, res) => {
     const preferences = userDetails?.preferences ?? {};
 
     for (let pet of pets) {
-    pet.score = petScorer.calculateScore(preferences, pet).score;
-    };
+        pet.score = petScorer.calculateScore(preferences, pet).score;
+    }
 
     pets.sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
 
@@ -151,6 +149,7 @@ exports.applyInterest = async (req, res) => {
     let petExperience = req.body.petExperience;
     let income = req.body.income;
     let contactNo = req.body.contactNo;
+    const user = req.session.user;
 
     if (
         !reason ||
@@ -165,6 +164,8 @@ exports.applyInterest = async (req, res) => {
             petFound: pet,
             errorMsg: errorMsg,
             successMsg: successMsg,
+            user,
+            userInfo: await accountModel.retrieveProfile(uid),
         });
     }
 
@@ -336,7 +337,6 @@ exports.showPetlistingProfile = async (req, res) => {
         errorMsg: "",
     });
 };
-
 
 exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
@@ -544,13 +544,7 @@ exports.petDeleted = async (req, res) => {
         await listing.deletePetData(pid, pet.img);
 
         console.log("deleted");
-        return res.send(`
-            <h3 style="color: green;"> Pet has been withdrawn from listing! Redirecting...</h3>
-            <script>
-                setTimeout(() => {
-                    location.href = "/view-listings"
-                    },3000)
-            </script>`);
+        return res.redirect("/view-listings");
     } catch (err) {
         console.error("Trouble deleting pet", err);
         fail = "Error deleting pet";
@@ -627,26 +621,67 @@ exports.updateApplication = async (req, res) => {
     const appID = req.query.appID;
     const user = req.session.user;
     const application = await listing.findApplicationByID(appID);
-    return res.render("update-application", { application, user });
+    return res.render("update-application", {
+        application,
+        user,
+        errorMsg: "",
+        successMsg: "",
+    });
 };
 exports.updateApplicationDetails = async (req, res) => {
-    const updatedFields = {
-        houseType: req.body.houseType,
-        income: req.body.income,
-        petExperience: req.body.petExperience,
-        existingPets: req.body.existingPets,
-        contactNo: req.body.contactNo,
-        reason: req.body.applyReason,
-    };
+    const houseType = req.body.houseType;
+    const existingPets = req.body.existingPets;
+    const reason = req.body.reason;
+    const contactNo = req.body.contactNo;
+    const income = req.body.income;
+    const petExperience = req.body.petExperience;
     const user = req.session.user;
     const appID = req.body.appID;
     const uid = user._id;
+    if (
+        !houseType ||
+        !existingPets ||
+        !reason ||
+        !contactNo ||
+        !income ||
+        !petExperience
+    ) {
+        errorMsg = "Please fill in all fields to update your application.";
+        const application = await listing.findApplicationByID(req.body.appID);
+        return res.render("update-application", {
+            application,
+            user,
+            errorMsg,
+            successMsg: "",
+        });
+    }
+
+    const updatedFields = {
+        houseType: houseType,
+        income: income,
+        petExperience: petExperience,
+        existingPets: existingPets,
+        contactNo: contactNo,
+        reason: reason,
+    };
+
     try {
         await listing.updateApplicationDetails(appID, updatedFields);
         console.log("application updated");
     } catch (error) {
         console.log("Error:", error);
+        return res.render("update-application", {
+            application: await listing.findApplicationByID(appID),
+            user,
+            errorMsg: "Error updating application.",
+            successMsg: "",
+        });
     }
     const applications = await listing.findApplicationbyUID(uid);
-    return res.render("applications-status", { user, applications });
+    return res.render("applications-status", {
+        user,
+        applications,
+        errorMsg: "",
+        successMsg: "Application updated successfully!",
+    });
 };

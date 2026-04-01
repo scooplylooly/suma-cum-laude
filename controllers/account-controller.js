@@ -461,39 +461,39 @@ const animalTypes = [
     "guinea pig",
     "other",
 ];
-
+const petPersonalities = [
+    "affectionate",
+    "independent",
+    "playful",
+    "curious",
+    "gentle",
+    "vocal",
+    "shy",
+    "bold",
+    "couch potato",
+    "hunter",
+    "social",
+    "energetic",
+    "loyal",
+    "friendly",
+    "protective",
+    "calm",
+    "smart",
+    "goofy",
+    "cuddly",
+    "adventurous",
+    "sweet",
+    "relaxed",
+    "outgoing",
+    "loving",
+    "resilient",
+    "chatty",
+    "foodie",
+    "active",
+];
+petPersonalities.sort();
 exports.userPreferenceForm = async (req, res) => {
     try {
-        const petPersonalities = [
-            "affectionate",
-            "independent",
-            "playful",
-            "curious",
-            "gentle",
-            "vocal",
-            "shy",
-            "bold",
-            "couch potato",
-            "hunter",
-            "social",
-            "energetic",
-            "loyal",
-            "friendly",
-            "protective",
-            "calm",
-            "smart",
-            "goofy",
-            "cuddly",
-            "adventurous",
-            "sweet",
-            "relaxed",
-            "outgoing",
-            "loving",
-            "resilient",
-            "chatty",
-            "foodie",
-            "active",
-        ];
         const userId = req.session.user._id;
         const userInfo = await accountModel.retrieveProfile(userId);
         const userPref = userInfo.preferences;
@@ -512,14 +512,21 @@ exports.userPreferenceForm = async (req, res) => {
 
 exports.updatePreferences = async (req, res) => {
     try {
-        const userId = req.session.user._id;
+        const userId = req.session.user._id ;
+        const userInfo = await accountModel.retrieveProfile(userId);
+        const userPref = userInfo.preferences;
+        const housingType = req.body.housingType || "";
+        const preferredAnimal = req.body.preferredAnimal || [];
+        const preferredTraits = req.body.preferredTraits || [];
+        const experienceLevel = req.body.experienceLevel || userPref.experienceLevel;
+        const activityLevel = req.body.activityLevel || userPref.activityLevel;
 
         const preferences = {
-            housingType: req.body.housingType,
-            preferredAnimal: req.body.preferredAnimal || [],
-            preferredTraits: req.body.preferredTraits || [],
-            experienceLevel: req.body.experienceLevel,
-            activityLevel: req.body.activityLevel,
+            housingType: housingType,
+            preferredAnimal: preferredAnimal,
+            preferredTraits: preferredTraits,
+            experienceLevel: experienceLevel,
+            activityLevel: activityLevel,
         };
         await accountModel.updatePreferences(userId, preferences);
         console.log("Success");

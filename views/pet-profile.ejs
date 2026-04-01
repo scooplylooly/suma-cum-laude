@@ -24,6 +24,12 @@
             <%if (user.role == "admin"){%>
             <h4>Created by Admin : <%= petFound[key] ? 'Yes' : 'No' %></h4>
             <%}%>
+        <%}else if (key == 'personality' ){%>
+            <%if (key == []){%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
+            <%}else{%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
+            <%}%>
         <%}else if (petFound[key] == true ){%>
             <%if (key == 'hdbApproved' ){%>
                 <h4>HDB Aproved : Yes</h4>
@@ -35,12 +41,6 @@
                 <h4>HDB Aproved : No</h4>
             <% }else{ %>
                 <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
-            <%}%>
-        <%}else if (key == 'personality' ){%>
-            <%if (key == []){%>
-            <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
-            <%}else{%>
-            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
             <%}%>
         <%}else if (key == 'activityLevel' ){%>
             <h4>Activity Level : <%= petFound[key][0].toUpperCase() + petFound[key].slice(1) %></h4>

@@ -24,6 +24,8 @@
                             <p>#<%= petFound[key] %></p>
                         <% } else if (key == "dob") { %>
                             <p><span>Date of Birth:</span> <%= petFound[key] %></p>
+                        <%}else if (key == 'personality'){%>
+                            <p><span>Personality:</span> <%= petFound[key].length > 0 ? petFound[key].join(', ') : 'N/A' %></p>
                         <% } else if (petFound[key] == true) { %>
                             <% if (key == 'hdbApproved') { %>
                                 <p><span>HDB Approved:</span> Yes</p>
@@ -39,12 +41,6 @@
                                 <p><span>Created by Admin:</span> No</p>
                             <% } else { %>
                                 <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> No</p>
-                            <% } %>
-                        <% } else if (key == 'personality') { %>
-                            <% if (petFound[key].length === 0) { %>
-                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> N/A</p>
-                            <% } else { %>
-                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> <%= petFound[key].join(', ') %></p>
                             <% } %>
                         <% } else if (key == 'ownerName') { %>
                             <p><span>Listed by:</span> <%= petFound[key] %></p>

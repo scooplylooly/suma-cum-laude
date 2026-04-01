@@ -34,7 +34,13 @@ main {
     font-size: 38px;
     letter-spacing: 0.3px;
 }
-
+.preferences-container p {
+    text-align: center;
+    color: #666;
+    margin: 0 0 32px;
+    font-size: 18px;
+    line-height: 1.6;
+}
 /* ===== FORM ===== */
 .preferences-form {
     display: flex;
