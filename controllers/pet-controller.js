@@ -42,6 +42,8 @@ exports.displayPets = async (req, res) => {
     const user = req.session.user;
     const userDetails = await accountModel.retrieveProfile(user._id);
     const preferences = userDetails?.preferences ?? {};
+    const applications = await listing.findApplicationbyUID(user._id);
+    const pids = applications.map((application) => String(application.pid));
 
     pets.reverse();
 
@@ -56,6 +58,7 @@ exports.displayPets = async (req, res) => {
         pets,
         nameSearched: "",
         user,
+        pids,
     });
 };
 
@@ -63,13 +66,10 @@ exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
     const user = req.session.user;
+    const applications = await listing.findApplicationbyUID(user._id);
+    const pids = applications.map((application) => String(application.pid));
 
     allPets.reverse();
-    const applications = listing.findApplicationbyUID(user._id)
-    pids = []
-    for (let application of applications) {
-        pids.push(application.pid)
-    }
     let pets = [];
 
     if (nameSearched !== "") {

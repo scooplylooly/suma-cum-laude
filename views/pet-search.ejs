@@ -33,19 +33,14 @@
             <%}%>
             <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
             <h5>Date Of Birth: <%=pet.dob%></h5>
-<<<<<<< HEAD
-            <%if (pet.adopted == false && pet.uid != user._id) {%>
+            <% const isOwner = user && String(user._id) === String(pet.uid); %>
+            <% const hasApplied = Array.isArray(pids) && pids.includes(String(pet._id)); %>
+            <%if (!pet.adopted && !isOwner && !hasApplied) {%>
                 <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
-            <% } else if (user && String(user._id) === String(pet.uid)) { %>
+            <% } else if (isOwner) { %>
                 <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
-=======
-            <%if (pet.adopted == false || pids.includes(pet._id) == false) {%>
-            <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
-            <%}else if(user==pet.uid){%>
-                <a href="/view-applications"><button>View Applications</button></a>
-            <%}else if (pids.includes(pet._id)) {%>
-                <a href="/applications-status"><button>View Application Status</button></a>
->>>>>>> a4c7174 (Fixed an issue??)
+            <% } else if (hasApplied) { %>
+                <a href="/application-status"><button>View Application Status</button></a>
             <%}else{%>
                 <%if (pet.adopted == true){%>
                 <p class="status adopted">Adopted</p>
