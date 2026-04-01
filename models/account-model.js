@@ -30,6 +30,13 @@ const usersSchema = new mongoose.Schema({
         default: "user",
         required: [true, "User role must be stated"],
     },
+    preferences: {
+        housingType: String,
+        preferredAnimal: [String],
+        preferredTraits: [String],
+        experienceLevel: String,
+        activityLevel: String
+    }
 });
 
 const users = mongoose.model("users", usersSchema, "users");
@@ -37,10 +44,13 @@ const users = mongoose.model("users", usersSchema, "users");
 async function registerUser(userName, email, DOB, password, securityKey, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
-        throw new Error(
-            "Username already exists. Please choose another username.",
-        );
-    } else {
+        throw new Error("Username already exists. Please choose another username.");
+    } 
+    
+    if (await users.findOne({ email: email })) {
+        throw new Error("Email already exists. Please use another email.")
+    }
+    else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
             userName,
@@ -165,6 +175,17 @@ async function getAllUsers() {
     return users.find().lean();
 }
 
+const updatePreferences = async (userId, preferences) => {
+    return await users.findByIdAndUpdate(userId, {preferences})
+}
+const countUsers = async () => {
+    try {
+        return users.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
 module.exports = {
     authenticateUser,
     registerUser,
@@ -177,4 +198,6 @@ module.exports = {
     checkSecurityKey,
     securePassword,
     findUserByName,
+    updatePreferences,
+    countUsers
 };

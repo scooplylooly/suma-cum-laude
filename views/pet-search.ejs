@@ -23,11 +23,14 @@
     <%if(pets.length > 0){%>
     <h2>Adoption Listings</h2>
     <div class="container-flex">
-    <% for(let pet of pets){%>
+    <%for(let pet of pets){%>
         <%if (pet.approved){%>
         <div class="item"> 
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.name%></h4>
+            <%if (pet.score !== null){%>
+                <h5>Match: <%=pet.score%>%</h5>
+            <%}%>
             <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
             <h5>Date Of Birth: <%=pet.dob%></h5>
             

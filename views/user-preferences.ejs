@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Preferences</title>
+    <link rel="stylesheet" href="/style/user-preferences.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+<main>
+    <div class="preferences-container">
+        <h1>Set Your Preferences</h1>
+
+        <form action="/preferences" method="POST" class="preferences-form">
+
+            <div>
+                <label for="housingType">Housing Type:</label>
+                <select name="housingType" id="housingType">
+                    <option value="">-- Select --</option>
+                    <option value="HDB">HDB</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Landed">Landed</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Preferred Animal:</label><br>
+                <div class="checkbox-group">
+                    <% animalTypes.forEach(element => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="preferredAnimal" value="<%= element %>">
+                            <label><%= element %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div>
+                <label>Preferred Traits:</label><br>
+                <div class="checkbox-group">
+                    <% petPersonalities.forEach(element => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="preferredTraits" value="<%= element %>">
+                            <label><%= element %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div>
+                <label for="experienceLevel">Experience Level:</label>
+                <select name="experienceLevel" id="experienceLevel">
+                    <option value="">-- Select --</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="experienced">Experienced</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="activityLevel">Activity Level:</label>
+                <select name="activityLevel" id="activityLevel">
+                    <option value="">-- Select --</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</main>

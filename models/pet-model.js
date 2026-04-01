@@ -21,61 +21,60 @@ const petSchema = new mongoose.Schema(
                 "other",
             ],
         },
-
         img: {
             type: String,
             default: "",
         },
-
         name: {
             type: String,
             required: true,
             trim: true,
         },
-
         breed: {
             type: String,
             required: true,
             trim: true,
         },
-
         gender: {
             type: String,
             enum: ["male", "female"],
             required: true,
         },
-
         description: {
             type: String,
             required: true,
         },
-
         hdbApproved: {
             type: Boolean,
             default: false,
         },
-
         dob: {
             type: String,
             required: true,
             min: 0,
         },
-
         vaccinated: {
             type: Boolean,
             default: false,
         },
-
         sterilized: {
             type: Boolean,
             default: false,
         },
-
         personality: {
             type: [String],
             default: [],
         },
-
+        activityLevel: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium",
+        },
+        experienceLevel: {
+            type: String,
+            enum: ["beginner", "intermediate", "experienced"],
+            default: "intermediate",
+        },
         uid: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "users",
@@ -125,6 +124,11 @@ const applicationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        petType: {
+            type: String,
+            default: ''
+
+        },
         reason: {
             type: String,
             required: true,
@@ -155,6 +159,16 @@ const applicationSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        activityLevel: {
+            type: String,
+            enum: ["low", "medium", "high"],
+            default: "medium"
+        },
+        experienceLevel: {
+            type: String,
+            enum: ["beginner","intermediate","experienced"],
+            default: "intermediate",
+        }
     },
     {
         timestamps: true,
@@ -364,3 +378,31 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
         { new: true },
     );
 };
+
+
+
+//For Admin Dashboard
+
+exports.countPets = async function () {
+    try {
+        return Pet.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countTotalApplications = async function () {
+    try {
+        return Application.countDocuments({})
+    } catch(error) {
+        return error
+    }
+}
+
+exports.countPendingApplications = async function () {
+    try {
+        return Application.countDocuments({ status: 'pending' })
+    } catch(error) {
+        return error
+    }
+}
