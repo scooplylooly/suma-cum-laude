@@ -337,7 +337,7 @@ exports.updateProfile = async (req, res) => {
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
     const securityKey = originalDetails.securityKey;
-    // password is not displayed in the fields for securiy reasons
+    // password is not displayed in the fields for security reasons
     res.render("update-user-profile", {
         userName,
         email,
