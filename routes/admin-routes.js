@@ -6,11 +6,11 @@ const authMiddleware = require("../middleware/auth-middleware.js");
 
 router.get("/admin-page", adminController.showAdminPage);
 router.get(
-    "/admin-listings",
+    "/admin/listings",
     authMiddleware.isAdmin,
     adminController.showIncomingListings,
 );
-router.post("/admin-listings", adminController.filterListings);
+router.post("/admin/listings", adminController.filterListings);
 router.get(
     "/admin-change-listings-status",
     authMiddleware.isAdmin,
@@ -21,8 +21,8 @@ router.post(
     authMiddleware.isAdmin,
     adminController.updateListingStatus,
 );
-router.get("/admin-users", authMiddleware.isAdmin, adminController.showUsers);
-router.post("/admin-users", adminController.filterUsers);
+router.get("/admin/users", authMiddleware.isAdmin, adminController.showUsers);
+router.post("/admin/users", adminController.filterUsers);
 
 router.get(
     "/delete-user-profile",
@@ -36,4 +36,10 @@ router.get(
     adminController.displayUpdateUser,
 );
 router.post("/admin-user-update", adminController.updateUser);
+router.get(
+    "/view-user-applications",
+    authMiddleware.isAdmin,
+    adminController.viewUserApplications,
+);
+router.get("/admin/dashboard", authMiddleware.isAdmin, adminController.showAdminDashboard);
 module.exports = router;

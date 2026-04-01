@@ -23,25 +23,27 @@
     <%if(pets.length > 0){%>
     <h2>Adoption Listings</h2>
     <div class="container-flex">
-    <% for(let pet of pets){%>
+    <%for(let pet of pets){%>
         <%if (pet.approved){%>
         <div class="item"> 
         <img src="/images/<%=pet.img %>.jpg" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" alt="<%= pet.Name%>">
             <h4><%=pet.name%></h4>
-            <h5>Breed: <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
-            <h5>Date Of Birth: <%=pet.dob%></h5>
-            
-          
-            
-            <%if ((pet.adopted == false && pet.uid != user._id) && pids.includes(pet._id.toString()) == false) {%>
-                <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
-            <% } else if (pet.adopted == true) {%>
-                 <p class="status adopted">Adopted</p>
-            <%}else if (user && String(user._id) === String(pet.uid)) { %>
-                <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
-            <%}else if (pids.includes(pet._id.toString())) {%>
-                <a href="/application-status"><button>View Application Status</button></a>
+            <%if (pet.score !== null){%>
+                <h5>Match: <%=pet.score%>%</h5>
             <%}%>
+            <h5><b>Breed:</b> <%=pet.breed[0].toUpperCase() + pet.breed.slice(1)%></h5>
+            <h5><b>Date Of Birth:</b> <%=pet.dob%></h5>
+            <% const isOwner = user && String(user._id) === String(pet.uid); %>
+            <% const hasApplied = Array.isArray(pids) && pids.includes(String(pet._id)); %>
+            <%if (!pet.adopted && !isOwner && !hasApplied) {%>
+                <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
+            <% } else if (isOwner) { %>
+                <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
+            <% } else if (hasApplied) { %>
+                <a href="/application-status"><button>View Application Status</button></a>
+            <% } else if (pet.adopted) { %>
+                <p class="status adopted">Adopted</p>
+            <% } %>
         </div>
     <%}%>
   

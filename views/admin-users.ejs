@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Users</title>
+    <title>Users Management</title>
     <link rel="stylesheet" href="/style/admin-listings.css">
 
 </head>
@@ -22,13 +22,13 @@
             </a>
         </div>
 
-        <form action="/admin-users" method="post" class="filter-form">
+        <form action="/admin/users" method="post" class="filter-form">
             <label for="userType">Pick a user type:</label>
             <select name="userType" id="userType">
-                <option value="" <%= selectedType === "" ? "selected" : "" %>>All</option>
-                <option value="user" <%= selectedType === 'users' ? "selected" : "" %>> Default users</option>
-                <option value="lister"<%= selectedType === 'lister' ? "selected" : "" %>>Listers</option>
-                <option value="admin"<%= selectedType === 'admin' ? "selected" : "" %>>Admin</option>
+                <option value="" <%= selectedType == "" ? "selected" : "" %>>All</option>
+                <option value="user" <%= selectedType == 'user' ? "selected" : "" %>> Default users</option>
+                <option value="lister"<%= selectedType == 'lister' ? "selected" : "" %>>Listers</option>
+                <option value="admin"<%= selectedType == 'admin' ? "selected" : "" %>>Admin</option>
             </select>
             <button type="submit">Filter</button>
         </form>
@@ -37,7 +37,7 @@
             <h4 class="empty-state">No listings found.</h4>
         <% } else { %>
             <h3>
-                Showing <%= selectedType === "user" ? "Default Users" : selectedType === "lister" ? "Listers" : selectedType === "admin" ? "Admin" : "All" %> 
+                Showing <%= selectedType == "user" ? "Default Users" : selectedType == "lister" ? "Listers" : selectedType == "admin" ? "Admin" : "All" %> 
             </h3>
 
             <div class="container-flex">
@@ -45,10 +45,10 @@
                     <%if(user._id != adminUserId){%>
                     <div class="item">
                         <h4><%= user.userName %></h4>
-                        <p><span>ID</span> : <%=user._id%></user._id></p>
+                        <p class="pet-id"><%= user._id %></p>
                         <p><span>Email:</span> <%= user.email%></p>
                         <p><span>Date Of Birth:</span> <%= user.DOB %></p>
-                        <p><span>Role</span>: <%=user.role == "user" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
+                        <p><span>Role:</span> <%= user.role == "user" ? "Default User" : user.role == "lister" ? "Lister" : user.role === "admin" ? "Admin" : "None" %></p>
                         
                         <div class="card-actions">
                             <a href="/admin-user-update?uid=<%=user._id%>">
@@ -56,6 +56,9 @@
                             </a>
                             <a href="/delete-user-profile?uid=<%=user._id%>">
                                 <button type="button">Delete User</button>
+                            </a>
+                            <a href="/view-user-applications?uid=<%=user._id%>">
+                                <button type="button">View user's applications</button>
                             </a>
                         </div>
                     </div>

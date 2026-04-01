@@ -35,7 +35,7 @@ server.use((req, res, next) => {
 server.use("/", accountRoutes);
 server.use("/", petRoutes);
 server.use("/", adminRoutes);
-server.use("/faq", faqRoutes);
+server.use("/", faqRoutes);
 
 server.get("/", (req, res) => {
     res.redirect("/adopt");

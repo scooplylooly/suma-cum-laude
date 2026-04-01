@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Incoming Listings</title>
+    <title>Listing Management</title>
     <link rel="stylesheet" href="/style/admin-listings.css">
 </head>
 <body>
@@ -17,11 +17,11 @@
 
         <div class="top-actions">
             <a href="/create-listing" class="top-link">
-                <button type="button">Create Listing</button>
+                <button type="button">Create Listing for User</button>
             </a>
         </div>
 
-        <form action="/admin-listings" method="post" class="filter-form">
+        <form action="/admin/listings" method="post" class="filter-form">
             <label for="status">Pick a Status:</label>
             <select name="status" id="status">
                 <option value="" <%= selectedStatus === "" ? "selected" : "" %>>All</option>
@@ -44,15 +44,25 @@
                         <img src="/images/<%= listing.img %>.jpg" alt="<%= listing.name %>">
 
                         <h4><%= listing.name %></h4>
-                        <p><span>ID</span>:<%= listing._id %></p>
+
+                        <!-- subtitle -->
+                        <p class="pet-id"><%= listing._id%></p>
+
                         <p><span>Breed:</span> <%= listing.breed[0].toUpperCase() + listing.breed.slice(1) %></p>
                         <p><span>Date Of Birth:</span> <%= listing.dob %></p>
 
-                        <% if (!listing.approved) { %>
-                            <p class="status pending">Status: Pending</p>
-                        <% } else { %>
-                            <p class="status approved">Status: Approved</p>
-                        <% } %>
+                        <!-- ✅ same line -->
+                        <div class="status-row">
+                            <% if (!listing.approved) { %>
+                                <span class="status pending">Pending</span>
+                            <% } else { %>
+                                <span class="status approved">Approved</span>
+                            <% } %>
+
+                            <% if (listing.adopted) { %>
+                                <span class="status adopted">Adopted</span>
+                            <% } %>
+                        </div>
 
                         <div class="card-actions">
                             <a href="/admin-change-listings-status?pid=<%= listing._id %>">
@@ -62,7 +72,10 @@
                                 <button type="button">Update Listing</button>
                             </a>
                             <a href="/delete-pet?pid=<%= listing._id %>">
-                                <button type="button">Delete Listing</button>
+                                <button type="button" class="danger">Delete Listing</button>
+                            </a>
+                            <a href="/view-applications?pid=<%=listing._id%>">
+                                <button type="button">View Applications</button>
                             </a>
                         </div>
                     </div>

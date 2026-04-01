@@ -21,7 +21,7 @@
             <!-- Admin functionalities can be added here -->
             <section class="admin-grid">
                 <div class="admin-card">
-                    <a href="/admin-listings">
+                    <a href="/admin/listings">
                         <button>Manage Listings</button>
                     </a>
                     <p>
@@ -33,7 +33,7 @@
             for admin to review and approve/reject listings. can edit and delete them too-->
 
                 <div class="admin-card">
-                    <a href="/admin-users">
+                    <a href="/admin/users">
                         <button>Manage Users</button>
                     </a>
                     <p>
@@ -54,18 +54,7 @@
                 <!-- will see all listers that have applied to be listers and can approve/reject them -->
 
                 <div class="admin-card">
-                    <a href="/">
-                        <button>Manage Pet Applications</button>
-                    </a>
-                    <p>
-                        Handle submitted pet adoption applications and review
-                        their details.
-                    </p>
-                </div>
-                <!-- will see all applications for pets that have been submitted by users and can approve/reject them. can edit and delete them too-->
-
-                <div class="admin-card">
-                    <a href="/">
+                    <a href="/admin/faq">
                         <button>Manage FAQ</button>
                     </a>
                     <p>
@@ -76,6 +65,90 @@
                 <!-- will see all meet-ups that have been scheduled by users and can approve/reject them. can edit and delete them too-->
             </section>
         </main>
+        <h1>Admin Dashboard</h1>
+    
+    <h2>Stats</h2>
+    <table border="1">
+        <tr>
+            <th>Total Pets</th>
+            <th>Total Applications</th>
+            <th>Pending Applications</th>
+            <th>Total FAQs</th>
+            <th>Total Users</th>
+        </tr>
+        <tr>
+            <td><%= totalPets %></td>
+            <td><%= totalApplications %></td>
+            <td><%= pendingApplications %></td>
+            <td><%= totalFaqs %></td>
+            <td><%= totalUsers %></td>
+        </tr>
+    </table>
+    <% for (let entry of topPetTypes) { %>
+    <p><%= entry.type %>: <%= Math.round((entry.count/totalApplications)*100) %>%</p>
+<% } %>
+
+        <h2>Aggregated Time Averages: Pet remains Unadopted</h2>
+    <table border="1">
+        <tr>
+            <th>Average days a pet is unadopted</th>
+            <th rowspan="2">Average days a pet is unadopted (by type)</th>
+            <% if (avgDaysUnadoptedByType) { %>
+                <% Object.keys(avgDaysUnadoptedByType).forEach(type => { %>
+                    <th><%= type %></th>
+            <% }) %>
+            <% } else { %>
+                <th>No data available yet</th>
+            <% } %>
+        </tr>
+        <tr>
+            <% if (avgDaysUnadopted) { %>
+                <td><%= avgDaysUnadopted %> days</td>
+            <% } else { %>
+                <td><i>no average data available yet</i></td>
+            <% } %>
+
+            <% if (avgDaysUnadoptedByType) { %>
+                <% Object.values(avgDaysUnadoptedByType).forEach(data => { %>
+                    <td><%= data %> days</td>
+                <% }) %>
+            <% } else { %>
+                <td><i>no average data available yet</i></td>
+            <% } %>
+        </tr>
+    </table>
+
+    <h2>Adoption Rate by Pet Type</h2>
+    <% if (adoptionRateByType && Object.keys(adoptionRateByType).length) { %>
+        <table border="1">
+            <tr>
+                <th>Pet Type</th>
+                <th>Adopted</th>
+                <th>Total Listed</th>
+                <th>Adoption Rate</th>
+            </tr>
+            <% Object.entries(adoptionRateByType).forEach(([type, data]) => { %>
+            <tr>
+                <td><%= type %></td>
+                <td><%= data.adopted %></td>
+                <td><%= data.total %></td>
+                <td><%= data.rate %></td>
+            </tr>
+            <% }) %>
+        </table>
+    <% } else { %>
+        <p>No pet listing data available yet.</p>
+    <% } %>
+
+    <h2>Quick Actions</h2>
+    <div>
+        <a href="/admin/">Manage Pets</a>
+        <a href="/admin/listings">Manage Listings</a>
+        <a>Manage Applications</a>
+        <a href="/admin/faq">Manage FAQs</a>
+        <a href="/admin/users">Manage Users</a>
+    </div>
+
 
         <%- include('common/footer') %>
     </body>

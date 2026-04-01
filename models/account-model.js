@@ -29,16 +29,28 @@ const usersSchema = new mongoose.Schema({
         type: String,
         default: "user",
         required: [true, "User role must be stated"],
+    },
+    preferences: {
+        housingType: String,
+        preferredAnimal: [String],
+        preferredTraits: [String],
+        experienceLevel: String,
+        activityLevel: String
     }
 });
 
 const users = mongoose.model("users", usersSchema, "users");
 
-async function registerUser(userName, email, DOB, password, securityKey, role ) {
+async function registerUser(userName, email, DOB, password, securityKey, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
         throw new Error("Username already exists. Please choose another username.");
-    } else {
+    } 
+    
+    if (await users.findOne({ email: email })) {
+        throw new Error("Email already exists. Please use another email.")
+    }
+    else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
             userName,
@@ -46,7 +58,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role ) 
             DOB,
             password: hashedPassword, // hashes the password for security
             securityKey,
-            role
+            role: "user"
         };
         // create new user profile + add to users schema
         await addUser(newUser);
@@ -70,17 +82,19 @@ async function authenticateUser(userName, password) {
 }
 
 // function checks if password meets mininum requirements to ensure security
-function securePassword(password){
+function securePassword(password) {
     let errors = [];
-    if (password.length < 5){
-        errors.push("Password must be at least 5 characters")
-    } 
+    if (password.length < 5) {
+        errors.push("Password must be at least 5 characters");
+    }
     if (!/[!@#$%^&*]/.test(password)) {
-        errors.push("Password must contain at least one special character: !@#$%^&*")
+        errors.push(
+            "Password must contain at least one special character: !@#$%^&*",
+        );
     }
 
     if (errors.length === 0) {
-        return true 
+        return true;
     }
     // returns array of errors back to caller
     return errors;
@@ -88,9 +102,9 @@ function securePassword(password){
 
 async function checkSecurityKey(userName, securityKey) {
     // checks if securityKey matches; case insensitive
-    const data = await users.findOne({userName}).lean()
+    const data = await users.findOne({ userName }).lean();
     if (!data) {
-        return false
+        return false;
     }
     // authenticates security key: case insensitive
     return data.securityKey.toLowerCase() === securityKey.toLowerCase();
@@ -98,8 +112,8 @@ async function checkSecurityKey(userName, securityKey) {
 
 async function updatePassword(userName, hashedPassword) {
     return await users.updateOne(
-        {userName},
-        {$set: {password: hashedPassword}}
+        { userName },
+        { $set: { password: hashedPassword } },
     );
 }
 
@@ -115,24 +129,43 @@ async function addUser(user) {
 
 async function checkUserExist(userName) {
     // checks if current user exists in database
-    if (await users.findOne({userName})) {
+    if (await users.findOne({ userName })) {
         return true;
     }
     return false;
 }
+async function findUserByName(userName) {
+    return await users.findOne({ userName }).lean();
+}
 
-async function updateDetails(userId, userName, email, DOB, password, securityKey) {
+async function updateDetails(
+    userId,
+    userName,
+    email,
+    DOB,
+    password,
+    securityKey,
+    role,
+) {
     // updates the profile details of specified user
     const originalDetails = await retrieveProfile(userId);
-    return users.updateOne({ _id: userId },
-        {$set: {userName, 
-            email, 
-            DOB, 
-            // if no password was inputted in form, value defaulted to original password
-            password: password ? await bcrypt.hash(password, 10) : originalDetails.password,
-            securityKey}
-        })
-} 
+    return users.updateOne(
+        { _id: userId },
+        {
+            $set: {
+                userName,
+                email,
+                DOB,
+                // if no password was inputted in form, value defaulted to original password
+                password: password
+                    ? await bcrypt.hash(password, 10)
+                    : originalDetails.password,
+                securityKey,
+                role,
+            },
+        },
+    );
+}
 
 async function deleteUser(userId) {
     // deletes specified user from user schema
@@ -140,6 +173,18 @@ async function deleteUser(userId) {
 }
 async function getAllUsers() {
     return users.find().lean();
+}
+
+const updatePreferences = async (userId, preferences) => {
+    return await users.findByIdAndUpdate(userId, {preferences})
+}
+
+const countUsers = async () => {
+    try {
+        return users.countDocuments({})
+    } catch(error) {
+        return error
+    }
 }
 
 module.exports = {
@@ -152,5 +197,7 @@ module.exports = {
     checkUserExist,
     updatePassword,
     checkSecurityKey,
-    securePassword
+    securePassword,
+    updatePreferences,
+    countUsers
 };
