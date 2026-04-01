@@ -1,6 +1,7 @@
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
+const { act } = require("react");
 
 const petPersonalities = [
     "affectionate",
@@ -66,9 +67,9 @@ exports.searchPet = async (req, res) => {
     const applications = await listing.findApplicationbyUID(user._id);
 
     allPets.reverse();
-    let pids = []
+    let pids = [];
     for (let application of applications) {
-        pids.push(application.pid.toString())
+        pids.push(application.pid.toString());
     }
     let pets = [];
 
@@ -223,6 +224,8 @@ exports.createPetListing = async (req, res) => {
     let sterilized = req.body.sterilized;
     let personality = req.body.personality;
     let createdByAdmin = req.session.user.role == "admin" ? true : false;
+    let activityLevel = req.body.activityLevel;
+    let experienceLevel = req.body.experienceLevel;
     console.log("created by admin:", createdByAdmin);
     let errorMsg = "";
     let successMsg = "";
@@ -234,6 +237,8 @@ exports.createPetListing = async (req, res) => {
     if (!gender) missingFields.push("Gender");
     if (!desc) missingFields.push("Description");
     if (!dob) missingFields.push("Date of Birth");
+    if (activityLevel === undefined) missingFields.push("Activity Level");
+    if (experienceLevel === undefined) missingFields.push("Experience Level");
     if (user.role == "user")
         missingFields.push("The owner must be a lister to create a listing");
     if (missingFields.length > 0) {
@@ -269,6 +274,8 @@ exports.createPetListing = async (req, res) => {
         uid: user ? user._id : null,
         approved: false, // New listings start as unapproved
         createdByAdmin: createdByAdmin,
+        activityLevel: activityLevel,
+        experienceLevel: experienceLevel,
     };
 
     try {
