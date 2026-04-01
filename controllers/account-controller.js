@@ -435,6 +435,7 @@ exports.deleteProfile = async (req, res) => {
         password,
     );
     if (match) {
+        await accountModel.deleteListerByUid(req.session.user._id);
         await accountModel.deleteUser(req.session.user._id); // deletes user
         console.log("Deleting user...");
         console.log("Destroying the session");
