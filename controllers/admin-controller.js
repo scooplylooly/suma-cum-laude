@@ -70,7 +70,7 @@ exports.showIncomingListings = async (req, res) => {
 exports.filterListings = async (req, res) => {
     let status = req.body.status;
     let selectedStatus = "";
-    let pet;
+    let pets;
 
     if (status === "approved") {
         pets = (await petModel.getAllPets())
