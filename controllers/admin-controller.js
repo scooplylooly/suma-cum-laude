@@ -293,10 +293,10 @@ exports.updateListerStatus = async (req, res) => {
             }
 
         }
-        return res.redirect("/admin-page");
+        return res.redirect("/admin/admin-page");
     } catch (err) {
         console.log(err);
-        res.redirect("/admin-page");
+        res.redirect("/admin/admin-page");
     }
 };
 
@@ -328,20 +328,21 @@ exports.displayDeleteLister = async (req, res) => {
     }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
-exports.deleteLister = async (req, res) => {
-    let lid = req.body.lid;
-    console.log("LID FOUND:", lid);
-    let listerInfo = await accountModel.retrieveLister(lid);
-    let error = "";
+exports.adminDeleteLister = async (req, res) => {
+    const lid = req.query.lid;
+    const uid = req.query.uid
+
     try {
         await accountModel.deleteLister(lid);
-        console.log("lister deleted!");
+        if (uid) {
+            await accountModel.updateUserRole(uid, "user");
+        }
         return res.redirect("/admin-lister");
     } catch (err) {
-        console.error(err);
-        error = "Error deleting lister";
+        console.error("Could not delete lister:", err);
+        return res.redirect("/admin-lister");
     }
-    return res.render("admin-delete-lister", { listerInfo, error });
+    
 };
 
 exports.displayUpdateLister = async (req, res) => {

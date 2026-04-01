@@ -44,10 +44,14 @@
                                 <a href="/admin-lister-update?lid=<%=lister._id%>">
                                     <button type="button">Update details</button>
                                 </a>
+                                <a href="/admin/delete-lister?lid=<%=lister._id%>">
+                                    <button type="button">Delete User</button>
+                                </a>
+                            <%} else if (lister.statusL === "rejected") {%>
+                                <a href="/admin/delete-lister?lid=<%=lister._id%>&uid=<%=lister.uid%>">
+                                    <button type="button">Delete User</button>
+                                </a>
                             <%}%>
-                            <a href="/delete-lister-profile?lid=<%=lister._id%>">
-                                <button type="button">Delete User</button>
-                            </a>
                         </div>
                     </div>
                     <%}%>

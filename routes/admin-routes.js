@@ -70,11 +70,10 @@ router.get(
 router.post("/admin-lister-update", adminController.updateLister);
 
 router.get(
-    "/delete-lister-profile",
+    "/admin/delete-lister",
     authMiddleware.isAdmin,
-    adminController.displayDeleteLister,
+    adminController.adminDeleteLister,
 );
-router.post("/delete-lister-profile", adminController.deleteLister);
  
 router.post("/admin/admin-user-update", adminController.updateUser);
 router.get(

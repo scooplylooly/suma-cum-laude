@@ -318,6 +318,11 @@ exports.handleResetPassword = async (req, res) => {
 exports.showProfile = async (req, res) => {
     // displays user's profile if they are logged in
     const details = await accountModel.retrieveProfile(req.session.user._id);
+
+    if (details) {
+        req.session.user.role = details.role;
+        req.session.user.userName = details.userName
+    }
     const user = req.session.user;
     res.render("user-profile", { details, user });
 };
@@ -540,7 +545,12 @@ exports.handleLister = async (req, res) => {
 exports.updateLister = async (req, res) => {
     const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
-    res.render("update-lister-profile", { originalDetails });
+    
+    if (!originalDetails) {
+        req.session.user.role = "user";
+        return res.redirect("/profile")
+    }
+    return res.render("update-lister-profile", { originalDetails });
 };
 
 exports.processLister = async (req, res) => {
@@ -612,15 +622,8 @@ exports.deleteLister = async (req, res) => {
         password,
     );
     if (!match) {
-        res.render("delete-lister", {
+        return res.render("delete-lister-profile", {
             error: "Wrong password. Please try again.",
-        });
-        await accountModel.deleteUser(req.session.user.uid); // deletes user
-        console.log("Deleting user...");
-        console.log("Destroying the session");
-        req.session.destroy(() => {
-            // session destroyed
-            res.redirect("/index.html"); // redirected to homepage
         });
     } 
 
@@ -631,11 +634,11 @@ exports.deleteLister = async (req, res) => {
         req.session.user.role = "user"
 
         console.log("Deleting lister profile...");
-        return res.redirect("/user-profile");
+        return res.redirect("/profile");
     
     } catch (err) {
         console.error("Failed to delete lister profile:", err)
-        return res.render("/delete-lister-profile", {
+        return res.render("delete-lister-profile", {
             error: "Failed to delete lister profile."
         })
     }

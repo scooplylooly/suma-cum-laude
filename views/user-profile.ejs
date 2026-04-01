@@ -49,16 +49,17 @@
                 <a href="/logout" class="button3">Log out</a>
                 <a href="/delete-profile" class="delete">Delete Account</a>  
                 <%if(details.role =='lister'){%>
-                    <a href="/delete-lister" class="delete">Delete Lister</a>  
+                    <a href="/delete-lister-profile" class="delete">Delete Lister</a>  
                 <%}%>
                 <%if(details.role == 'lister'){%>
-                Create your pet listings <a href="/create-listings">here!</a>
+                Create your pet listings <a href="/create-listing">here!</a>
                 Update your pet details <a href="/view-listings">here!</a>
                 Update your own lister details <a href="/update-lister-profile">here!</a>
                 <%}else{%>
                 <h3>Do you want to list some pets?</h3>
                 <p>
-                    Have you already applied? Check your application status <a href="/lister-application-status">here</a>.
+                    Have you already applied? <br>
+                    Check your application status <a href="/lister-application-status">here.</a>
                 </p>
                 <p>
                     If not, click <a href="/apply-lister">here</a> to apply!

@@ -182,10 +182,6 @@ async function deleteUser(userId) {
     return users.deleteOne({ _id: userId });
 }
 
-async function deleteListerByUid(userId) {
-    return lister.deleteOne({ uid: userId });
-}
-
 async function getAllUsers() {
     return users.find().lean();
 }
@@ -250,7 +246,10 @@ async function retrieveLister(id) {
 }
 
 async function getAllListers() {
-    return await lister.find( { statusL: "approved" }).lean();
+    const allListers = await lister.find().lean();
+    return allListers.filter(l =>
+        l.statusL === "approved" || l.statusL === "rejected"
+    )
 }
 
 async function addLister(listerData) {
@@ -279,6 +278,9 @@ async function updateUserRole (userId, role) {
 
 async function deleteLister(listerID) {
     return lister.deleteOne({ _id: listerID });
+}
+async function deleteListerByUid(userId) {
+    return lister.deleteOne({ uid: userId });
 }
 
 const updatePreferences = async (userId, preferences) => {
