@@ -28,24 +28,30 @@
             
             <div class="container-flex">
                 <% for (let lister of listers) { %>
-                    <%if(lister._id != adminUserId){%>
+                    <%if(lister.uid != adminUserId){%>
                     <div class="item">
                         <h4><%= lister.userName %></h4>
-                        <p><span>ID</span> : <%=lister._id%></user._id></p>
+                        <p><span>ID:</span> <%=lister.uid%></user._id></p>
                         <p><span>Address:</span> <%= lister.address%></p>
                         <p><span>Contact number:</span> <%= lister.contactNo %></p>
-                        <p><span>Reason(s) for becoming a lister</span> : <%= lister.reason></user._id></p>
+                        <p><span>Reason(s) for becoming a lister:</span> <%= lister.reason%></user._id></p>
                         <p><span>Current pet(s) owned:</span> <%= lister.pets%></p>
                         <p><span>Experience with adoption:</span> <%= lister.experience %></p>
-                        <p><span>Role</span>: <%=user.role == "user" ? "Default Users" : user.role === "lister" ? "Listers" : user.role === "admin" ? "Admin":'None'%></p>
+                        <p><span>Role</span>: <%=lister.role == "user" ? "Default Users" : lister.role === "lister" ? "Listers" : lister.role === "admin" ? "Admin":'None'%></p>
                         
                         <div class="card-actions">
-                            <a href="/admin-lister-update?uid=<%=user._id%>">
-                                <button type="button">Update details</button>
-                            </a>
-                            <a href="/delete-lister-profile?uid=<%=user._id%>">
-                                <button type="button">Delete User</button>
-                            </a>
+                            <%if (lister.statusL === "approved") {%>
+                                <a href="/admin-lister-update?lid=<%=lister._id%>">
+                                    <button type="button">Update details</button>
+                                </a>
+                                <a href="/admin/delete-lister?lid=<%=lister._id%>">
+                                    <button type="button">Delete User</button>
+                                </a>
+                            <%} else if (lister.statusL === "rejected") {%>
+                                <a href="/admin/delete-lister?lid=<%=lister._id%>&uid=<%=lister.uid%>">
+                                    <button type="button">Delete User</button>
+                                </a>
+                            <%}%>
                         </div>
                     </div>
                     <%}%>

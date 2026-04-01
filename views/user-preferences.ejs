@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Preferences</title>
+    <link rel="stylesheet" href="/style/user-preferences.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+<main>
+    <div class="preferences-container">
+        <h1>Set Your Preferences</h1>
+        <p>Help us match you with your <i>perfect companion</i>!</p>
+
+        <form action="/preferences" method="POST" class="preferences-form">
+
+            <div>
+                <label for="housingType">Housing Type:</label>
+                <select name="housingType" id="housingType">
+                    <%= console.log(userPref) %>
+                    <option value="" <%= (userPref.housingType == '') ? 'selected' : '' %>>-- Select --</option>
+                    <option value="HDB" <%= (userPref.housingType === 'HDB') ? 'selected' : '' %>>HDB</option>
+                    <option value="Condo" <%= (userPref.housingType === 'Condo') ? 'selected' : '' %>>Condo</option>
+                    <option value="Landed" <%= (userPref.housingType === 'Landed') ? 'selected' : '' %>>Landed</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Preferred Animal:</label><br>
+                <div class="checkbox-group">
+                    <% animalTypes.forEach(element => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="preferredAnimal" value="<%= element %>" <%=userPref.preferredAnimal.includes(element) ? 'checked' : ''%>>
+                            <label><%= element %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div>
+                <label>Preferred Traits:</label><br>
+                <div class="checkbox-group">
+                    <% petPersonalities.forEach(element => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="preferredTraits" value="<%= element %>" <%=userPref.preferredTraits.includes(element) ? 'checked' : ''%>>
+                            <label><%= element %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+
+            <div>
+                <label for="experienceLevel">Experience Level:</label>
+                <select name="experienceLevel" id="experienceLevel">
+                    <option value="" <%= (userPref.experienceLevel === '') ? 'selected' : '' %>>-- Select --</option>
+                    <option value="beginner" <%= (userPref.experienceLevel === 'beginner') ? 'selected' : '' %>>Beginner</option>
+                    <option value="intermediate" <%= (userPref.experienceLevel === 'intermediate') ? 'selected' : '' %>>Intermediate</option>
+                    <option value="experienced" <%= (userPref.experienceLevel === 'experienced') ? 'selected' : '' %>>Experienced</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="activityLevel">Activity Level:</label>
+                <select name="activityLevel" id="activityLevel">
+                    <option value="" <%= (userPref.activityLevel === '') ? 'selected' : '' %>>-- Select --</option>
+                    <option value="low" <%= (userPref.activityLevel === 'low') ? 'selected' : '' %>>Low</option>
+                    <option value="medium" <%= (userPref.activityLevel === 'medium') ? 'selected' : '' %>>Medium</option>
+                    <option value="high" <%= (userPref.activityLevel === 'high') ? 'selected' : '' %>>High</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</main>

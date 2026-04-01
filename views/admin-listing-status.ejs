@@ -10,7 +10,7 @@
     <%- include('common/header') %>
 
     <main class="status-page">
-        <form action="/admin-change-listings-status" method="post" class="status-form">
+        <form action="/admin/admin-change-listings-status" method="post" class="status-form">
             <h2>Update Listing Status</h2>
 
             <div class="pet-card">
@@ -24,6 +24,8 @@
                             <p>#<%= petFound[key] %></p>
                         <% } else if (key == "dob") { %>
                             <p><span>Date of Birth:</span> <%= petFound[key] %></p>
+                        <%}else if (key == 'personality'){%>
+                            <p><span>Personality:</span> <%= petFound[key].length > 0 ? petFound[key].join(', ') : 'N/A' %></p>
                         <% } else if (petFound[key] == true) { %>
                             <% if (key == 'hdbApproved') { %>
                                 <p><span>HDB Approved:</span> Yes</p>
@@ -40,14 +42,12 @@
                             <% } else { %>
                                 <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> No</p>
                             <% } %>
-                        <% } else if (key == 'personality') { %>
-                            <% if (petFound[key].length === 0) { %>
-                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> N/A</p>
-                            <% } else { %>
-                                <p><span><%= key[0].toUpperCase() + key.slice(1) %>:</span> <%= petFound[key].join(', ') %></p>
-                            <% } %>
                         <% } else if (key == 'ownerName') { %>
                             <p><span>Listed by:</span> <%= petFound[key] %></p>
+                        <%}else if (key == 'activityLevel' ){%>
+                            <p><span>Activity Level :</span> <%= petFound[key][0].toUpperCase() + petFound[key].slice(1) %></p>
+                        <%}else if (key == 'experienceLevel' ){%>
+                            <p><span>Experience level recommended :</span> <%= petFound[key][0].toUpperCase() + petFound[key].slice(1) %></p>
                         <% } else { %>
                             <p>
                                 <span><%= key[0].toUpperCase() + key.slice(1) %>:</span>

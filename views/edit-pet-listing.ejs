@@ -21,6 +21,13 @@
                     <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key !== '__v' && key != 'img' && key != 'name') { %>
                         <% if (key == "dob") { %>
                             <h4>Date of Birth: <%= pet[key] %></h4>
+                        <%}else if (key == 'createdByAdmin'){%>
+                            <%if (user.role == "admin"){%>
+                            <h4>Created by Admin : <%= pet[key] ? 'Yes' : 'No' %></h4>
+                            <%}%>
+                        <%}else if (key == 'personality' ){%>
+                            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=pet[key].join(', ') != '' ? pet[key].join(', ') : 'N/A'%></h4>
+                        <%}%>
                         <% } else if (pet[key] == true) { %>
                             <% if (key == 'hdbApproved') { %>
                                 <h4>HDB Approved: Yes</h4>
@@ -33,8 +40,11 @@
                             <% } else { %>
                                 <h4><%= key[0].toUpperCase() + key.slice(1) %> : No</h4>
                             <% } %>
-                        <% } else if (key == 'personality') { %>
-                            <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= pet[key] && pet[key].length ? pet[key].join(', ') : 'N/A' %></h4>
+                        <%}else if (key == 'activityLevel' ){%>
+                            <h4>Activity Level : <%=pet[key]%></h4>
+                        <%}else if (key == 'experienceLevel' ){%>
+                            <h4>Experience level recommended : <%=pet[key]%></h4>
+            
                         <% } else { %>
                             <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= pet[key] ? pet[key][0].toUpperCase() + pet[key].slice(1) : 'N/A' %></h4>
                         <% } %>

@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete <%= userInfo.userName %>'s Profile</title>
-    <link rel="stylesheet" type="text/css" href="./style/delete-profile.css">
+    <link rel="stylesheet" type="text/css" href="/style/delete-profile.css">
 </head>
 <body>
     <%- include('common/header') %>
 
     <main class="delete-page">
         <div class="delete-card">
-            <form action="/delete-user-profile" method="post" class="delete-form">
+            <form action="/admin/delete-user-profile" method="post" class="delete-form">
                 <h2 style="color: red;">Deleting <%=userInfo.userName%></h2> <br>
                 <%for(key in userInfo){%>
-                    <% if (key != '__v' && key != 'password' && key != 'otp' && key != 'otpExpiry'){%>
+                    <% if (key != '__v' && key != 'password' && key != 'otp' && key != 'otpExpiry' && key != 'preferences'){%>
                     <%if (key == '_id'){%>
                     <p>ID : <%=userInfo[key]%> </p>
                     <%}else if (key == 'DOB'){%>

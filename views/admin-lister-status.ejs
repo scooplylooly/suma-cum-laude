@@ -9,44 +9,37 @@
     <%- include('common/header') %>
 
     <main class="status-page">
-        <form action="/admin-lister-status" method="post" class="status-form">
+        <form action="/admin-lister-status" method="post">
             <h2>Pending Lister Applications</h2>
             <%if (!pending || pending.length === 0) {%>
                 <p>No pending applications.</p>
             <%} else {%>
                 <ul>
-                    <%pending.forEach(lister => {%>
-                        <li><h4><%= lister.userId.userName %></h4>
-                        <p><span>Address</span>:<%= lister.address %></p>
-                        <p><span>Contact number:</span> <%= lister.contactNo %></p>
-                        <p><span>Reason of becoming a lister:</span> <%= lister.reason %></p>
-                        <p><span>Current pet(s) owned</span>:<%= lister.pets %></p>
-                        <p><span>Experience with adoptions:</span> <%= lister.experience %></p>
-                        <p><span>Current status:</span> <%= lister.statusL %></p>
-                        
-                        <form action="/admin-lister-status" method="post">
-                            <input type="hidden" name="uid" id="user._id">
-                            <label>
-                                <input type="radio" name="statusL" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
-                                Pending
-                            </label>
-                            <label>
-                                <input type="radio" name="statusL" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
-                                Approved
-                            </label>
-                            <label>
-                                <input type="radio" name="statusL" value="rejected" <%= lister.statusL === 'rejected' ? 'checked' : ''%>>
-                                Rejected
-                            </label>
+                    <%pending.forEach((lister, index) => {%>
+                        <li>
+                            <h4><%= lister.userName %></h4>
+                            <p><span>Address</span>:<%= lister.address %></p>
+                            <p><span>Contact number:</span> <%= lister.contactNo %></p>
+                            <p><span>Reason of becoming a lister:</span> <%= lister.reason %></p>
+                            <p><span>Current pet(s) owned</span>:<%= lister.pets %></p>
+                            <p><span>Experience with adoptions:</span> <%= lister.experience %></p>
+                            <p><span>Current status:</span> <%= lister.statusL %></p>
 
-                            <button type="submit">Update status</button>
-
-                        </form>
-                    
+                            <input type="hidden" name="listers[<%= index %>][lid]" value="<%= lister._id%>">
+                            <input type="hidden" name="listers[<%= index %>][uid]" value="<%= lister.uid%>">
+                            <input type="radio" name="listers[<%= index %>][statusL]" value="pending" <%= lister.statusL === 'pending' ? 'checked' : ''%>>
+                            <label>Pending</label>
+                            <input type="radio" name="listers[<%= index %>][statusL]" value="approved" <%= lister.statusL === 'approved' ? 'checked' : ''%>>
+                            <label>Approved</label>
+                            <input type="radio" name="listers[<%= index %>][statusL]" value="rejected" <%= lister.statusL === 'rejected' ? 'checked' : ''%>>
+                            <label>Rejected</label>
                         </li>
                     <%})%>
                 </ul>
+                <button type="submit">Update all status</button>
 
+            <%}%>
+        </form>
 
     </main>
 

@@ -1,0 +1,207 @@
+body {
+    font-family: "Palatino Linotype", Palatino, serif;
+    background: linear-gradient(180deg, #fffaf5 0%, #fdf1e6 100%);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+main {
+    padding: 50px 20px;
+}
+
+.update-listing {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.update-listing section {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.update-listing h2 {
+    color: #b86a3f;
+    font-size: 34px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.update-listing form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    background: rgba(255, 250, 245, 0.94);
+    border: 1px solid rgba(201, 125, 78, 0.14);
+    border-radius: 24px;
+    padding: 34px 32px;
+    box-shadow: 0 16px 36px rgba(130, 84, 54, 0.08);
+    box-sizing: border-box;
+}
+
+.update-listing form p {
+    margin: 0;
+    font-size: 17px;
+    color: #6d5648;
+    text-align: center;
+}
+
+.update-listing form > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    background: #fff7f1;
+    border: 1px solid rgba(201, 125, 78, 0.1);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+}
+
+.update-listing label {
+    font-size: 17px;
+    font-weight: 700;
+    color: #7a4c2f;
+}
+
+.update-listing select,
+.update-listing input[type="number"],
+.update-listing input[type="tel"],
+.update-listing textarea {
+    font-family: inherit;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #d7a07a;
+    border-radius: 10px;
+    background: #fff;
+    padding: 11px 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.update-listing select:focus,
+.update-listing input[type="number"]:focus,
+.update-listing input[type="tel"]:focus,
+.update-listing textarea:focus {
+    border-color: #c97d4e;
+    box-shadow: 0 0 0 3px rgba(201, 125, 78, 0.14);
+    background: #fffdfb;
+}
+
+.update-listing select {
+    min-width: 180px;
+}
+
+.update-listing input[type="number"],
+.update-listing input[type="tel"] {
+    width: 220px;
+}
+
+.update-listing textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.update-listing textarea[name="existingPets"],
+.update-listing textarea[name="applyReason"] {
+    margin-top: 8px;
+}
+
+.update-listing form > label {
+    margin-bottom: -10px;
+    text-align: left;
+    color: #7a4c2f;
+}
+
+.update-listing button {
+    align-self: center;
+    min-width: 220px;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 26px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: inherit;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, #d08858, #b86a3f);
+    box-shadow:
+        0 10px 20px rgba(184, 106, 63, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.update-listing button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 24px rgba(184, 106, 63, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    filter: brightness(1.03);
+}
+
+.update-listing button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .update-listing h2 {
+        font-size: 28px;
+    }
+
+    .update-listing form {
+        padding: 26px 20px;
+        border-radius: 18px;
+    }
+
+    .update-listing form > div {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+    }
+
+    .update-listing select,
+    .update-listing input[type="number"],
+    .update-listing input[type="tel"] {
+        width: 100%;
+    }
+
+    .update-listing button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    main {
+        padding: 30px 14px;
+    }
+
+    .update-listing h2 {
+        font-size: 24px;
+    }
+
+    .update-listing form {
+        padding: 22px 16px;
+    }
+
+    .update-listing label {
+        font-size: 16px;
+    }
+
+    .update-listing form p {
+        font-size: 15px;
+    }
+}

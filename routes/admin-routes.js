@@ -4,42 +4,38 @@ const router = express.Router();
 const adminController = require("../controllers/admin-controller");
 const authMiddleware = require("../middleware/auth-middleware.js");
 
-router.get("/admin-page", adminController.showAdminPage);
+router.get("/admin/admin-page", adminController.showAdminPage);
 router.get(
-    "/admin-listings",
+    "/admin/listings",
     authMiddleware.isAdmin,
     adminController.showIncomingListings,
 );
-router.post("/admin-listings", adminController.filterListings);
+router.post("/admin/listings", adminController.filterListings);
 router.get(
-    "/admin-change-listings-status",
+    "/admin/change-listings-status",
     authMiddleware.isAdmin,
     adminController.confirmListingStatus,
 );
 router.post(
-    "/admin-change-listings-status",
+    "/admin/admin-change-listings-status",
     authMiddleware.isAdmin,
     adminController.updateListingStatus,
 );
-router.get("/admin-users", authMiddleware.isAdmin, adminController.showUsers);
-router.post("/admin-users", adminController.filterUsers);
+router.get("/admin/users", authMiddleware.isAdmin, adminController.showUsers);
+router.post("/admin/users", adminController.filterUsers);
 
 router.get(
-    "/delete-user-profile",
+    "/admin/delete-user",
     authMiddleware.isAdmin,
     adminController.displayDeleteUser,
 );
-router.post("/delete-user-profile", adminController.deleteUser);
+router.post("/admin/delete-user", adminController.deleteUser);
 router.get(
-    "/admin-user-update",
+    "/admin/user-update",
     authMiddleware.isAdmin,
     adminController.displayUpdateUser,
 );
 router.post("/admin-user-update", adminController.updateUser);
-router.get(
-    "/view-user-applications",
-    authMiddleware.isAdmin,
-    adminController.viewUserApplications)
 
 router.get(
     "/admin-lister-status",
@@ -51,15 +47,21 @@ router.post(
     authMiddleware.isAdmin,
     adminController.updateListerStatus,
 );
-router.get("/admin-lister", authMiddleware.isAdmin, adminController.showLister);
-router.post("/admin-lister", adminController.filterLister);
+router.get("/admin-lister", authMiddleware.isAdmin, adminController.showListerListings);
+// router.post("/admin-lister", adminController.filterLister);
 
 router.get(
-    "/delete-lister-profile",
+    "/admin-lister-approve",
     authMiddleware.isAdmin,
-    adminController.displayDeleteLister,
+    adminController.approveLister,
 );
-router.post("/delete-lister-profile", adminController.deleteLister);
+
+router.get(
+    "/admin-lister-reject",
+    authMiddleware.isAdmin,
+    adminController.rejectLister,
+);
+
 router.get(
     "/admin-lister-update",
     authMiddleware.isAdmin,
@@ -67,5 +69,19 @@ router.get(
 );
 router.post("/admin-lister-update", adminController.updateLister);
 
-
+router.get(
+    "/admin/delete-lister",
+    authMiddleware.isAdmin,
+    adminController.adminDeleteLister,
+);
+ 
+router.post("/admin/admin-user-update", adminController.updateUser);
+router.get(
+    "/admin/view-user-applications",
+    authMiddleware.isAdmin,
+    adminController.viewUserApplications,
+);
+router.get("/admin/dashboard", authMiddleware.isAdmin, adminController.showAdminDashboard);
 module.exports = router;
+
+

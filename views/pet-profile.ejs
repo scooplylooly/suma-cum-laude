@@ -13,13 +13,23 @@
     <div>
         
         <%for(key in petFound){%>
-        <% if (key != 'type' && key != 'uid' && key != 'createdByAdmin' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
+        <% if (key != 'type' && key != 'uid'  && key != 'adopted' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key!=='__v'&& key != 'approved'){%>
         <% if(key == "img") {%>
           <img src="/images/<%=petFound[key]%>.jpg" alt="<%= petFound.name%>">
         <%}else if (key == "name"){%>
             <h2><%= petFound[key] %></h2>
         <%}else if (key == "dob"){%>
             <h4>Date of  Birth: <%= petFound[key] %></h4>
+        <%}else if (key == 'createdByAdmin'){%>
+            <%if (user.role == "admin"){%>
+            <h4>Created by Admin : <%= petFound[key] ? 'Yes' : 'No' %></h4>
+            <%}%>
+        <%}else if (key == 'personality' ){%>
+            <%if (key == []){%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
+            <%}else{%>
+            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
+            <%}%>
         <%}else if (petFound[key] == true ){%>
             <%if (key == 'hdbApproved' ){%>
                 <h4>HDB Aproved : Yes</h4>
@@ -32,12 +42,11 @@
             <% }else{ %>
                 <h4><%=key[0].toUpperCase() + key.slice(1)%> : No</h4>
             <%}%>
-        <%}else if (key == 'personality' ){%>
-            <%if (key == []){%>
-            <h4><%=key[0].toUpperCase() + key.slice(1)%> : N/A</h4>
-            <%}else{%>
-            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=petFound[key].join(', ')%></h4>
-            <%}%>
+        <%}else if (key == 'activityLevel' ){%>
+            <h4>Activity Level : <%= petFound[key][0].toUpperCase() + petFound[key].slice(1) %></h4>
+        <%}else if (key == 'experienceLevel' ){%>
+            <h4>Experience level recommended : <%= petFound[key][0].toUpperCase() + petFound[key].slice(1) %></h4>
+        
         <% }else{ %>
             <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= petFound[key] ? petFound[key][0].toUpperCase() + petFound[key].slice(1): 'N/A' %></h4>
         <%}%>
@@ -52,14 +61,14 @@
         <form action="/apply-for-pet" method="post">
             <label for="houseType">House Type:</label>
             <select name="houseType" id="houseType">
-                <option value="HDB" selected>HDB</option>
-                <option value="Condo">Condo</option>
-                <option value="Landed">Landed</option>
+                <option value="HDB" <%= (userInfo.preferences.housingType === 'HDB') ? 'selected' : '' %>>HDB</option>
+                <option value="Condo" <%= (userInfo.preferences.housingType === 'Condo') ? 'selected' : '' %>>Condo</option>
+                <option value="Landed" <%= (userInfo.preferences.housingType === 'Landed') ? 'selected' : '' %>>Landed</option>
             </select><br><br>
             <label for="petExperience">Do you have any prior experience with owning a pet?</label>
             <select name="petExperience" id="petExperience">
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
+                <option value="Yes" <%= (userInfo.preferences.experienceLevel !== 'beginner') ? 'selected' : '' %>>Yes</option>
+                <option value="No" <%= (userInfo.preferences.experienceLevel === 'intermediate') ? 'selected' : '' %>>No</option>
             </select><br><br>
             <label for="income">What is your monthly income?</label>
             $<input type="number" name="income" min="0"><br><br>

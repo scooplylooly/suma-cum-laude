@@ -30,6 +30,22 @@ const usersSchema = new mongoose.Schema({
         default: "user",
         required: [true, "User role must be stated"],
     },
+    preferences: {
+        type: {
+            housingType: String,
+            preferredAnimal: [String],
+            preferredTraits: [String],
+            experienceLevel: String,
+            activityLevel: String,
+        },
+        default: {
+            housingType: "",
+            preferredAnimal: [],
+            preferredTraits: [],
+            experienceLevel: "beginner",
+            activityLevel: "low",
+        },
+    },
 });
 
 const users = mongoose.model("users", usersSchema, "users");
@@ -40,6 +56,10 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
         throw new Error(
             "Username already exists. Please choose another username.",
         );
+    }
+
+    if (await users.findOne({ email: email })) {
+        throw new Error("Email already exists. Please use another email.");
     } else {
         let hashedPassword = await bcrypt.hash(password, 10);
         let newUser = {
@@ -53,7 +73,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
         // create new user profile + add to users schema
         await addUser(newUser);
     }
-};
+}
 
 async function authenticateUser(userName, password) {
     // checks if user exists in DB
@@ -69,7 +89,7 @@ async function authenticateUser(userName, password) {
     } else {
         return null;
     }
-};
+}
 
 // function checks if password meets mininum requirements to ensure security
 function securePassword(password) {
@@ -110,12 +130,12 @@ async function updatePassword(userName, hashedPassword) {
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
-};
+}
 
 async function addUser(user) {
     // creates a new record under user schema
     return await users.create(user);
-};
+}
 
 async function checkUserExist(userName) {
     // checks if current user exists in database
@@ -160,24 +180,28 @@ async function updateDetails(
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
-};
+}
+
 async function getAllUsers() {
     return users.find().lean();
-};
-
+}
+// Lister schema + functions
 const listerSchema = new mongoose.Schema({
     userName: {
         type: String,
-        required: [true, "A user must have an address"]
+        required: [true, "A user must have an address"],
     },
-
+    uid: {
+        type: String,
+        required: [true, "A user must have a uid"],
+    },
     address: {
         type: String,
-        required: [true, "A user must have an address"]
+        required: [true, "A user must have an address"],
     },
     contactNo: {
         type: String,
-        required: [true, "A user must have a contact number"]
+        required: [true, "A user must have a contact number"],
     },
     reason: {
         type: String,
@@ -196,51 +220,80 @@ const listerSchema = new mongoose.Schema({
         default: "pending",
         required: [true, "A user will have a status"],
     },
-    role: {
-        type: String,
-        default: "user",
-        required: [true, "User role must be stated"],
-    },
 });
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
-async function authenticateLister(userName) {
-    const exists = await lister.findOne({ userName });
-
-    if (!exists) return null;
-
-};
-
 async function getPendingListers() {
-    return await lister.find({ statusL: 'pending' }).lean();
-};
+    return await lister.find({ statusL: "pending" }).lean();
+}
 
 async function approveLister(userId) {
-    return await lister.updateOne({ _id: userId}, { $set: {statusL: "approved"} })
-};
+    return await lister.updateOne({ _id: userId }, { statusL: "approved" });
+}
 
 async function rejectLister(userId) {
-    return await lister.updateOne({ _id: userId}, { $set: {statusL: "rejected"} })
-};
+    return await lister.updateOne({ _id: userId }, { statusL: "rejected" });
+}
 
-async function retrieveLister(userId) {
-    return await lister.findOne({ _id: userId }).lean();
-};
+async function retrieveLister(id) {
+    let found = await lister.findOne({ uid: id }).lean();
+    
+    if (!found) {
+        found = await lister.findOne({ _id: id }).lean();
+    }
+    return found;
+}
 
-async function addLister(lister) {
-    return await lister.create(lister);
-};
+async function getAllListers() {
+    const allListers = await lister.find().lean();
+    return allListers.filter(l =>
+        l.statusL === "approved" || l.statusL === "rejected"
+    )
+}
+
+async function addLister(listerData) {
+    return await lister.create(listerData);
+}
 
 async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
-    return users.updateOne({ _id: userId }, { $set: {address, contactNo, pets, experience} });
+    return lister.updateOne(
+        { _id: userId },
+        { address, contactNo, pets, experience},
+    );
+}
+
+async function getListerByUserName (userName) {
+    return await lister.findOne({ userName }).lean()
+}
+
+async function updateUserRole (userId, role) {
+    
+    return users.updateOne(
+        { _id : userId },
+        { role }
+    );
+}
+
+async function deleteLister(listerID) {
+    return lister.deleteOne({ _id: listerID });
+}
+async function deleteListerByUid(userId) {
+    return lister.deleteOne({ uid: userId });
+}
+
+const updatePreferences = async (userId, preferences) => {
+    return await users.findByIdAndUpdate(userId, { preferences });
 };
 
-async function deleteLister(userID) {
-    return lister.deleteOne({ _id: userID });
+const countUsers = async () => {
+    try {
+        return users.countDocuments({});
+    } catch (error) {
+        return error;
+    }
 };
-
 
 module.exports = {
     authenticateUser,
@@ -249,17 +302,21 @@ module.exports = {
     deleteUser,
     updateDetails,
     getAllUsers,
-    authenticateLister,
     getPendingListers,
     approveLister,
     rejectLister,
     retrieveLister,
     updateLister,
+    getListerByUserName,
+    updateUserRole,
     deleteLister,
+    deleteListerByUid,
+    getAllListers,
     addLister,
     checkUserExist,
     updatePassword,
     checkSecurityKey,
     securePassword,
-    findUserByName,
+    updatePreferences,
+    countUsers,
 };

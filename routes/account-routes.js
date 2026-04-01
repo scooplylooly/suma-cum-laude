@@ -21,16 +21,21 @@ router.post("/edit-profile", authMiddleware.checkUser, accountController.process
 
 router.get("/delete-profile", authMiddleware.checkUser, accountController.deleteConfirmation1);
 router.post("/delete-profile", authMiddleware.checkUser, accountController.deleteProfile);
-
+// Lister routes
 router.get('/apply-lister', authMiddleware.checkUser, accountController.showLister)
 router.post('/apply-lister', authMiddleware.checkUser, accountController.handleLister)
 
-router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
-router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
+router.get("/lister-application-status", authMiddleware.checkUser, accountController.showListerStatus)
 
-router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmation2);
-router.post("/delete-lister", authMiddleware.checkUser, accountController.deleteLister);
+router.get("/update-lister-profile", authMiddleware.checkUser, accountController.updateLister);
+router.post("/update-lister-profile", authMiddleware.checkUser, accountController.processLister);
 
-router.get("/logout", accountController.logout);
+router.get("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteConfirmationForLister);
+router.post("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteLister);
+
+router.get("/preferences", authMiddleware.checkUser, accountController.userPreferenceForm);
+router.post("/preferences", authMiddleware.checkUser, accountController.updatePreferences);
+
+router.get("/logout", authMiddleware.checkUser, accountController.logout);
 
 module.exports = router;

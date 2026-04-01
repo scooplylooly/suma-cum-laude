@@ -11,10 +11,10 @@
     <%- include('common/header') %>
     
     <main class="profile-page">
-            <%if(user.role == 'admin'){%>
-            <h2>Hi <%=user.userName%>!</h2>
+            <%if(details.role == 'admin'){%>
+            <h2>Hi <%=details.userName%>!</h2>
             <%}else{%>
-            <h2>Hi <%=user.userName%>!</h2>
+            <h2>Hi <%=details.userName%>!</h2>
             <%}%>
             <p>Edit your profile information over here at anytime!</p>
         <div class="profile-card">
@@ -44,28 +44,30 @@
 
             <div class="actions">
                 <a href="/edit-profile">Edit details</a>
+                <a href="/preferences" class="edit-button">Set Preferences</a>   
                 <a href="/apply-lister">Apply lister</a>
                 <a href="/logout" class="button3">Log out</a>
                 <a href="/delete-profile" class="delete">Delete Account</a>  
-                <%if(user.role =='lister'){%>
-                    <a href="/delete-lister" class="delete">Delete Lister</a>  
+                <%if(details.role =='lister'){%>
+                    <a href="/delete-lister-profile" class="delete">Delete Lister</a>  
+                <%}%>
+                <%if(details.role == 'lister'){%>
+                Create your pet listings <a href="/create-listing">here!</a>
+                Update your pet details <a href="/view-listings">here!</a>
+                Update your own lister details <a href="/update-lister-profile">here!</a>
+                <%}else{%>
+                <h3>Do you want to list some pets?</h3>
+                <p>
+                    Have you already applied? <br>
+                    Check your application status <a href="/lister-application-status">here.</a>
+                </p>
+                <p>
+                    If not, click <a href="/apply-lister">here</a> to apply!
+                </p>
                 <%}%>
             </div>
         </div>
-        
-           <%if(user.role == 'lister'){%>
-            Create your pet listings <a href="/pet-create-listings">here</a>!
-            Update your pet details <a href="/update-pet-details">here</a>!
-            Update your own lister details <a href="/update-lister-profile">here</a>!
-            <%}else{%>
-            <h3>Do you want to list some pets?</h3>
-            <p>
-                Have you already applied? Check your application status here:
-            </p>
-            <p>
-                If not, click <a href="/apply-lister">here</a> to apply!
-            </p>
-            <%}%>
+            
 
     </main>
     <%- include('common/footer') %>

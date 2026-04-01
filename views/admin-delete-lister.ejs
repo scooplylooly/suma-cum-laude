@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete <%= listerInfo.userName %>'s Lister Profile</title>
+    <link rel="stylesheet" type="text/css" href="./style/delete-profile.css">
+</head>
+<body>
+    <%- include('common/header') %>
+
+    <main class="delete-page">
+        <div class="delete-card">
+            <form action="/delete-lister-profile" method="post" class="delete-form">
+                <h2 style="color: red;">Deleting <%=listerInfo.userName%></h2> <br>
+                <p>ID : <%= listerInfo.uid %> </p>
+                <p>Address : <%= listerInfo.address %></p>
+                <p>Contact number : <%= listerInfo.contactNo %></p>
+                <p>Reason : <%= listerInfo.reason %></p>
+                <p>Current pet(s) owned : <%= listerInfo.pets %></p>
+                <p>Experience with adoption : <%= listerInfo.experience %></p>
+                <p>Current status : <%= listerInfo.statusL %></p>
+                <input type="hidden" value="<%=listerInfo._id%>" name="lid">
+                <button type="submit" onclick="return confirm ('WARNING: Are you sure? This action cannot be undone and all data will be lost')">Confirm Deletion</button>
+            </form>
+        </div>
+
+    </main>
+    <% if (error) { %>
+        <div class="err-message">
+            <%= error %>
+        </div>
+    <% } %>
+
+
+    <%- include('common/footer') %>
+    
+</body>
+</html>

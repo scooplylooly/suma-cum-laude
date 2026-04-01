@@ -20,7 +20,11 @@
     <main class="register-page">
         <div id="form" class="register-card">
             <h2>User Registration</h2>
-            <p class="subtitle">Please create an account to use our services.</p>
+            <%if (user && user.role == 'admin'){%>
+                <p class="subtitle">As an admin, you can create accounts for users, listers, and other admins.</p>
+            <%}else{%>
+                <p class="subtitle">Please create an account to use our services.</p>
+            <%}%>
             <form action="/register" method="post" class="register-form">
                 User Name: <input type="text" name="userName" value="<%= userName %>"> <br><br>
                 Email: <input type="email" name="email" value="<%= email %>"> <br><br>
@@ -54,7 +58,9 @@
                 <%}%><br><br>
                 <button type="submit" class="register-link">Register</button> <br><br>
             </form>
-            <p>Already have an account? <a href="/login" class="login-link">Login</a></p>
+        <%if (!user || user.role != 'admin'){%>
+            <p>Already have an account? <a href="/login" class="login-link">Login here</a></p>
+        <%}%>
 
             <% if (errors.length > 0){ %>
                 <ul class="error-list">
