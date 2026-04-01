@@ -337,10 +337,10 @@ exports.adminDeleteLister = async (req, res) => {
         if (uid) {
             await accountModel.updateUserRole(uid, "user");
         }
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     } catch (err) {
         console.error("Could not delete lister:", err);
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     }
 };
 
