@@ -1,21 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../style/register.css">
-    <title>Register to be a Lister</title>
-</head>
-<body>
-    <div id="form">
-        <form action="/apply-lister" method="post">
-            Address: <input type="text" name="address" id="address"><br><br>
-            Contact number: <input type="number" name="contactNo" value="<%= contactNo %>"><br><br>
-            Reason of becoming a lister: <input type="text" name="reason" id="reason"><br><br>
-            Current pet(s) owned: <input type="text" name="pets" value="<%= pets %>"><br><br> 
-            Experience with adoption: <input type="text" name="experience" value="<%= experience %>"><br><br>
-            <button type="submit">Apply</button>
-        </form>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="/style/lister-style.css" />
+        <title>Register to be a Lister</title>
+    </head>
+    <body>
+        <%- include('common/header') %>
+        <div id="form">
+            <%if(user.role === 'admin'){%>
+                <h2>Create Lister Application for a user</h2>
+            <%}else{%>
+                <h2>Apply to be a Lister!</h2>
+            <%}%>
+            <form action="/apply-lister" method="post">
+                <%if(user.role === 'admin'){%>
+                    Enter username of the user to be a lister:
+                    <input type="text" name="username" required><br><br>
+                <%}%>
+                Address:
+                <input type="text" name="address" id="address" /><br /><br />
+                Contact number: <input
+                    type="tel"
+                    pattern="[0-9]{8}"
+                    name="contactNo"
+                    value="<%= contactNo %>"
+                /><br /><br />
+                Reason of becoming a lister:
+                <textarea name="reason" id="reason"></textarea><br /><br />
+                Current pet(s) owned:
+                <textarea name="pets" id="pets"><%= pets %></textarea
+                ><br /><br />
+                Experience with adoption:
+                <textarea name="experience" id="experience"><%= experience %></textarea
+                ><br /><br />
+                <button type="submit">Apply</button>
+            </form>
+        </div>
+        <% if (errors && errors.length > 0) { %>
+            <div class="err-message">
+                <p><%= errors %></p>
+            </div>
+        <% } %>
+        <%- include('common/footer') %>
+    </body>
 </html>

@@ -18,9 +18,13 @@
 
         <div class="top-actions">
             <a href="/apply-lister" class="top-link">
-                <button type="button">Apply New Lister</button>
+                <button type="button">Create New Lister</button>
+            </a>
+            <a href="/admin/lister-status" class="top-link">
+                <button type="button">Approve Lister Applications</button>
             </a>
         </div>
+        
 
         <% if (listers.length < 1) { %>
             <h4 class="empty-state">No listings found.</h4>
@@ -37,21 +41,16 @@
                         <p><span>Reason(s) for becoming a lister:</span> <%= lister.reason%></user._id></p>
                         <p><span>Current pet(s) owned:</span> <%= lister.pets%></p>
                         <p><span>Experience with adoption:</span> <%= lister.experience %></p>
-                        <p><span>Role</span>: <%=lister.role == "user" ? "Default Users" : lister.role === "lister" ? "Listers" : lister.role === "admin" ? "Admin":'None'%></p>
-                        
+                        <p><span>Status</span>: <%= lister.statusL[0].toUpperCase() + lister.statusL.slice(1) %></p>
                         <div class="card-actions">
                             <%if (lister.statusL === "approved") {%>
-                                <a href="/admin-lister-update?lid=<%=lister._id%>">
+                                <a href="/admin/lister-update?lid=<%=lister._id%>">
                                     <button type="button">Update details</button>
                                 </a>
-                                <a href="/admin/delete-lister?lid=<%=lister._id%>">
-                                    <button type="button">Delete User</button>
-                                </a>
-                            <%} else if (lister.statusL === "rejected") {%>
-                                <a href="/admin/delete-lister?lid=<%=lister._id%>&uid=<%=lister.uid%>">
-                                    <button type="button">Delete User</button>
-                                </a>
-                            <%}%>
+                             <%}%>
+                            <a href="/admin/delete-lister?lid=<%=lister._id%>&uid=<%=lister.uid%>">
+                                <button type="button">Delete lister</button>
+                            </a>
                         </div>
                     </div>
                     <%}%>

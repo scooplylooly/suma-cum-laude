@@ -238,7 +238,7 @@ async function rejectLister(userId) {
 
 async function retrieveLister(id) {
     let found = await lister.findOne({ uid: id }).lean();
-    
+
     if (!found) {
         found = await lister.findOne({ _id: id }).lean();
     }
@@ -247,9 +247,9 @@ async function retrieveLister(id) {
 
 async function getAllListers() {
     const allListers = await lister.find().lean();
-    return allListers.filter(l =>
-        l.statusL === "approved" || l.statusL === "rejected"
-    )
+    return allListers.filter(
+        (l) => l.statusL === "approved" || l.statusL === "rejected",
+    );
 }
 
 async function addLister(listerData) {
@@ -260,20 +260,16 @@ async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
     return lister.updateOne(
         { _id: userId },
-        { address, contactNo, pets, experience},
+        { address, contactNo, pets, experience },
     );
 }
 
-async function getListerByUserName (userName) {
-    return await lister.findOne({ userName }).lean()
+async function getListerByUserName(userName) {
+    return await lister.findOne({ userName }).lean();
 }
 
-async function updateUserRole (userId, role) {
-    
-    return users.updateOne(
-        { _id : userId },
-        { role }
-    );
+async function updateUserRole(userId, role) {
+    return users.updateOne({ _id: userId }, { role });
 }
 
 async function deleteLister(listerID) {
@@ -319,4 +315,5 @@ module.exports = {
     securePassword,
     updatePreferences,
     countUsers,
+    findUserByName,
 };

@@ -3,64 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit <%=pet.name%>'s details </title>
+    <title>Edit <%= pet.name %>'s Details</title>
     <link rel="stylesheet" href="/style/edit-listing.css">
 </head>
 <body>
     <%- include('common/header') %>
+
     <main class="edit-page">
         <div class="edit-card">
-
             <h2>Current details for <%= pet.name %></h2>
 
             <div class="pet-card">
-                <img src="/images/<%= pet.img %>.jpg" alt="<%= pet.name %>">
+                <img
+                    src="/images/<%= pet.img %>.jpg"
+                    alt="<%= pet.name %>"
+                >
                 <h3><%= pet.name %></h3>
 
-                <% for (key in pet) { %>
-                    <% if (key != 'type' && key != 'uid' && key != "_id" && key != "createdAt" && key != 'updatedAt' && key !== '__v' && key != 'img' && key != 'name') { %>
-                        <% if (key == "dob") { %>
-                            <h4>Date of Birth: <%= pet[key] %></h4>
-                        <%}else if (key == 'createdByAdmin'){%>
-                            <%if (user.role == "admin"){%>
-                            <h4>Created by Admin : <%= pet[key] ? 'Yes' : 'No' %></h4>
-                            <%}%>
-                        <%}else if (key == 'personality' ){%>
-                            <h4><%=key[0].toUpperCase() + key.slice(1)%> : <%=pet[key].join(', ') != '' ? pet[key].join(', ') : 'N/A'%></h4>
-                        <%}%>
-                        <% } else if (pet[key] == true) { %>
-                            <% if (key == 'hdbApproved') { %>
+                <% for (let key in pet) { %>
+                    <% if (
+                        key !== 'type' &&
+                        key !== 'uid' &&
+                        key !== '_id' &&
+                        key !== 'createdAt' &&
+                        key !== 'updatedAt' &&
+                        key !== '__v' &&
+                        key !== 'img' &&
+                        key !== 'name'
+                    ) { %>
+
+                        <% if (key === 'dob') { %>
+                            <h4>Date of Birth: <%= pet[key] || 'N/A' %></h4>
+
+                        <% } else if (key === 'createdByAdmin') { %>
+                            <% if (user && user.role === 'admin') { %>
+                                <h4>Created by Admin: <%= pet[key] ? 'Yes' : 'No' %></h4>
+                            <% } %>
+
+                        <% } else if (key === 'personality') { %>
+                            <h4>
+                                Personality:
+                                <%= Array.isArray(pet[key]) && pet[key].length > 0 ? pet[key].join(', ') : 'N/A' %>
+                            </h4>
+
+                        <% } else if (pet[key] === true) { %>
+                            <% if (key === 'hdbApproved') { %>
                                 <h4>HDB Approved: Yes</h4>
                             <% } else { %>
-                                <h4><%= key[0].toUpperCase() + key.slice(1) %> : Yes</h4>
+                                <h4><%= key[0].toUpperCase() + key.slice(1) %>: Yes</h4>
                             <% } %>
-                        <% } else if (pet[key] == false) { %>
-                            <% if (key == 'hdbApproved') { %>
+
+                        <% } else if (pet[key] === false) { %>
+                            <% if (key === 'hdbApproved') { %>
                                 <h4>HDB Approved: No</h4>
                             <% } else { %>
-                                <h4><%= key[0].toUpperCase() + key.slice(1) %> : No</h4>
+                                <h4><%= key[0].toUpperCase() + key.slice(1) %>: No</h4>
                             <% } %>
-                        <%}else if (key == 'activityLevel' ){%>
-                            <h4>Activity Level : <%=pet[key]%></h4>
-                        <%}else if (key == 'experienceLevel' ){%>
-                            <h4>Experience level recommended : <%=pet[key]%></h4>
-            
+
+                        <% } else if (key === 'activityLevel') { %>
+                            <h4>Activity Level: <%= pet[key] || 'N/A' %></h4>
+
+                        <% } else if (key === 'experienceLevel') { %>
+                            <h4>Experience Level Recommended: <%= pet[key] || 'N/A' %></h4>
+
                         <% } else { %>
-                            <h4><%= key[0].toUpperCase() + key.slice(1) %> : <%= pet[key] ? pet[key][0].toUpperCase() + pet[key].slice(1) : 'N/A' %></h4>
+                            <h4>
+                                <%= key[0].toUpperCase() + key.slice(1) %>:
+                                <%= typeof pet[key] === 'string'
+                                    ? pet[key][0].toUpperCase() + pet[key].slice(1)
+                                    : (pet[key] ?? 'N/A') %>
+                            </h4>
                         <% } %>
+
                     <% } %>
                 <% } %>
             </div>
+
             <br>
+
             <h2 class="section-title">What do you want to do?</h2>
 
             <div class="form-actions">
-                <a href="/update-pet?pid=<%= pet._id %>"><button class="edit-btn">Edit Listing</button></a>
-                <a href="/delete-pet?pid=<%= pet._id %>"><button class="withdraw-btn">Withdraw Listing</button></a>
+                <a  href="/update-pet?pid=<%= pet._id %>"><button class="edit-btn">Edit Listing</button> </a>
+                <a  href="/delete-pet?pid=<%= pet._id %>"><button class="withdraw-btn">Withdraw Listing</button> </a>
             </div>
         </div>
     </main>
-    <%- include('common/footer') %>
 
+    <%- include('common/footer') %>
 </body>
 </html>

@@ -17,7 +17,7 @@ router.get(
     adminController.confirmListingStatus,
 );
 router.post(
-    "/admin/admin-change-listings-status",
+    "/admin/change-listings-status",
     authMiddleware.isAdmin,
     adminController.updateListingStatus,
 );
@@ -35,53 +35,59 @@ router.get(
     authMiddleware.isAdmin,
     adminController.displayUpdateUser,
 );
-router.post("/admin-user-update", adminController.updateUser);
+router.post("/admin/user-update", adminController.updateUser);
 
 router.get(
-    "/admin-lister-status",
+    "/admin/lister-status",
     authMiddleware.isAdmin,
     adminController.confirmListerStatus,
 );
 router.post(
-    "/admin-lister-status",
+    "/admin/lister-status",
     authMiddleware.isAdmin,
     adminController.updateListerStatus,
 );
-router.get("/admin-lister", authMiddleware.isAdmin, adminController.showListerListings);
+router.get(
+    "/admin/lister",
+    authMiddleware.isAdmin,
+    adminController.showListerListings,
+);
 // router.post("/admin-lister", adminController.filterLister);
 
 router.get(
-    "/admin-lister-approve",
+    "/admin/lister-approve",
     authMiddleware.isAdmin,
     adminController.approveLister,
 );
 
 router.get(
-    "/admin-lister-reject",
+    "/admin/lister-reject",
     authMiddleware.isAdmin,
     adminController.rejectLister,
 );
 
 router.get(
-    "/admin-lister-update",
+    "/admin/lister-update",
     authMiddleware.isAdmin,
     adminController.displayUpdateLister,
 );
-router.post("/admin-lister-update", adminController.updateLister);
+router.post("/admin/lister-update", adminController.updateLister);
 
 router.get(
     "/admin/delete-lister",
     authMiddleware.isAdmin,
     adminController.adminDeleteLister,
 );
- 
-router.post("/admin/admin-user-update", adminController.updateUser);
+
+router.post("/admin/user-update", adminController.updateUser);
 router.get(
     "/admin/view-user-applications",
     authMiddleware.isAdmin,
     adminController.viewUserApplications,
 );
-router.get("/admin/dashboard", authMiddleware.isAdmin, adminController.showAdminDashboard);
+router.get(
+    "/admin/dashboard",
+    authMiddleware.isAdmin,
+    adminController.showAdminDashboard,
+);
 module.exports = router;
-
-

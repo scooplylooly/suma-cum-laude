@@ -18,16 +18,18 @@ exports.showAdminPage = async (req, res) => {
     }
     topPetTypes.sort((a, b) => b.count - a.count);
     topPetTypes = topPetTypes.slice(0, 3);
-    const totalPets = await petModel.countPets({})
-    console.log("Total Pets: " + totalPets)
-    const totalApplications = await petModel.countTotalApplications({})
-    console.log("Total Applications: " + totalApplications)
-    const pendingApplications = await petModel.countPendingApplications({ status: 'pending' })
-    console.log("Total Pending Applications: " + pendingApplications)
-    const totalUsers = await accModel.countUsers({})
-    console.log("Total Users: " + totalUsers)
-    const totalFaqs = await faqModel.countFaqs({})
-    console.log("Total FAQs: " + totalFaqs)
+    const totalPets = await petModel.countPets({});
+    console.log("Total Pets: " + totalPets);
+    const totalApplications = await petModel.countTotalApplications({});
+    console.log("Total Applications: " + totalApplications);
+    const pendingApplications = await petModel.countPendingApplications({
+        status: "pending",
+    });
+    console.log("Total Pending Applications: " + pendingApplications);
+    const totalUsers = await accModel.countUsers({});
+    console.log("Total Users: " + totalUsers);
+    const totalFaqs = await faqModel.countFaqs({});
+    console.log("Total FAQs: " + totalFaqs);
     const avgDaysUnadopted = await petModel.avgDaysUnadopted();
     const avgDaysUnadoptedByType = await petModel.avgDaysUnadoptedByType();
     const adoptionRateByType = await petModel.adoptionRateByType();
@@ -243,7 +245,7 @@ exports.updateUser = async (req, res) => {
         );
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
-        return res.redirect("/admin/dashboard");
+        return res.redirect("/admin/admin-page");
     } catch (error) {
         console.error("Failed to update user details, error:", error);
     }
@@ -263,7 +265,7 @@ exports.approveLister = async (req, res) => {
 
         return res.redirect("/admin-lister-status");
     } catch (err) {
-        console.error("Error approving listers:", err)
+        console.error("Error approving listers:", err);
         return res.redirect("/admin-lister-status");
     }
 };
@@ -290,7 +292,6 @@ exports.updateListerStatus = async (req, res) => {
             } else if (statusL === "rejected") {
                 await accountModel.rejectLister(lid);
             }
-
         }
         return res.redirect("/admin/admin-page");
     } catch (err) {
@@ -309,13 +310,13 @@ exports.showListerListings = async (req, res) => {
             adminUserId,
         });
     } catch (err) {
-        console.error("Error fetching listers:", err)
+        console.error("Error fetching listers:", err);
         return res.render("admin-lister", {
             listers: [],
             adminUserId: req.session.user._id,
         });
     }
-}
+};
 
 exports.displayDeleteLister = async (req, res) => {
     let lid = req.query.lid;
@@ -323,13 +324,13 @@ exports.displayDeleteLister = async (req, res) => {
     const listerInfo = await accountModel.retrieveLister(lid);
 
     if (!listerInfo) {
-        return res.redirect("/admin-lister")
+        return res.redirect("/admin-lister");
     }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
 exports.adminDeleteLister = async (req, res) => {
     const lid = req.query.lid;
-    const uid = req.query.uid
+    const uid = req.query.uid;
 
     try {
         await accountModel.deleteLister(lid);
@@ -341,7 +342,6 @@ exports.adminDeleteLister = async (req, res) => {
         console.error("Could not delete lister:", err);
         return res.redirect("/admin-lister");
     }
-    
 };
 
 exports.displayUpdateLister = async (req, res) => {
@@ -351,9 +351,9 @@ exports.displayUpdateLister = async (req, res) => {
     const lid = req.query.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
 
-    if(!originalDetails || originalDetails.statusL !== "approved") {
+    if (!originalDetails || originalDetails.statusL !== "approved") {
         console.log("Lister not found or approved:", lid);
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     }
 
     console.log("EDITING USER:", originalDetails.userName);
@@ -378,9 +378,9 @@ exports.updateLister = async (req, res) => {
     const lid = req.body.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
 
-    if(!originalDetails || originalDetails.statusL !== "approved") {
+    if (!originalDetails || originalDetails.statusL !== "approved") {
         console.log("Lister not found or approved:", lid);
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     }
 
     const userName =
@@ -424,11 +424,11 @@ exports.updateLister = async (req, res) => {
             pets,
             experience,
         );
-        await accountModel.updateUserRole(originalDetails.uid, role)
-        
+        await accountModel.updateUserRole(originalDetails.uid, role);
+
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     } catch (error) {
         console.error("Failed to update lister details, error:", error);
     }

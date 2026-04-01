@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= userName %>'s</title>
-    <link rel="stylesheet" type="text/css" href="./style/update-profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/style/lister-style.css">
 </head>
 <body>
     <%- include('common/header') %>
@@ -19,10 +18,11 @@
                 Contact number: <input type="number" name="contactNo" value="<%= contactNo %>"> <br>
                 Current pet(s) owned: <input type="text" name="pets" value="<%= currentPets %>"> <br>
                 Experience with adoption: <input type="text" name="experience" value="<%= experience %>"> <br>
-                </div> <br>
+                
 
                 <button type="submit">Update</button>
             </form>
+            </div> <br>
             <% if (errors.length > 0) { %>
                <ul class="error-list">
                 <% errors.forEach(error => { %>

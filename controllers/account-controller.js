@@ -84,7 +84,7 @@ exports.handleRegister = async (req, res) => {
             );
             console.log("Registering user...");
             if (req.session.user && req.session.user.role === "admin") {
-                return res.redirect("/admin-users");
+                return res.redirect("/admin/users");
             }
         } catch (error) {
             errors.push(error.message);
@@ -317,13 +317,15 @@ exports.handleResetPassword = async (req, res) => {
 exports.showProfile = async (req, res) => {
     // displays user's profile if they are logged in
     const details = await accountModel.retrieveProfile(req.session.user._id);
-
+    const listerApplication = await accountModel.retrieveLister(
+        req.session.user._id,
+    );
     if (details) {
         req.session.user.role = details.role;
-        req.session.user.userName = details.userName
+        req.session.user.userName = details.userName;
     }
     const user = req.session.user;
-    res.render("user-profile", { details, user });
+    res.render("user-profile", { details, user, listerApplication });
 };
 
 exports.updateProfile = async (req, res) => {
@@ -448,7 +450,9 @@ exports.deleteProfile = async (req, res) => {
 };
 // lister related controllers below
 exports.showLister = (req, res) => {
+    const user = req.session.user;
     res.render("apply-lister", {
+        user,
         address: "",
         contactNo: "",
         reason: "",
@@ -460,9 +464,9 @@ exports.showLister = (req, res) => {
 };
 
 exports.handleLister = async (req, res) => {
-    const userId = req.session.user._id;
-    const userName = req.session.user.userName;
-
+    let userId = req.session.user._id;
+    let userName = req.session.user.userName;
+    let username = req.body.username ? req.body.username.trim() : "";
     let address = (req.body.address ?? "").trim();
     let contactNo = (req.body.contactNo ?? "").trim();
     let reason = (req.body.reason ?? "").trim();
@@ -504,6 +508,26 @@ exports.handleLister = async (req, res) => {
     }
 
     try {
+        if (username.length > 0) {
+            try {
+                const newUser = await accountModel.findUserByName(username);
+                userId = newUser._id;
+                userName = newUser.userName;
+            } catch (err) {
+                errors.push(
+                    "Username not found. Please enter a valid username.",
+                );
+                return res.render("apply-lister", {
+                    address,
+                    contactNo,
+                    reason,
+                    pets,
+                    experience,
+                    errors,
+                    success: false,
+                });
+            }
+        }
         const exists = await accountModel.retrieveLister(userId);
         if (exists && exists.statusL === "pending") {
             errors.push("Your application is pending.");
@@ -525,10 +549,9 @@ exports.handleLister = async (req, res) => {
             reason,
             pets,
             experience,
-            statusL: 'pending'
+            statusL: "pending",
         });
         return res.redirect("/adopt");
-        
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
@@ -546,10 +569,10 @@ exports.handleLister = async (req, res) => {
 exports.updateLister = async (req, res) => {
     const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
-    
+
     if (!originalDetails) {
         req.session.user.role = "user";
-        return res.redirect("/profile")
+        return res.redirect("/profile");
     }
     return res.render("update-lister-profile", { originalDetails });
 };
@@ -589,20 +612,20 @@ exports.showListerStatus = async (req, res) => {
             return res.render("lister-application-status", {
                 hasApplication: false,
                 status: null,
-                userName
+                userName,
             });
         }
         return res.render("lister-application-status", {
             hasApplication: true,
             status: application.statusL,
-            userName
+            userName,
         });
     } catch (err) {
         console.error("Error fetching lister applications:", err);
         return res.render("lister-application-status", {
             hasApplication: false,
             status: null,
-            userName
+            userName,
         });
     }
 };
@@ -618,30 +641,26 @@ exports.deleteLister = async (req, res) => {
     const userName = req.session.user.userName;
     const userId = req.session.user._id.toString();
 
-    const match = await accountModel.authenticateUser(
-        userName,
-        password,
-    );
+    const match = await accountModel.authenticateUser(userName, password);
     if (!match) {
         return res.render("delete-lister-profile", {
             error: "Wrong password. Please try again.",
         });
-    } 
+    }
 
     try {
         await accountModel.deleteListerByUid(userId); // deletes user
-        await accountModel.updateUserRole(userId, "user");;
+        await accountModel.updateUserRole(userId, "user");
 
-        req.session.user.role = "user"
+        req.session.user.role = "user";
 
         console.log("Deleting lister profile...");
         return res.redirect("/profile");
-    
     } catch (err) {
-        console.error("Failed to delete lister profile:", err)
+        console.error("Failed to delete lister profile:", err);
         return res.render("delete-lister-profile", {
-            error: "Failed to delete lister profile."
-        })
+            error: "Failed to delete lister profile.",
+        });
     }
 };
 
@@ -716,13 +735,14 @@ exports.userPreferenceForm = async (req, res) => {
 
 exports.updatePreferences = async (req, res) => {
     try {
-        const userId = req.session.user._id ;
+        const userId = req.session.user._id;
         const userInfo = await accountModel.retrieveProfile(userId);
         const userPref = userInfo.preferences;
         const housingType = req.body.housingType || "";
         const preferredAnimal = req.body.preferredAnimal || [];
         const preferredTraits = req.body.preferredTraits || [];
-        const experienceLevel = req.body.experienceLevel || userPref.experienceLevel;
+        const experienceLevel =
+            req.body.experienceLevel || userPref.experienceLevel;
         const activityLevel = req.body.activityLevel || userPref.activityLevel;
 
         const preferences = {

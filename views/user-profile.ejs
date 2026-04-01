@@ -43,27 +43,35 @@
         </div>
 
             <div class="actions">
-                <a href="/edit-profile">Edit details</a>
+                <a href="/edit-profile" class="edit-button">Edit details</a>
                 <a href="/preferences" class="edit-button">Set Preferences</a>   
-                <a href="/apply-lister">Apply lister</a>
-                <a href="/logout" class="button3">Log out</a>
-                <a href="/delete-profile" class="delete">Delete Account</a>  
-                <%if(details.role =='lister'){%>
-                    <a href="/delete-lister-profile" class="delete">Delete Lister</a>  
-                <%}%>
+                <a href="/logout" class="logout-button">Log out</a>
+                <a href="/delete-profile" class="delete-button">Delete Account</a>  
                 <%if(details.role == 'lister'){%>
-                Create your pet listings <a href="/create-listing">here!</a>
-                Update your pet details <a href="/view-listings">here!</a>
-                Update your own lister details <a href="/update-lister-profile">here!</a>
-                <%}else{%>
-                <h3>Do you want to list some pets?</h3>
-                <p>
-                    Have you already applied? <br>
-                    Check your application status <a href="/lister-application-status">here.</a>
-                </p>
-                <p>
-                    If not, click <a href="/apply-lister">here</a> to apply!
-                </p>
+                    <%if(listerApplication.statusL == 'approved'){%>
+                    <h3 style="color: green;">You're a registered <b>Lister</b>!</h3>
+                    <p>As a lister, you can create pet listings and manage them on your profile page.</p> 
+                    <a href="/update-lister-profile" class="edit-button">Edit Lister details</a>
+                    <a href="/delete-lister-profile" class="delete-button">Delete Lister profile</a>  
+                    <%}%>
+                <%}else if (details.role == 'user'){%>
+                    <h3>Interested in listing pets?</h3>
+                    <p>As a lister, you can create pet listings and manage them on your profile page.</p>
+                    <%if(listerApplication){%>
+                        <%if(listerApplication.statusL == 'pending'){%>
+                            <p>Check your application status down here & edit your details at any time.</p>
+                            <a href="/update-lister-profile" class="edit-button">Edit Lister details</a>
+                    
+                        <%}else if(listerApplication.statusL == 'rejected'){%>
+                            <h3>Your lister application was rejected.</h3>
+                            <p>You can reapply after some time.</p>
+                        <%}%>
+                        <a href="/lister-application-status" class="edit-button">Application status</a>   
+                    <%}else{%>
+                        <p>Apply to become a lister now to start listing pets for adoption!</p>
+                        <a href="/apply-lister" class="edit-button">Apply lister</a>
+                    <%}%> 
+
                 <%}%>
             </div>
         </div>
