@@ -1,0 +1,683 @@
+[
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de6010b"
+    },
+    "type": "cat",
+    "img": "pet-1774272728756",
+    "name": "Mr Chappy",
+    "breed": "british shorthair mix",
+    "gender": "female",
+    "description": "Gentle and calm blue-gray cat who enjoys quiet cuddles, a lap cat!",
+    "hdbApproved": true,
+    "dob": "2024-04-12",
+    "vaccinated": false,
+    "sterilized": true,
+    "personality": [],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:50.783Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de6010c"
+    },
+    "type": "cat",
+    "img": "ginger-cat",
+    "name": "Simba",
+    "breed": "domestic short hair",
+    "gender": "male",
+    "description": "Friendly and playful ginger cat who loves chasing laser pointers",
+    "hdbApproved": true,
+    "dob": "2025-05-20",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "playful",
+      "affectionate",
+      "curious"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:46.288Z"
+    },
+    "__v": null,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de6010d"
+    },
+    "type": "cat",
+    "img": "black-cat",
+    "name": "Luna",
+    "breed": "bombay mix",
+    "gender": "female",
+    "description": "Gentle and calm black cat who enjoys quiet cuddles",
+    "hdbApproved": true,
+    "dob": "2023-12-11",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "gentle",
+      "hunter",
+      "loyal",
+      "playful",
+      "shy"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:42.517Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de6010e"
+    },
+    "type": "dog",
+    "img": "golden-retriever",
+    "name": "Cooper",
+    "breed": "golden retriever",
+    "gender": "male",
+    "description": "Energetic and friendly golden retriever who loves water and playing fetch",
+    "hdbApproved": false,
+    "dob": "2025-03-09",
+    "vaccinated": true,
+    "sterilized": false,
+    "personality": [
+      "energetic",
+      "friendly",
+      "intelligent"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:36.034Z"
+    },
+    "__v": null,
+    "activityLevel": "high",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de6010f"
+    },
+    "type": "dog",
+    "img": "shih-tzu",
+    "name": "Coco",
+    "breed": "shih tzu",
+    "gender": "female",
+    "description": "Sweet and gentle small dog who enjoys lap time and short walks",
+    "hdbApproved": true,
+    "dob": "2022-10-23",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "sweet",
+      "calm",
+      "affectionate"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:27.876Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "experienced"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60110"
+    },
+    "type": "dog",
+    "img": "mixed-breed",
+    "name": "Rocky",
+    "breed": "mixed breed",
+    "gender": "male",
+    "description": "Resilient and loyal mixed breed dog, rescued from the streets, now ready for a loving home",
+    "hdbApproved": false,
+    "dob": "2024-01-10",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "loyal",
+      "protective",
+      "energetic"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:23.383Z"
+    },
+    "__v": null,
+    "activityLevel": "high",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60111"
+    },
+    "type": "rabbit",
+    "img": "lop-rabbit",
+    "name": "Snowball",
+    "breed": "holland lop",
+    "gender": "female",
+    "description": "Fluffy white rabbit who loves fresh vegetables and hopping around",
+    "hdbApproved": true,
+    "dob": "2023-06-08",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "gentle",
+      "quiet",
+      "playful"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:17.754Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60112"
+    },
+    "type": "rabbit",
+    "img": "rex-rabbit",
+    "name": "Oreo",
+    "breed": "rex rabbit",
+    "gender": "male",
+    "description": "Friendly black and white rabbit with soft velvety fur",
+    "hdbApproved": true,
+    "dob": "2024-09-28",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "curious",
+      "friendly",
+      "active"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:31.993Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60113"
+    },
+    "type": "bird",
+    "img": "budgie",
+    "name": "Sunny",
+    "breed": "budgie",
+    "gender": "male",
+    "description": "Colorful talking budgie who loves to sing and mimic sounds",
+    "hdbApproved": true,
+    "dob": "2025-12-25",
+    "vaccinated": true,
+    "sterilized": false,
+    "personality": [
+      "vocal",
+      "playful",
+      "social"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:09.468Z"
+    },
+    "__v": null,
+    "activityLevel": "medium",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60114"
+    },
+    "type": "bird",
+    "img": "cockatiel",
+    "name": "Peach",
+    "breed": "cockatiel",
+    "gender": "female",
+    "description": "Gentle cockatiel with beautiful peach-colored cheeks, enjoys head scratches",
+    "hdbApproved": true,
+    "dob": "2025-03-26",
+    "vaccinated": true,
+    "sterilized": false,
+    "personality": [
+      "gentle",
+      "affectionate",
+      "quiet"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:05.537Z"
+    },
+    "__v": null,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60115"
+    },
+    "type": "hamster",
+    "img": "syrian-hamster",
+    "name": "Peanut",
+    "breed": "syrian hamster",
+    "gender": "male",
+    "description": "Tiny and active hamster who loves running on his wheel and storing food in his cheeks",
+    "hdbApproved": true,
+    "dob": "2026-02-10",
+    "vaccinated": false,
+    "sterilized": false,
+    "personality": [
+      "active",
+      "curious",
+      "nocturnal"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:38:01.938Z"
+    },
+    "__v": null,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c00bac660304389de60116"
+    },
+    "type": "guinea pig",
+    "img": "abby-guinea",
+    "name": "Mochi",
+    "breed": "abyssinian guinea pig",
+    "gender": "female",
+    "description": "Chatty guinea pig with unique rosette fur pattern, loves fresh veggies",
+    "hdbApproved": true,
+    "dob": "2026-02-10",
+    "vaccinated": true,
+    "sterilized": false,
+    "personality": [
+      "vocal",
+      "social",
+      "friendly"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": true,
+    "createdByAdmin": true,
+    "createdAt": null,
+    "updatedAt": {
+      "$date": "2026-03-30T04:20:03.908Z"
+    },
+    "__v": null,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c142e39b7380bca2b8b89b"
+    },
+    "type": "cat",
+    "img": "pet-1774273251688",
+    "name": "Sesame",
+    "breed": "Exotic Long Hair",
+    "gender": "female",
+    "description": "A shy cute cat that likes to cuddle!",
+    "hdbApproved": true,
+    "dob": "2025-10-15",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "cuddly",
+      "curious",
+      "loyal",
+      "shy"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": {
+      "$date": "2026-03-23T13:40:51.691Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T04:35:33.542Z"
+    },
+    "__v": 0,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69c39973b79e2df70f1937f7"
+    },
+    "type": "dog",
+    "img": "pet-1774426483525",
+    "name": "Dog",
+    "breed": "Monkey-Dog",
+    "gender": "male",
+    "description": "Please don't laugh at my cute dog",
+    "hdbApproved": true,
+    "dob": "2000-01-01",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "active",
+      "chatty",
+      "foodie",
+      "independent",
+      "protective",
+      "social"
+    ],
+    "uid": {
+      "$oid": "69c395477db1f20cdceff26e"
+    },
+    "approved": true,
+    "adopted": true,
+    "createdByAdmin": null,
+    "createdAt": {
+      "$date": "2026-03-25T08:14:43.766Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-25T15:11:26.338Z"
+    },
+    "__v": 0,
+    "activityLevel": "high",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69c9f440ee2a810016d65879"
+    },
+    "type": "hamster",
+    "img": "pet-1774842944165",
+    "name": "Greed",
+    "breed": "Russian Dwarf Hamster",
+    "gender": "male",
+    "description": "He is hungry, feed him",
+    "hdbApproved": false,
+    "dob": "2025-12-10",
+    "vaccinated": false,
+    "sterilized": false,
+    "personality": [
+      "couch potato",
+      "foodie",
+      "goofy"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": false,
+    "adopted": false,
+    "createdByAdmin": false,
+    "createdAt": {
+      "$date": "2026-03-30T03:55:44.171Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T06:01:17.016Z"
+    },
+    "__v": 0,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69ca1d70a3c02b1015af0466"
+    },
+    "type": "bird",
+    "img": "pet-1774853487999",
+    "name": "Bird",
+    "breed": "Bird",
+    "gender": "male",
+    "description": "Bird",
+    "hdbApproved": true,
+    "dob": "1000-01-01",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "affectionate",
+      "energetic",
+      "protective"
+    ],
+    "uid": {
+      "$oid": "69c395477db1f20cdceff26e"
+    },
+    "approved": true,
+    "adopted": true,
+    "createdByAdmin": true,
+    "createdAt": {
+      "$date": "2026-03-30T06:51:28.084Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T10:35:10.780Z"
+    },
+    "__v": 0,
+    "activityLevel": "medium",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69ca4c1b36ad54b5c35cd0ee"
+    },
+    "type": "dog",
+    "img": "pet-1774865435958",
+    "name": "Bouncer",
+    "breed": "Golden Retriever",
+    "gender": "male",
+    "description": "He like to bounces!",
+    "hdbApproved": true,
+    "dob": "2023-05-11",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "energetic",
+      "gentle",
+      "goofy",
+      "playful"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": false,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": {
+      "$date": "2026-03-30T10:10:35.984Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T10:10:35.984Z"
+    },
+    "__v": 0,
+    "activityLevel": "high",
+    "experienceLevel": "intermediate"
+  },
+  {
+    "_id": {
+      "$oid": "69ca4e7286e0cd45a3fa4e45"
+    },
+    "type": "guinea pig",
+    "img": "pet-1774866034736",
+    "name": "Cookie",
+    "breed": "Coronet Guinea Pig",
+    "gender": "female",
+    "description": "A cute guinea pig that likes to play in her wheel and chirp alot",
+    "hdbApproved": true,
+    "dob": "2026-03-16",
+    "vaccinated": true,
+    "sterilized": false,
+    "personality": [
+      "chatty",
+      "energetic",
+      "friendly",
+      "playful"
+    ],
+    "uid": {
+      "$oid": "69c2699dfc85e056c882555e"
+    },
+    "approved": false,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": {
+      "$date": "2026-03-30T10:20:34.767Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T10:20:34.767Z"
+    },
+    "__v": 0,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69ca517592c82f83d1bfdec5"
+    },
+    "type": "other",
+    "img": "pet-1774866805650",
+    "name": "Nemo",
+    "breed": "Clownfish",
+    "gender": "male",
+    "description": "Its a funny clownfish",
+    "hdbApproved": false,
+    "dob": "2025-05-01",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "energetic",
+      "friendly",
+      "goofy"
+    ],
+    "uid": {
+      "$oid": "69c37e8bc1cfff7233ce4181"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": false,
+    "createdAt": {
+      "$date": "2026-03-30T10:33:25.877Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T11:42:07.557Z"
+    },
+    "__v": 0,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  },
+  {
+    "_id": {
+      "$oid": "69ca5513a3140950bfaa771c"
+    },
+    "type": "other",
+    "img": "pet-1774867731104",
+    "name": "Robert",
+    "breed": "Chinchilla",
+    "gender": "male",
+    "description": "a fun loving chinchilla",
+    "hdbApproved": true,
+    "dob": "2025-01-16",
+    "vaccinated": true,
+    "sterilized": true,
+    "personality": [
+      "curious",
+      "outgoing",
+      "playful",
+      "protective"
+    ],
+    "uid": {
+      "$oid": "69c37e8bc1cfff7233ce4181"
+    },
+    "approved": true,
+    "adopted": false,
+    "createdByAdmin": true,
+    "createdAt": {
+      "$date": "2026-03-30T10:48:51.336Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T11:42:02.172Z"
+    },
+    "__v": 0,
+    "activityLevel": "low",
+    "experienceLevel": "beginner"
+  }
+]
