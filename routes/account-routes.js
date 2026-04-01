@@ -27,11 +27,11 @@ router.post('/apply-lister', authMiddleware.checkUser, accountController.handleL
 
 router.get("/lister-application-status", authMiddleware.checkUser, accountController.showListerStatus)
 
-router.get("/edit-lister", authMiddleware.checkUser, accountController.updateLister);
-router.post("/edit-lister", authMiddleware.checkUser, accountController.processLister);
+router.get("/update-lister-profile", authMiddleware.checkUser, accountController.updateLister);
+router.post("/update-lister-profile", authMiddleware.checkUser, accountController.processLister);
 
-router.get("/delete-lister", authMiddleware.checkUser, accountController.deleteConfirmationForLister);
-router.post("/delete-lister", authMiddleware.checkUser, accountController.deleteLister);
+router.get("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteConfirmationForLister);
+router.post("/delete-lister-profile", authMiddleware.checkUser, accountController.deleteLister);
 
 router.get("/logout", accountController.logout);
 

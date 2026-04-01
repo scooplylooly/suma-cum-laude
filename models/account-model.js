@@ -161,6 +161,11 @@ async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
 }
+
+async function deleteListerByUid(userId) {
+    return lister.deleteOne({ uid: userId });
+}
+
 async function getAllUsers() {
     return users.find().lean();
 }
@@ -232,11 +237,11 @@ async function addLister(listerData) {
     return await lister.create(listerData);
 }
 
-async function updateLister(userId, address, contactNo, pets, experience, role) {
+async function updateLister(userId, address, contactNo, pets, experience) {
     // updates the profile details of speificied user
     return lister.updateOne(
         { _id: userId },
-        { address, contactNo, pets, experience, role },
+        { address, contactNo, pets, experience},
     );
 }
 
@@ -271,6 +276,7 @@ module.exports = {
     getListerByUserName,
     updateUserRole,
     deleteLister,
+    deleteListerByUid,
     getAllListers,
     addLister,
     checkUserExist,

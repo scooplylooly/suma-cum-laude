@@ -384,8 +384,9 @@ exports.updateLister = async (req, res) => {
             contactNo,
             pets,
             experience,
-            role
         );
+        await accountModel.updateUserRole(originalDetails.uid, role)
+        
         console.log("Updated details successfully");
         // updates username variable in session; becauses session captures old snapshot with outdated details
         return res.redirect("/admin-lister");

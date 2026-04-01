@@ -317,7 +317,8 @@ exports.handleResetPassword = async (req, res) => {
 exports.showProfile = async (req, res) => {
     // displays user's profile if they are logged in
     const details = await accountModel.retrieveProfile(req.session.user._id);
-    res.render("user-profile", { details });
+    const user = req.session.user;
+    res.render("user-profile", { details, user });
 };
 
 exports.updateProfile = async (req, res) => {
@@ -536,20 +537,23 @@ exports.handleLister = async (req, res) => {
 };
 
 exports.updateLister = async (req, res) => {
-    const userId = req.session.user.uid;
+    const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
-    res.render("edit-lister-profile", { originalDetails });
+    res.render("update-lister-profile", { originalDetails });
 };
 
 exports.processLister = async (req, res) => {
+    const userId = req.session.user._id.toString();
+    const originalDetails = await accountModel.retrieveLister(userId);
+
     const address = (req.body.address ?? "").trim();
     const contactNo = (req.body.contactNo ?? "").trim();
     const pets = (req.body.pets ?? "").trim();
     const experience = (req.body.experience ?? "").trim();
 
     try {
-        await accountModel.updateDetails(
-            req.session.lister.uid,
+        await accountModel.updateLister(
+            originalDetails._id,
             address,
             contactNo,
             pets,
@@ -559,7 +563,7 @@ exports.processLister = async (req, res) => {
     } catch (error) {
         console.error("Failed to update user details", error);
     }
-    res.redirect("/user-profile");
+    res.redirect("/profile");
 };
 
 exports.showListerStatus = async (req, res) => {
@@ -599,11 +603,17 @@ exports.deleteConfirmationForLister = (req, res) => {
 exports.deleteLister = async (req, res) => {
     const password = req.body.password;
     // authenticates inputted password before processing deletion
+    const userName = req.session.user.userName;
+    const userId = req.session.user._id.toString();
+
     const match = await accountModel.authenticateUser(
-        req.session.user.user.uid,
+        userName,
         password,
     );
-    if (match) {
+    if (!match) {
+        res.render("delete-lister", {
+            error: "Wrong password. Please try again.",
+        });
         await accountModel.deleteUser(req.session.user.uid); // deletes user
         console.log("Deleting user...");
         console.log("Destroying the session");
@@ -611,10 +621,22 @@ exports.deleteLister = async (req, res) => {
             // session destroyed
             res.redirect("/index.html"); // redirected to homepage
         });
-    } else {
-        res.render("delete-lister", {
-            error: "Wrong password. Please try again.",
-        });
+    } 
+
+    try {
+        await accountModel.deleteListerByUid(userId); // deletes user
+        await accountModel.updateUserRole(userId, "user");;
+
+        req.session.user.role = "user"
+
+        console.log("Deleting lister profile...");
+        return res.redirect("/user-profile");
+    
+    } catch (err) {
+        console.error("Failed to delete lister profile:", err)
+        return res.render("/delete-lister-profile", {
+            error: "Failed to delete lister profile."
+        })
     }
 };
 
