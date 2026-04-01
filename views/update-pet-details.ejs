@@ -146,18 +146,18 @@
             <div class="form-group">
                 <label>Activity Level of pet:</label>
                 <div class="radio-group">
-                    <label class="choice"><input type="radio" name="activityLevel" value="low"> Low</label>
-                    <label class="choice"><input type="radio" name="activityLevel" value="medium"> Medium</label>
-                    <label class="choice"><input type="radio" name="activityLevel" value="high"> High</label>
+                    <label class="choice"><input type="radio" name="activityLevel" value="low" <%= pet.activityLevel === 'low' ? 'checked' : '' %>> Low</label>
+                    <label class="choice"><input type="radio" name="activityLevel" value="medium" <%= pet.activityLevel === 'medium' ? 'checked' : '' %>> Medium</label>
+                    <label class="choice"><input type="radio" name="activityLevel" value="high" <%= pet.activityLevel === 'high' ? 'checked' : '' %>> High</label>
                 </div>
             </div>
             <!-- EXPERIENCE LEVEL -->
              <div class="form-group">
                 <label>Experience Level needed?</label>
                 <div class="radio-group">
-                    <label class="choice"><input type="radio" name="experienceLevel" value="beginner"> Beginner</label>
-                    <label class="choice"><input type="radio" name="experienceLevel" value="intermediate"> Intermediate</label>
-                    <label class="choice"><input type="radio" name="experienceLevel" value="experienced"> Experienced</label>
+                    <label class="choice"><input type="radio" name="experienceLevel" value="beginner" <%= pet.experienceLevel === 'beginner' ? 'checked' : '' %>> Beginner</label>
+                    <label class="choice"><input type="radio" name="experienceLevel" value="intermediate" <%= pet.experienceLevel === 'intermediate' ? 'checked' : '' %>> Intermediate</label>
+                    <label class="choice"><input type="radio" name="experienceLevel" value="experienced" <%= pet.experienceLevel === 'experienced' ? 'checked' : '' %>> Experienced</label>
                 </div>
             </div>
             <div class="form-actions">

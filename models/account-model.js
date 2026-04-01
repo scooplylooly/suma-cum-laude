@@ -31,11 +31,13 @@ const usersSchema = new mongoose.Schema({
         required: [true, "User role must be stated"],
     },
     preferences: {
-        housingType: String,
-        preferredAnimal: [String],
-        preferredTraits: [String],
-        experienceLevel: String,
-        activityLevel: String,
+        type: {
+            housingType: String,
+            preferredAnimal: [String],
+            preferredTraits: [String],
+            experienceLevel: String,
+            activityLevel: String,
+        },
         default: {
             housingType: "HDB",
             preferredAnimal: [],

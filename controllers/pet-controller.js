@@ -178,6 +178,7 @@ exports.applyInterest = async (req, res) => {
 };
 
 exports.showPetListingForm = async (req, res) => {
+    const user = req.session.user;
     return res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
@@ -267,6 +268,7 @@ exports.createPetListing = async (req, res) => {
 
         // Clear form data on success
         return res.render("pet-create-listing", {
+            user,
             errorMsg: "",
             successMsg: successMsg,
             petPersonalities,
@@ -277,6 +279,7 @@ exports.createPetListing = async (req, res) => {
         console.error("Error creating pet listing:", error);
 
         return res.render("pet-create-listing", {
+            user,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities,

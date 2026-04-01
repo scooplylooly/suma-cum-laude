@@ -25,11 +25,11 @@ router.get("/admin/users", authMiddleware.isAdmin, adminController.showUsers);
 router.post("/admin/users", adminController.filterUsers);
 
 router.get(
-    "/admin/delete-user-profile",
+    "/admin/delete-user",
     authMiddleware.isAdmin,
     adminController.displayDeleteUser,
 );
-router.post("/admin/delete-user-profile", adminController.deleteUser);
+router.post("/admin/delete-user", adminController.deleteUser);
 router.get(
     "/admin/user-update",
     authMiddleware.isAdmin,
