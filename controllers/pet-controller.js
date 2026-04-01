@@ -305,13 +305,6 @@ exports.showPetlistingProfile = async (req, res) => {
     });
 };
 
-exports.changePetlistingProfile = async (req, res) => {
-    const pid = req.query.pid;
-    let pet = await listing.findPetById(pid);
-    res.render("edit-pet-listing", {
-        pet,
-    });
-};
 
 exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
