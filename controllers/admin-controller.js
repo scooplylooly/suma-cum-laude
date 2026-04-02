@@ -155,8 +155,17 @@ exports.deleteUser = async (req, res) => {
     let userInfo = await accountModel.retrieveProfile(uid);
     let error = "";
     try {
+        let pets = await petModel.findPetsByUID(uid);
+        for (let pet of pets) {
+            await petModel.deletePet(pet._id);
+        }
+        let applications = await petModel.findApplicationbyUID(uid);
+        for (let app of applications) {
+            await petModel.deleteApplication(app._id);
+        }
         await accountModel.deleteListerByUid(uid);
         await accountModel.deleteUser(uid);
+       
         console.log("user deleted!");
         return res.redirect("/admin/users");
     } catch (err) {
@@ -198,8 +207,10 @@ exports.updateUser = async (req, res) => {
     const email = (req.body.email ?? "").trim() || originalDetails.email;
     // note that password fields could be left empty if user does not key in values
     // passwords are not shown for security in update page
-    const password = (req.body.password ?? "").trim();
-    const password2 = (req.body.password2 ?? "").trim();
+    const password =
+        (req.body.password ?? "").trim() || originalDetails.password;
+    const password2 =
+        (req.body.password2 ?? "").trim() || originalDetails.password;
     const DOB = req.body.dob;
     const role = req.body.role;
     const securityKey =
@@ -345,6 +356,15 @@ exports.adminDeleteLister = async (req, res) => {
         if (uid) {
             await accountModel.updateUserRole(uid, "user");
         }
+        let applications = await petModel.findApplicationbyUID(uid);
+        for (let app of applications) {
+            await petModel.deleteApplication(app._id);
+        }
+        let pets = await petModel.findPetsByUID(uid);
+        for (let pet of pets) {
+            await petModel.deletePet(pet._id);
+        }
+
         return res.redirect("/admin/lister");
     } catch (err) {
         console.error("Could not delete lister:", err);
@@ -358,6 +378,7 @@ exports.displayUpdateLister = async (req, res) => {
     // and is put as default value for form fields
     const lid = req.query.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
+    const userName = originalDetails.userName;
 
     if (!originalDetails || originalDetails.statusL !== "approved") {
         console.log("Lister not found or approved:", lid);
@@ -365,7 +386,6 @@ exports.displayUpdateLister = async (req, res) => {
     }
 
     console.log("EDITING USER:", originalDetails.userName);
-    const userName = originalDetails.userName;
     const address = originalDetails.address;
     const contactNo = originalDetails.contactNo;
     const currentPets = originalDetails.pets;
@@ -385,14 +405,6 @@ exports.displayUpdateLister = async (req, res) => {
 exports.updateLister = async (req, res) => {
     const lid = req.body.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
-
-    if (!originalDetails || originalDetails.statusL !== "approved") {
-        console.log("Lister not found or approved:", lid);
-        return res.redirect("/admin/lister");
-    }
-
-    const userName =
-        (req.body.userName ?? "").trim() || originalDetails.userName;
     const address = (req.body.address ?? "").trim() || originalDetails.address;
     const contactNo =
         (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
@@ -401,27 +413,7 @@ exports.updateLister = async (req, res) => {
         (req.body.experience ?? "").trim() || originalDetails.experience;
     const role = req.body.role;
     console.log(role);
-
-    let errors = [];
     console.log("Editing lister:", originalDetails.userName);
-    if (
-        userName !== originalDetails.userName &&
-        (await accountModel.checkUserExist(userName))
-    ) {
-        errors.push("Username already exists");
-    }
-
-    if (errors.length > 0) {
-        return res.render("update-lister-profile", {
-            address,
-            contactNo,
-            role,
-            pets: "",
-            experience: "",
-            errors,
-            lid,
-        });
-    }
 
     try {
         // updates fields of user profile in database
@@ -435,7 +427,6 @@ exports.updateLister = async (req, res) => {
         await accountModel.updateUserRole(originalDetails.uid, role);
 
         console.log("Updated details successfully");
-        // updates username variable in session; becauses session captures old snapshot with outdated details
         return res.redirect("/admin/lister");
     } catch (error) {
         console.error("Failed to update lister details, error:", error);

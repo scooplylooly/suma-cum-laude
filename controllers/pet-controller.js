@@ -118,6 +118,10 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
+
+    const appExist = await listing.findApplicationbyUID(user._id);
+    console.log("appExist", appExist);
+
     let pid = req.query.pid;
     if (!pid) {
         return res.redirect("/adopt");
@@ -130,11 +134,13 @@ exports.showPetProfile = async (req, res) => {
             successMsg: "",
             user,
             userInfo: await accountModel.retrieveProfile(user._id),
+            appExist,
         });
     }
 };
 
 exports.applyInterest = async (req, res) => {
+    const appExist = await listing.findApplicationbyUID(user._id);
     let errorMsg = "";
     let successMsg = "";
     // let petFound = null;
@@ -143,12 +149,12 @@ exports.applyInterest = async (req, res) => {
     let uid = req.session.user._id;
     let userName = req.session.user.userName;
     let pid = pet._id;
-    let reason = req.body.applyReason;
-    let houseType = req.body.houseType;
-    let existingPets = req.body.existingPets;
-    let petExperience = req.body.petExperience;
-    let income = req.body.income;
-    let contactNo = req.body.contactNo;
+    let reason = (req.body.applyReason ?? "").trim();
+    let houseType = (req.body.houseType ?? "").trim();
+    let existingPets = (req.body.existingPets ?? "").trim();
+    let petExperience = (req.body.petExperience ?? "").trim();
+    let income = (req.body.income ?? "").trim();
+    let contactNo = (req.body.contactNo ?? "").trim();
     const user = req.session.user;
 
     if (
@@ -166,6 +172,7 @@ exports.applyInterest = async (req, res) => {
             successMsg: successMsg,
             user,
             userInfo: await accountModel.retrieveProfile(uid),
+            appExist,
         });
     }
 
@@ -198,6 +205,7 @@ exports.applyInterest = async (req, res) => {
         successMsg: successMsg,
         user,
         userInfo: await accountModel.retrieveProfile(uid),
+        appExist,
     });
 };
 
@@ -278,7 +286,7 @@ exports.createPetListing = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: user ? user._id : null,
-        approved: false, // New listings start as unapproved
+        approved: createdByAdmin ? true : false, // New listings start as unapproved
         createdByAdmin: createdByAdmin,
         activityLevel: activityLevel,
         experienceLevel: experienceLevel,
@@ -629,19 +637,21 @@ exports.updateApplication = async (req, res) => {
     });
 };
 exports.updateApplicationDetails = async (req, res) => {
-    const user = req.session.user;
-    
-    if (!user) {
-        return res.redirect("/login")
-    };
-
-    const houseType = req.body.houseType;
-    const existingPets = req.body.existingPets;
-    const reason = req.body.applyReason;
-    const contactNo = req.body.contactNo;
-    const income = req.body.income;
-    const petExperience = req.body.petExperience;
     const appID = req.body.appID;
+    console.log("APPID:", appID);
+    const originalApp = await listing.findApplicationByID(appID);
+    console.log("Original Application:", originalApp);
+    const houseType =
+        (req.body.houseType ?? "").trim() || originalApp.houseType;
+    const existingPets =
+        (req.body.existingPets ?? "").trim() || originalApp.existingPets;
+    const reason = (req.body.reason ?? "").trim() || originalApp.reason;
+    const contactNo =
+        (req.body.contactNo ?? "").trim() || originalApp.contactNo;
+    const income = (req.body.income ?? "").trim() || originalApp.income;
+    const petExperience =
+        (req.body.petExperience ?? "").trim() || originalApp.petExperience;
+    const user = req.session.user;
     const uid = user._id;
     if (
         !houseType ||
