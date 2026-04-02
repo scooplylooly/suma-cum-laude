@@ -110,6 +110,7 @@ exports.searchPet = async (req, res) => {
 
 exports.showPetListingForm = async (req, res) => {
     const user = req.session.user;
+    const appExist = await petModel.findApplicationbyUID(user._id);
     return res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
@@ -120,43 +121,61 @@ exports.showPetListingForm = async (req, res) => {
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
 
-    const appExist = await listing.findApplicationbyUID(user._id);
+    let pid = req.query.pid;
+    const appForPet = await listing.findApplicationByPet(pid);
+    let appExist = false;
+    if (appForPet) {
+        for (app of appForPet) {
+            if (app.uid == user._id) {
+                appExist = true;
+                break;
+            }
+        }
+    }
     console.log("appExist", appExist);
 
-    let pid = req.query.pid;
     if (!pid) {
         return res.redirect("/adopt");
     } else {
         let result = await listing.findPetById(pid);
         console.log(result);
         return res.render("pet-profile", {
+            appExist,
             petFound: result,
             errorMsg: "",
             successMsg: "",
             user,
             userInfo: await accountModel.retrieveProfile(user._id),
-            appExist,
         });
     }
 };
 
 exports.applyInterest = async (req, res) => {
-    const appExist = await listing.findApplicationbyUID(user._id);
+    const user = req.session.user;
+    let petName = req.body.petName;
+    let pet = await listing.findPet(petName).lean();
+    let pid = pet._id;
+    let appForPet = await listing.findApplicationByPet(pid);
+    let appExist = false;
+    if (appForPet) {
+        for (app of appForPet) {
+            if (app.uid == user._id) {
+                appExist = true;
+            }
+            break;
+        }
+    }
     let errorMsg = "";
     let successMsg = "";
     // let petFound = null;
-    let petName = req.body.petName;
-    let pet = await listing.findPet(petName).lean();
-    let uid = req.session.user._id;
+    let uid = user._id;
     let userName = req.session.user.userName;
-    let pid = pet._id;
     let reason = (req.body.applyReason ?? "").trim();
     let houseType = (req.body.houseType ?? "").trim();
     let existingPets = (req.body.existingPets ?? "").trim();
     let petExperience = (req.body.petExperience ?? "").trim();
     let income = (req.body.income ?? "").trim();
     let contactNo = (req.body.contactNo ?? "").trim();
-    const user = req.session.user;
 
     if (
         !reason ||
@@ -206,7 +225,7 @@ exports.applyInterest = async (req, res) => {
         successMsg: successMsg,
         user,
         userInfo: await accountModel.retrieveProfile(uid),
-        appExist,
+        appExist: successMsg != "" ? true : false,
     });
 };
 
@@ -361,6 +380,7 @@ exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);
     res.render("update-pet-details", {
+        redirectUrl: null,
         pet,
         petPersonalities,
         errorMsg: "",
@@ -372,7 +392,7 @@ exports.updatePetProfile = async (req, res) => {
 exports.petUpdated = async (req, res) => {
     const pid = req.body.pid;
     console.log("PID RECEIVED:", pid);
-
+    let redirectUrl = "/view-listings";
     // Validate pid exists
     if (!pid) {
         return res.status(400).send("Pet ID is missing");
@@ -419,6 +439,9 @@ exports.petUpdated = async (req, res) => {
         (req.body.activityLevel ?? "").trim() || pet.activityLevel;
     let experienceLevel =
         (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
+    if (user.role) {
+        redirectUrl = "/admin/listings";
+    }
 
     let errorMsg = "";
     let successMsg = "";
@@ -434,6 +457,7 @@ exports.petUpdated = async (req, res) => {
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             pet: pet,
@@ -501,6 +525,7 @@ exports.petUpdated = async (req, res) => {
         const updatedPet = await listing.findPetById(pid);
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: "",
             successMsg: successMsg,
             pet: updatedPet,
@@ -527,6 +552,7 @@ exports.petUpdated = async (req, res) => {
         }
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities: petPersonalities,
@@ -555,6 +581,7 @@ exports.deletePetProfile = async (req, res) => {
 };
 exports.petDeleted = async (req, res) => {
     let redirectUrl = "/view-listings";
+    let user = req.session.user;
     const pid = req.body.pid;
     let pet = await listing.findPetById(pid);
     console.log("pet", pet);
@@ -564,7 +591,10 @@ exports.petDeleted = async (req, res) => {
         await listing.deletePetData(pid, pet.img);
 
         console.log("deleted");
-        return res.redirect("/view-listings");
+        if (user.role == "admin") {
+            redirectUrl = "/admin/listings";
+        }
+        return res.redirect(redirectUrl);
     } catch (err) {
         console.error("Trouble deleting pet", err);
         fail = "Error deleting pet";
