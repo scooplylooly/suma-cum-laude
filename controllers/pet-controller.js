@@ -615,6 +615,7 @@ exports.approveApp = async (req, res) => {
     const petID = req.query.petID;
     const petName = req.query.petName;
     const user = req.session.user;
+    let pet = await listing.findPetById(petID);
 
     try {
         await listing.updateApplicationbyID(appID, value);
@@ -636,7 +637,7 @@ exports.approveApp = async (req, res) => {
         }
     }
     applications = await listing.findApplicationByPet(petID);
-    return res.render("view-applications", { applications, user, petName });
+    return res.render("view-applications", { applications, user, petName, pet });
 };
 exports.denyApp = async (req, res) => {
     const appID = req.query.application;
@@ -644,6 +645,7 @@ exports.denyApp = async (req, res) => {
     const petID = req.query.petID;
     const petName = req.query.petName;
     const user = req.session.user;
+    let pet = await listing.findPetById(petID);
     try {
         await listing.updateApplicationbyID(appID, value);
         console.log("Success!");
@@ -651,7 +653,7 @@ exports.denyApp = async (req, res) => {
         console.log(error);
     }
     const applications = await listing.findApplicationByPet(petID);
-    return res.render("view-applications", { applications, user, petName });
+    return res.render("view-applications", { applications, user, petName , pet});
 };
 exports.applicationStatus = async (req, res) => {
     const user = req.session.user;
