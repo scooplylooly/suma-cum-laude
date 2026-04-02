@@ -1,7 +1,6 @@
 const accountModel = require("../models/account-model");
 const petModel = require("../models/pet-model");
 const faqModel = require("../models/faq-model");
-const accModel = require("../models/account-model");
 
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
@@ -26,7 +25,7 @@ exports.showAdminPage = async (req, res) => {
         status: "pending",
     });
     console.log("Total Pending Applications: " + pendingApplications);
-    const totalUsers = await accModel.countUsers({});
+    const totalUsers = await accountModel.countUsers({});
     console.log("Total Users: " + totalUsers);
     const totalFaqs = await faqModel.countFaqs({});
     console.log("Total FAQs: " + totalFaqs);
@@ -271,16 +270,16 @@ exports.approveLister = async (req, res) => {
         await accountModel.approveLister(lid);
         await accountModel.updateUserRole(application.uid, "lister");
 
-        return res.redirect("/admin-lister-status");
+        return res.redirect("/admin/lister-status");
     } catch (err) {
         console.error("Error approving listers:", err);
-        return res.redirect("/admin-lister-status");
+        return res.redirect("/admin/lister-status");
     }
 };
 exports.rejectLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.rejectLister(uid);
-    res.redirect("/admin-lister-status");
+    res.redirect("/admin/lister-status");
 };
 
 exports.confirmListerStatus = async (req, res) => {
@@ -332,7 +331,7 @@ exports.displayDeleteLister = async (req, res) => {
     const listerInfo = await accountModel.retrieveLister(lid);
 
     if (!listerInfo) {
-        return res.redirect("/admin-lister");
+        return res.redirect("/admin/lister");
     }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
@@ -458,7 +457,7 @@ exports.showAdminDashboard = async (req, res) => {
         status: "pending",
     });
     console.log("Total Pending Applications: " + pendingApplications);
-    const totalUsers = await accModel.countUsers({});
+    const totalUsers = await accountModel.countUsers({});
     console.log("Total Users: " + totalUsers);
     const totalFaqs = await faqModel.countFaqs({});
     console.log("Total FAQs: " + totalFaqs);

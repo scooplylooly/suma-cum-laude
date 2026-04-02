@@ -113,6 +113,8 @@ exports.showPetListingForm = async (req, res) => {
         errorMsg: "",
         successMsg: "",
         user,
+        petPersonalities,
+        formData: null,
     });
 };
 
@@ -149,6 +151,9 @@ exports.applyInterest = async (req, res) => {
     let petExperience = req.body.petExperience;
     let income = req.body.income;
     let contactNo = req.body.contactNo;
+    let activityLevel = req.body.activityLevel;
+    let experienceLevel = req.body.experienceLevel
+
     const user = req.session.user;
 
     if (
@@ -157,7 +162,9 @@ exports.applyInterest = async (req, res) => {
         !existingPets ||
         !petExperience ||
         !income ||
-        !contactNo
+        !contactNo ||
+        !activityLevel ||
+        !experienceLevel 
     ) {
         errorMsg += "Please fill in all fields to apply for adoption.";
         return res.render("pet-profile", {
@@ -181,6 +188,8 @@ exports.applyInterest = async (req, res) => {
         petExperience: petExperience,
         income: income,
         contactNo: contactNo,
+        activityLevel: activityLevel,
+        experienceLevel: experienceLevel,
     };
 
     try {
@@ -201,21 +210,14 @@ exports.applyInterest = async (req, res) => {
     });
 };
 
-exports.showPetListingForm = async (req, res) => {
-    return res.render("pet-create-listing", {
-        errorMsg: "",
-        successMsg: "",
-        petPersonalities,
-        formData: null,
-    });
-};
+
 
 exports.createPetListing = async (req, res) => {
     let user
     let imageFilename
 
     if (req.body.ownerName) {
-    user = await account.findUserByName(req.body.ownerName)
+    user = await accountModel.findUserByName(req.body.ownerName)
     } else {
     user = req.session.user
     }
@@ -324,7 +326,7 @@ exports.viewListings = async (req, res) => {
     const uid = user._id;
     const pets = await listing.getMyPets(uid).lean();
     let petFound = [];
-    for (pet of pets) {
+    for (let pet of pets) {
         if (pet.uid == uid) {
             petFound.push(pet);
         }
@@ -660,7 +662,7 @@ exports.updateApplicationDetails = async (req, res) => {
         !income ||
         !petExperience
     ) {
-        errorMsg = "Please fill in all fields to update your application.";
+        let errorMsg = "Please fill in all fields to update your application.";
         const application = await listing.findApplicationByID(req.body.appID);
         return res.render("update-application", {
             application,

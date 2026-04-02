@@ -254,9 +254,9 @@ exports.findPetById = function (pid) {
 //     }
 // };
 
-exports.createPetData = function (pet) {
+exports.createPetData = async function (pet) {
     try {
-        Pet.create(pet);
+        await Pet.create(pet);
         console.log("Listing saved successfully");
     } catch (err) {
         console.error("Error writing to db:", err);
