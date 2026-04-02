@@ -4,7 +4,7 @@ const router = express.Router();
 const adminController = require("../controllers/admin-controller");
 const authMiddleware = require("../middleware/auth-middleware.js");
 
-router.get("/admin/admin-page", adminController.showAdminPage);
+router.get("/admin/admin-page", authMiddleware.isAdmin, adminController.showAdminPage);
 router.get(
     "/admin/listings",
     authMiddleware.isAdmin,
