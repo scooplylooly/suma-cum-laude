@@ -216,10 +216,17 @@ exports.updateUser = async (req, res) => {
 
     if (password !== password2) {
         errors.push("Passwords do not match");
+    } else {
+        const checkSecure = accountModel.securePassword(password);
+        if (checkSecure !== true) {
+            for (let error of checkSecure) {
+                errors.push(error);
+            }
+        }
     }
 
     if (errors.length > 0) {
-        return res.render("update-user-profile", {
+        return res.render("admin-user-update", {
             userName,
             email,
             DOB,
