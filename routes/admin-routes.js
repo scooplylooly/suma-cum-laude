@@ -85,9 +85,5 @@ router.get(
     authMiddleware.isAdmin,
     adminController.viewUserApplications,
 );
-router.get(
-    "/admin/dashboard",
-    authMiddleware.isAdmin,
-    adminController.showAdminDashboard,
-);
+
 module.exports = router;
