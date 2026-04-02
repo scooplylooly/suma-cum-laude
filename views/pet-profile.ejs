@@ -56,6 +56,9 @@
     </div>
 
     <div>
+        <%if(appExist){%>
+            <h3>You have already applied for this <%=petFound.name%>!</h3>
+        <%}else{%>
         <!-- suppose to get user info since they signed in, and then save their username into database for application -->
         <h2> Interested in  adopting <%=petFound.name%>? Apply your interest here!</h2>
         <form action="/apply-for-pet" method="post">
@@ -83,6 +86,7 @@
             <textarea name="applyReason" cols="50" rows="5"></textarea> <br><br>
             <button type="submit">Submit</button>
         </form>
+        <%}%>
     </div>
     <% if (errorMsg){ %>
         <h3 style="color: red;"><%=errorMsg%></h3>

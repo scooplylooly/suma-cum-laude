@@ -137,7 +137,7 @@
             <h3 class="message success"><%= successMsg %> Redirecting to listings...</h3>
             <script>
                 setTimeout(() => {
-                    location.href = "/view-listings";
+                    location.href = "<%= redirectUrl %>";
                 }, 3000)
             </script>
         <% } %>

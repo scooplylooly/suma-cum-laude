@@ -1,6 +1,7 @@
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
+const { use } = require("react");
 
 const petPersonalities = [
     "affectionate",
@@ -109,6 +110,7 @@ exports.searchPet = async (req, res) => {
 
 exports.showPetListingForm = async (req, res) => {
     const user = req.session.user;
+    const appExist = await petModel.findApplicationbyUID(user._id);
     return res.render("pet-create-listing", {
         errorMsg: "",
         successMsg: "",
@@ -120,13 +122,27 @@ exports.showPetListingForm = async (req, res) => {
 
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
+
     let pid = req.query.pid;
+    const appForPet = await listing.findApplicationByPet(pid);
+    let appExist = false;
+    if (appForPet) {
+        for (app of appForPet) {
+            if (app.uid == user._id) {
+                appExist = true;
+                break;
+            }
+        }
+    }
+    console.log("appExist", appExist);
+
     if (!pid) {
         return res.redirect("/adopt");
     } else {
         let result = await listing.findPetById(pid);
         console.log(result);
         return res.render("pet-profile", {
+            appExist,
             petFound: result,
             errorMsg: "",
             successMsg: "",
@@ -137,24 +153,31 @@ exports.showPetProfile = async (req, res) => {
 };
 
 exports.applyInterest = async (req, res) => {
+    const user = req.session.user;
+    let petName = req.body.petName;
+    let pet = await listing.findPet(petName).lean();
+    let pid = pet._id;
+    let appForPet = await listing.findApplicationByPet(pid);
+    let appExist = false;
+    if (appForPet) {
+        for (app of appForPet) {
+            if (app.uid == user._id) {
+                appExist = true;
+            }
+            break;
+        }
+    }
     let errorMsg = "";
     let successMsg = "";
     // let petFound = null;
-    let petName = req.body.petName;
-    let pet = await listing.findPet(petName).lean();
-    let uid = req.session.user._id;
-    let userName = req.session.user.userName;
-    let pid = pet._id;
-    let reason = req.body.applyReason;
-    let houseType = req.body.houseType;
-    let existingPets = req.body.existingPets;
-    let petExperience = req.body.petExperience;
-    let income = req.body.income;
-    let contactNo = req.body.contactNo;
-    let activityLevel = req.body.activityLevel;
-    let experienceLevel = req.body.experienceLevel
-
-    const user = req.session.user;
+    let uid = user._id;
+    let userName = user.userName;
+    let reason = (req.body.applyReason ?? "").trim();
+    let houseType = (req.body.houseType ?? "").trim();
+    let existingPets = (req.body.existingPets ?? "").trim();
+    let petExperience = (req.body.petExperience ?? "").trim();
+    let income = (req.body.income ?? "").trim();
+    let contactNo = (req.body.contactNo ?? "").trim();
 
     if (
         !reason ||
@@ -164,7 +187,7 @@ exports.applyInterest = async (req, res) => {
         !income ||
         !contactNo ||
         !activityLevel ||
-        !experienceLevel 
+        !experienceLevel
     ) {
         errorMsg += "Please fill in all fields to apply for adoption.";
         return res.render("pet-profile", {
@@ -173,6 +196,7 @@ exports.applyInterest = async (req, res) => {
             successMsg: successMsg,
             user,
             userInfo: await accountModel.retrieveProfile(uid),
+            appExist,
         });
     }
 
@@ -207,32 +231,34 @@ exports.applyInterest = async (req, res) => {
         successMsg: successMsg,
         user,
         userInfo: await accountModel.retrieveProfile(uid),
+        appExist: successMsg != "" ? true : false,
     });
 };
 
-
+exports.showPetListingForm = async (req, res) => {
+    return res.render("pet-create-listing", {
+        redirectUrl: null,
+        errorMsg: "",
+        successMsg: "",
+        petPersonalities,
+        formData: null,
+    });
+};
 
 exports.createPetListing = async (req, res) => {
-    let user
-    let imageFilename
-
-    if (req.body.ownerName) {
-    user = await accountModel.findUserByName(req.body.ownerName)
-    } else {
-    user = req.session.user
-    }
-
-    console.log("user", user)
-    let type = req.body.type
-    let breed = req.body.breed
-
-    if (req.file) {
-    imageFilename = req.file.filename.replace(".jpg", "");
-    } else {
-    imageFilename = "default-pet";
-    }
-    console.log("Saved image as:", imageFilename)
-
+    let username = (req.body.ownerName ?? "").trim();
+    console.log("Received username:", username);
+    let user = username
+        ? await accountModel.findUserByName(username)
+        : req.session.user;
+    console.log("user", user);
+    let type = req.body.type;
+    let breed = req.body.breed;
+    const imageFilename = req.file
+        ? req.file.filename.replace(".jpg", "")
+        : "default-pet";
+    console.log("Saved image as:", imageFilename); // Should be like "pet-1234567890.jpg
+    let redirectUrl = "/view-listings";
     let name = req.body.name;
     let gender = req.body.gender;
     let desc = req.body.desc;
@@ -257,8 +283,12 @@ exports.createPetListing = async (req, res) => {
     if (!dob) missingFields.push("Date of Birth");
     if (activityLevel === undefined) missingFields.push("Activity Level");
     if (experienceLevel === undefined) missingFields.push("Experience Level");
-    if (user.role == "user")
+    console.log(user);
+    if (!user) {
+        missingFields.push("Valid owner / lister");
+    } else if (user.role === "user") {
         missingFields.push("The owner must be a lister to create a listing");
+    }
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
@@ -290,7 +320,7 @@ exports.createPetListing = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: user ? user._id : null,
-        approved: false, // New listings start as unapproved
+        approved: createdByAdmin ? true : false, // New listings start as unapproved
         createdByAdmin: createdByAdmin,
         activityLevel: activityLevel,
         experienceLevel: experienceLevel,
@@ -299,9 +329,10 @@ exports.createPetListing = async (req, res) => {
     try {
         await listing.createPetData(newPet);
         successMsg = "Listing created successfully!";
-
+        redirectUrl = createdByAdmin ? "/admin/listings" : "/view-listings";
         // Clear form data on success
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: "",
             successMsg: successMsg,
             petPersonalities,
@@ -312,6 +343,7 @@ exports.createPetListing = async (req, res) => {
         console.error("Error creating pet listing:", error);
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities,
@@ -354,6 +386,7 @@ exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);
     res.render("update-pet-details", {
+        redirectUrl: null,
         pet,
         petPersonalities,
         errorMsg: "",
@@ -365,7 +398,7 @@ exports.updatePetProfile = async (req, res) => {
 exports.petUpdated = async (req, res) => {
     const pid = req.body.pid;
     console.log("PID RECEIVED:", pid);
-
+    let redirectUrl = "/view-listings";
     // Validate pid exists
     if (!pid) {
         return res.status(400).send("Pet ID is missing");
@@ -412,6 +445,9 @@ exports.petUpdated = async (req, res) => {
         (req.body.activityLevel ?? "").trim() || pet.activityLevel;
     let experienceLevel =
         (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
+    if (user.role) {
+        redirectUrl = "/admin/listings";
+    }
 
     let errorMsg = "";
     let successMsg = "";
@@ -427,6 +463,7 @@ exports.petUpdated = async (req, res) => {
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             pet: pet,
@@ -456,7 +493,7 @@ exports.petUpdated = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: pet.uid || null,
-        approved: false, // Reset approval status on update
+        approved: createdByAdmin ? true : false, // Reset approval status on update
         createdByAdmin: createdByAdmin, // set admin creation status on update
         activityLevel: activityLevel,
         experienceLevel: experienceLevel,
@@ -494,6 +531,7 @@ exports.petUpdated = async (req, res) => {
         const updatedPet = await listing.findPetById(pid);
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: "",
             successMsg: successMsg,
             pet: updatedPet,
@@ -520,6 +558,7 @@ exports.petUpdated = async (req, res) => {
         }
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities: petPersonalities,
@@ -547,6 +586,8 @@ exports.deletePetProfile = async (req, res) => {
     return res.render("delete-pet-profile", { pet, errorMsg: "" });
 };
 exports.petDeleted = async (req, res) => {
+    let redirectUrl = "/view-listings";
+    let user = req.session.user;
     const pid = req.body.pid;
     let pet = await listing.findPetById(pid);
     console.log("pet", pet);
@@ -556,7 +597,10 @@ exports.petDeleted = async (req, res) => {
         await listing.deletePetData(pid, pet.img);
 
         console.log("deleted");
-        return res.redirect("/view-listings");
+        if (user.role == "admin") {
+            redirectUrl = "/admin/listings";
+        }
+        return res.redirect(redirectUrl);
     } catch (err) {
         console.error("Trouble deleting pet", err);
         fail = "Error deleting pet";
@@ -641,21 +685,24 @@ exports.updateApplication = async (req, res) => {
     });
 };
 exports.updateApplicationDetails = async (req, res) => {
-    const user = req.session.user;
-    
-    if (!user) {
-        return res.redirect("/login")
-    };
-
-    const houseType = req.body.houseType;
-    const existingPets = req.body.existingPets;
-    const reason = req.body.applyReason;
-    const contactNo = req.body.contactNo;
-    const income = req.body.income;
-    const petExperience = req.body.petExperience;
     const appID = req.body.appID;
+    console.log("APPID:", appID);
+    const originalApp = await listing.findApplicationByID(appID);
+    console.log("Original Application:", originalApp);
+    const houseType =
+        (req.body.houseType ?? "").trim() || originalApp.houseType;
+    const existingPets =
+        (req.body.existingPets ?? "").trim() || originalApp.existingPets;
+    const reason = (req.body.reason ?? "").trim() || originalApp.reason;
+    const contactNo =
+        (req.body.contactNo ?? "").trim() || originalApp.contactNo;
+    const income = (req.body.income ?? "").trim() || originalApp.income;
+    const petExperience =
+        (req.body.petExperience ?? "").trim() || originalApp.petExperience;
+    const user = req.session.user;
     const uid = user._id;
-    if (!houseType ||
+    if (
+        !houseType ||
         !existingPets ||
         !reason ||
         !contactNo ||

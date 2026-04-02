@@ -1,5 +1,6 @@
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcrypt");
+const petModel = require("../models/pet-model");
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
@@ -20,7 +21,7 @@ exports.showRegister = (req, res) => {
         password: "",
         password2: "",
         securityKey: "",
-        role:"",
+        role: "",
         errors: [],
         success: false,
     });
@@ -35,7 +36,7 @@ exports.handleRegister = async (req, res) => {
     const password2 = (req.body.password2 ?? "").trim();
     const securityKey = (req.body.securityKey ?? "").trim();
     // role is defaulted to user since only admins can register other account roles such as admin / lister
-    const role = req.body.role || "user";
+    let role = req.body.role || "user";
     // check to see if user session is already active
     // if session is active, registration ejs file checks if user role is admin
     const user = req.session.user ?? null;
@@ -74,6 +75,19 @@ exports.handleRegister = async (req, res) => {
 
     if (errors.length === 0) {
         // no errors; user is registered and data added to users schema
+        let redirectUrl = "/login";
+        if (role == "lister") {
+            redirectUrl = "/apply-lister?username=" + userName;
+            role = "user";
+            console.log(
+                "you will be redirected to the lister application page after registration",
+            );
+        } else if (user.role == "admin") {
+            redirectUrl = "/admin/users";
+            console.log(
+                "you will be redirected to the admin user management page after registration",
+            );
+        }
         try {
             await accountModel.registerUser(
                 userName,
@@ -84,12 +98,7 @@ exports.handleRegister = async (req, res) => {
                 role,
             );
             console.log("Registering user...");
-            if (role === 'lister'){
-                return res.redirect('/apply-lister');
-            }
-            if (req.session.user && req.session.user.role === "admin") {
-                return res.redirect("/admin/users");
-            }
+            return res.redirect(redirectUrl);
         } catch (error) {
             errors.push(error.message);
         }
@@ -440,8 +449,17 @@ exports.deleteProfile = async (req, res) => {
         password,
     );
     if (match) {
-        await accountModel.deleteListerByUid(req.session.user._id);
-        await accountModel.deleteUser(req.session.user._id); // deletes user
+        let uid = req.session.user._id
+        let pets = await petModel.getMyPets(uid);
+        for (let pet of pets) {
+            await petModel.deletePetData(pet._id, pet.img);
+        }
+        let applications = await petModel.findApplicationbyUID(uid);
+        for (let app of applications) {
+            await petModel.deleteApplication(app._id);
+        }
+        await accountModel.deleteListerByUid(uid);
+        await accountModel.deleteUser(uid); // deletes user
         console.log("Deleting user...");
         console.log("Destroying the session");
         req.session.destroy(() => {
@@ -457,6 +475,7 @@ exports.deleteProfile = async (req, res) => {
 // lister related controllers below
 exports.showLister = (req, res) => {
     const user = req.session.user;
+    let username = req.query.username || "";
     res.render("apply-lister", {
         user,
         address: "",
@@ -465,6 +484,7 @@ exports.showLister = (req, res) => {
         pets: "",
         experience: "",
         errors: [],
+        username,
     });
 };
 
@@ -477,7 +497,7 @@ exports.handleLister = async (req, res) => {
     let reason = (req.body.reason ?? "").trim();
     let pets = (req.body.pets ?? "").trim();
     let experience = (req.body.experience ?? "").trim();
-
+    let statusL = "pending";
     let errors = [];
 
     if (!address) {
@@ -508,6 +528,7 @@ exports.handleLister = async (req, res) => {
             pets,
             experience,
             errors,
+            username,
         });
     }
 
@@ -527,9 +548,15 @@ exports.handleLister = async (req, res) => {
                     reason,
                     pets,
                     experience,
-                    errors
+                    errors,
+                    username,
                 });
             }
+        }
+        let redirectUrl = "/adopt";
+        if (req.session.user.role === "admin") {
+            redirectUrl = "/admin/lister";
+            statusL = "approved";
         }
         const exists = await accountModel.retrieveLister(userId);
         if (exists && exists.statusL === "pending") {
@@ -540,9 +567,11 @@ exports.handleLister = async (req, res) => {
                 reason: "",
                 pets: "",
                 experience: "",
-                errors
+                errors,
+                username,
             });
         }
+        await accountModel.updateUserRole(userId, "lister");
         await accountModel.addLister({
             uid: userId.toString(),
             userName,
@@ -551,12 +580,9 @@ exports.handleLister = async (req, res) => {
             reason,
             pets,
             experience,
-            statusL: "pending",
+            statusL,
         });
-        if (req.session.user.role === 'admin') {
-            return res.redirect('/admin/lister-status');
-        }
-        res.redirect("/adopt");
+        return res.redirect(redirectUrl);
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
@@ -567,6 +593,7 @@ exports.handleLister = async (req, res) => {
             experience,
             errors,
             success: false,
+            username,
         });
     }
 };
@@ -579,18 +606,26 @@ exports.updateLister = async (req, res) => {
         req.session.user.role = "user";
         return res.redirect("/profile");
     }
-    return res.render("update-lister-profile", { originalDetails });
+    return res.render("update-lister-profile", { originalDetails, error: "" });
 };
 
 exports.processLister = async (req, res) => {
     const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
 
-    const address = (req.body.address ?? "").trim();
-    const contactNo = (req.body.contactNo ?? "").trim();
-    const pets = (req.body.pets ?? "").trim();
-    const experience = (req.body.experience ?? "").trim();
+    const address = (req.body.address ?? "").trim() || originalDetails.address;
+    const contactNo =
+        (req.body.contactNo ?? "").trim() || originalDetails.contactNo;
+    const pets = (req.body.pets ?? "").trim() || originalDetails.pets;
+    const experience =
+        (req.body.experience ?? "").trim() || originalDetails.experience;
 
+    if (!address || !contactNo || !pets || !experience) {
+        return res.render("update-lister-profile", {
+            originalDetails,
+            error: "All fields are required and cannot be left empty.",
+        });
+    }
     try {
         await accountModel.updateLister(
             originalDetails._id,
@@ -603,7 +638,7 @@ exports.processLister = async (req, res) => {
     } catch (error) {
         console.error("Failed to update user details", error);
     }
-    res.redirect("/profile");
+    return res.redirect("/profile");
 };
 
 exports.showListerStatus = async (req, res) => {
@@ -645,7 +680,6 @@ exports.deleteLister = async (req, res) => {
     // authenticates inputted password before processing deletion
     const userName = req.session.user.userName;
     const userId = req.session.user._id.toString();
-
     const match = await accountModel.authenticateUser(userName, password);
     if (!match) {
         return res.render("delete-lister-profile", {
@@ -656,7 +690,14 @@ exports.deleteLister = async (req, res) => {
     try {
         await accountModel.deleteListerByUid(userId); // deletes user
         await accountModel.updateUserRole(userId, "user");
-
+        let pets = await petModel.getMyPets(userId);
+        let applications = await petModel.findApplicationbyUID(userId);
+        for (let app of applications) {
+            await petModel.deleteApplication(app._id);
+        }
+        for (let pet of pets) {
+            await petModel.deletePetData(pet._id, pet.img);
+        }
         req.session.user.role = "user";
 
         console.log("Deleting lister profile...");
