@@ -82,16 +82,16 @@ router.get(
     authMiddleware.isLister,
     petController.deletePetProfile,
 );
-router.get("/approve", petController.approveApp);
-router.get("/deny", petController.denyApp);
+router.get("/approve", authMiddleware.isLister, petController.approveApp);
+router.get("/deny", authMiddleware.isLister,petController.denyApp);
 router.get(
     "/application-status",
     authMiddleware.checkUser,
     petController.applicationStatus,
 );
 router.post("/delete-pet", authMiddleware.isLister, petController.petDeleted);
-router.get("/view-applications", petController.viewApplications);
-router.get("/deleteApplication", petController.deleteApplication);
-router.get("/updateApplication", petController.updateApplication);
-router.post("/update-application", petController.updateApplicationDetails);
+router.get("/view-applications",authMiddleware.isLister, petController.viewApplications);
+router.get("/deleteApplication", authMiddleware.checkUser, petController.deleteApplication);
+router.get("/updateApplication", authMiddleware.checkUser, petController.updateApplication);
+router.post("/update-application", authMiddleware.checkUser, petController.updateApplicationDetails);
 module.exports = router;

@@ -10,7 +10,7 @@ router.get(
     authMiddleware.isAdmin,
     adminController.showIncomingListings,
 );
-router.post("/admin/listings", adminController.filterListings);
+router.post("/admin/listings", authMiddleware.isAdmin, adminController.filterListings);
 router.get(
     "/admin/change-listings-status",
     authMiddleware.isAdmin,
@@ -22,20 +22,20 @@ router.post(
     adminController.updateListingStatus,
 );
 router.get("/admin/users", authMiddleware.isAdmin, adminController.showUsers);
-router.post("/admin/users", adminController.filterUsers);
+router.post("/admin/users", authMiddleware.isAdmin, adminController.filterUsers);
 
 router.get(
     "/admin/delete-user",
     authMiddleware.isAdmin,
     adminController.displayDeleteUser,
 );
-router.post("/admin/delete-user", adminController.deleteUser);
+router.post("/admin/delete-user", authMiddleware.isAdmin, adminController.deleteUser);
 router.get(
     "/admin/user-update",
     authMiddleware.isAdmin,
     adminController.displayUpdateUser,
 );
-router.post("/admin/user-update", adminController.updateUser);
+
 
 router.get(
     "/admin/lister-status",
@@ -71,7 +71,7 @@ router.get(
     authMiddleware.isAdmin,
     adminController.displayUpdateLister,
 );
-router.post("/admin/lister-update", adminController.updateLister);
+router.post("/admin/lister-update", authMiddleware.isAdmin, adminController.updateLister);
 
 router.get(
     "/admin/delete-lister",
@@ -79,7 +79,7 @@ router.get(
     adminController.adminDeleteLister,
 );
 
-router.post("/admin/user-update", adminController.updateUser);
+router.post("/admin/user-update", authMiddleware.isAdmin, adminController.updateUser);
 router.get(
     "/admin/view-user-applications",
     authMiddleware.isAdmin,

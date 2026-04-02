@@ -55,10 +55,12 @@ exports.deleteFaq = async (faqId) => {
 
 exports.createFaq = async (faq) => {
   try {
-    FAQ.create(faq)
+    const result = await FAQ.create(faq)
     console.log("FAQ created successfully!")
+    return result
   } catch(error) {
     console.log(error)
+    return error
   }
 }
 
