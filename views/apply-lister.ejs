@@ -20,7 +20,7 @@
                     <input type="text" name="username" required><br><br>
                 <%}%>
                 Address:
-                <input type="text" name="address" id="address" /><br /><br />
+                <input type="text" name="address" id="address" value="<%= address %>"><br /><br />
                 Contact number: <input
                     type="tel"
                     pattern="[0-9]{8}"
@@ -28,7 +28,7 @@
                     value="<%= contactNo %>"
                 /><br /><br />
                 Reason of becoming a lister:
-                <textarea name="reason" id="reason"></textarea><br /><br />
+                <textarea name="reason" id="reason"><%= reason %></textarea><br /><br />
                 Current pet(s) owned:
                 <textarea name="pets" id="pets"><%= pets %></textarea
                 ><br /><br />
