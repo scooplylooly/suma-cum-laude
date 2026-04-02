@@ -37,12 +37,13 @@
             <% const hasApplied = Array.isArray(pids) && pids.includes(String(pet._id)); %>
             <%if (!pet.adopted && !isOwner && !hasApplied) {%>
                 <a href="/pet-profile?pid=<%=pet._id%>"><button>Adopt Now</button></a> <br><br>
+            <% } else if (pet.adopted) { %>
+                <p class="status adopted">Adopted</p>
+            
             <% } else if (isOwner) { %>
                 <a href="/view-applications?pid=<%=pet._id%>"><button>View Applications</button></a>
             <% } else if (hasApplied) { %>
                 <a href="/application-status"><button>View Application Status</button></a>
-            <% } else if (pet.adopted) { %>
-                <p class="status adopted">Adopted</p>
             <% } %>
         </div>
     <%}%>
