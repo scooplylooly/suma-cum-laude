@@ -1,7 +1,6 @@
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
-const { use } = require("react");
 
 const petPersonalities = [
     "affectionate",
