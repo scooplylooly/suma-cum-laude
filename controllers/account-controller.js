@@ -1,6 +1,6 @@
-const { use } = require("react");
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcrypt");
+const petModel = require("../models/pet-model");
 
 exports.showRegister = (req, res) => {
     let user = req.session.user;
@@ -75,7 +75,7 @@ exports.handleRegister = async (req, res) => {
 
     if (errors.length === 0) {
         // no errors; user is registered and data added to users schema
-        let redirectUrl = "/adopt";
+        let redirectUrl = "/login";
         if (role == "lister") {
             redirectUrl = "/apply-lister?username=" + userName;
             role = "user";
@@ -449,8 +449,8 @@ exports.deleteProfile = async (req, res) => {
         password,
     );
     if (match) {
-        await accountModel.deleteListerByUid(req.session.user._id);
-        let pets = await petModel.getMyPets(req.session.user._id);
+        let uid = req.session.user._id
+        let pets = await petModel.getMyPets(uid);
         for (let pet of pets) {
             await petModel.deletePetData(pet._id, pet.img);
         }
@@ -458,7 +458,8 @@ exports.deleteProfile = async (req, res) => {
         for (let app of applications) {
             await petModel.deleteApplication(app._id);
         }
-        await accountModel.deleteUser(req.session.user._id); // deletes user
+        await accountModel.deleteListerByUid(uid);
+        await accountModel.deleteUser(uid); // deletes user
         console.log("Deleting user...");
         console.log("Destroying the session");
         req.session.destroy(() => {
