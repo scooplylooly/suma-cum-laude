@@ -102,14 +102,12 @@
                 <!--Has any current existing pets?-->
                 <label for="existingPets">Existing Pets:</label>
                 <textarea name="existingPets" cols="50" rows="5">
-<%=application.existingPets%></textarea
-                >
+<%=application.existingPets%></textarea>
 
                 <!--Reason for adoption-->
                 <label for="applyReason">Reason:</label>
                 <textarea name="applyReason" cols="50" rows="5">
-<%=application.reason%></textarea
-                >
+<%=application.applyReason%></textarea>
                 <button type="submit">Update Application</button>
             </form>
             <%if (errorMsg){ %>
