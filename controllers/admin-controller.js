@@ -449,28 +449,3 @@ exports.viewUserApplications = async (req, res) => {
     console.log("USER FOUND:", user);
     return res.render("admin-application-status", { applications, user });
 };
-exports.showAdminDashboard = async (req, res) => {
-    const totalPets = await petModel.countPets({});
-    console.log("Total Pets: " + totalPets);
-    const totalApplications = await petModel.countTotalApplications({});
-    console.log("Total Applications: " + totalApplications);
-    const pendingApplications = await petModel.countPendingApplications({
-        status: "pending",
-    });
-    console.log("Total Pending Applications: " + pendingApplications);
-    const totalUsers = await accModel.countUsers({});
-    console.log("Total Users: " + totalUsers);
-    const totalFaqs = await faqModel.countFaqs({});
-    console.log("Total FAQs: " + totalFaqs);
-    try {
-        res.render("admin-dashboard", {
-            totalPets,
-            totalApplications,
-            pendingApplications,
-            totalFaqs,
-            totalUsers,
-        });
-    } catch (error) {
-        console.error(error);
-    }
-};
