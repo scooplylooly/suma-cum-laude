@@ -30,6 +30,17 @@
     max-width: none;
 }
 
+.faq-category {
+    display: inline-block;
+    margin: 0;
+    padding: 6px 12px;
+    background-color: #fff7f0;
+    color: #a9653d;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 main h1 {
     text-align: center;
     color: #c97d4e;
