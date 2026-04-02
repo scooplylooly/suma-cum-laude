@@ -199,61 +199,6 @@ exports.findPetById = function (pid) {
     return Pet.findOne({ _id: pid }).lean();
 };
 
-// exports.writeApplyInfo = function (application) {
-//     return Pet.create(application)
-// }
-
-// exports.writeApplyInfo = async (application) => {
-//     try {
-//         let data = [];
-
-//         // Try to read existing file
-//         try {
-//             const jsonData = await fs.readFile(applyFilePath, "utf-8");
-//             data = JSON.parse(jsonData);
-//             console.log("existing data", data);
-//         } catch (readError) {
-//             // File doesn't exist - start with empty array
-//             console.log("No existing file, creating new one");
-//             data = [];
-//         }
-
-//         data.push(application);
-//         const jData = JSON.stringify(data, null, 2);
-//         console.log(applyFilePath, data);
-//         await fs.writeFile(applyFilePath, jData, "utf-8");
-//         console.log("Application saved successfully");
-//     } catch (error) {
-//         console.error("Error writing to apply-for-pet-data.json:", error);
-//     }
-// };
-
-// exports.createPetData = async (petInfo) => {
-//     try {
-//         let data = [];
-
-//         // Try to read existing file
-//         try {
-//             const jData = await fs.readFile(petFilePath, "utf-8");
-//             data = JSON.parse(jData);
-//             console.log("existing data", data);
-//         } catch (readError) {
-//             // File doesn't exist - start with empty array
-//             console.log("No existing file, creating new one");
-//             data = [];
-//         }
-
-//         data.push(petInfo);
-//         console.log("new", data);
-//         const jData = JSON.stringify(data, null, 2);
-//         console.log(petFilePath, data);
-//         await fs.writeFile(petFilePath, jData, "utf-8");
-//         console.log("Listing saved successfully");
-//     } catch (error) {
-//         console.error("Error writing to pet-data.json:", error);
-//     }
-// };
-
 exports.createPetData = function (pet) {
     try {
         Pet.create(pet);
