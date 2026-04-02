@@ -452,7 +452,7 @@ exports.petUpdated = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: pet.uid || null,
-        approved: false, // Reset approval status on update
+        approved: createdByAdmin ? true : false, // Reset approval status on update
         createdByAdmin: createdByAdmin, // set admin creation status on update
         activityLevel: activityLevel,
         experienceLevel: experienceLevel,
