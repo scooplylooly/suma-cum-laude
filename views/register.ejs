@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="./style/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body>
@@ -50,10 +51,9 @@
                 <%if (user && user.role == 'admin'){%>
                     <br>role:<br>
                     <select name="role" required>
-                        <option hidden>--select a role--</option>
-                        <option value="user">User</option>
-                        <option value="lister">Lister</option>
-                        <option value="admin">Admin</option>
+                        <option value="user" <%= role === 'user' ? 'selected' : '' %>>User</option>
+                        <option value="lister" <%= role === 'lister' ? 'selected' : '' %>>Lister</option>
+                        <option value="admin" <%= role === 'admin' ? 'selected' : '' %>>Admin</option>
                     </select>
                 <%}%><br><br>
                 <button type="submit" class="register-link">Register</button> <br><br>
