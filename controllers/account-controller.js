@@ -450,9 +450,9 @@ exports.deleteProfile = async (req, res) => {
     );
     if (match) {
         await accountModel.deleteListerByUid(req.session.user._id);
-        let pets = await petModel.findPetsByUID(req.session.user._id);
+        let pets = await petModel.getMyPets(req.session.user._id);
         for (let pet of pets) {
-            await petModel.deletePet(pet._id);
+            await petModel.deletePetData(pet._id, pet.img);
         }
         let applications = await petModel.findApplicationbyUID(uid);
         for (let app of applications) {
@@ -570,6 +570,7 @@ exports.handleLister = async (req, res) => {
                 username,
             });
         }
+        await accountModel.updateUserRole(userId, "lister");
         await accountModel.addLister({
             uid: userId.toString(),
             userName,
@@ -688,9 +689,13 @@ exports.deleteLister = async (req, res) => {
     try {
         await accountModel.deleteListerByUid(userId); // deletes user
         await accountModel.updateUserRole(userId, "user");
-        let pets = await petModel.findPetsByUID(userId);
+        let pets = await petModel.getMyPets(userId);
+        let applications = await petModel.findApplicationbyUID(userId);
+        for (let app of applications) {
+            await petModel.deleteApplication(app._id);
+        }
         for (let pet of pets) {
-            await petModel.deletePet(pet._id);
+            await petModel.deletePetData(pet._id, pet.img);
         }
         req.session.user.role = "user";
 

@@ -137,15 +137,15 @@ async function addUser(user) {
     return await users.create(user);
 }
 
-async function checkUserExist(userName) {
+async function checkUserExist(username) {
     // checks if current user exists in database
     if (await users.findOne({ userName })) {
         return true;
     }
     return false;
 }
-async function findUserByName(userName) {
-    return await users.findOne({ userName }).lean();
+async function findUserByName(username) {
+    return await users.findOne({ userName: username }).lean();
 }
 
 async function updateDetails(

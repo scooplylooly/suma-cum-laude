@@ -155,9 +155,9 @@ exports.deleteUser = async (req, res) => {
     let userInfo = await accountModel.retrieveProfile(uid);
     let error = "";
     try {
-        let pets = await petModel.findPetsByUID(uid);
+        let pets = await petModel.getMyPets(uid);
         for (let pet of pets) {
-            await petModel.deletePet(pet._id);
+            await petModel.deletePetData(pet._id, pet.img);
         }
         let applications = await petModel.findApplicationbyUID(uid);
         for (let app of applications) {
@@ -165,7 +165,7 @@ exports.deleteUser = async (req, res) => {
         }
         await accountModel.deleteListerByUid(uid);
         await accountModel.deleteUser(uid);
-       
+
         console.log("user deleted!");
         return res.redirect("/admin/users");
     } catch (err) {
@@ -360,9 +360,9 @@ exports.adminDeleteLister = async (req, res) => {
         for (let app of applications) {
             await petModel.deleteApplication(app._id);
         }
-        let pets = await petModel.findPetsByUID(uid);
+        let pets = await petModel.getMyPets(uid);
         for (let pet of pets) {
-            await petModel.deletePet(pet._id);
+            await petModel.deletePetData(pet._id, pet.img);
         }
 
         return res.redirect("/admin/lister");

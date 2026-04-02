@@ -1,6 +1,7 @@
 const listing = require("../models/pet-model");
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
+const { use } = require("react");
 
 const petPersonalities = [
     "affectionate",
@@ -211,6 +212,7 @@ exports.applyInterest = async (req, res) => {
 
 exports.showPetListingForm = async (req, res) => {
     return res.render("pet-create-listing", {
+        redirectUrl: null,
         errorMsg: "",
         successMsg: "",
         petPersonalities,
@@ -219,8 +221,10 @@ exports.showPetListingForm = async (req, res) => {
 };
 
 exports.createPetListing = async (req, res) => {
-    let user = req.body.ownerName
-        ? await account.findUserByName(req.body.ownerName)
+    let username = (req.body.ownerName ?? "").trim();
+    console.log("Received username:", username);
+    let user = username
+        ? await accountModel.findUserByName(username)
         : req.session.user;
     console.log("user", user);
     let type = req.body.type;
@@ -229,6 +233,7 @@ exports.createPetListing = async (req, res) => {
         ? req.file.filename.replace(".jpg", "")
         : "default-pet";
     console.log("Saved image as:", imageFilename); // Should be like "pet-1234567890.jpg
+    let redirectUrl = "/view-listings";
     let name = req.body.name;
     let gender = req.body.gender;
     let desc = req.body.desc;
@@ -253,8 +258,12 @@ exports.createPetListing = async (req, res) => {
     if (!dob) missingFields.push("Date of Birth");
     if (activityLevel === undefined) missingFields.push("Activity Level");
     if (experienceLevel === undefined) missingFields.push("Experience Level");
-    if (user.role == "user")
+    console.log(user);
+    if (!user) {
+        missingFields.push("Valid owner / lister");
+    } else if (user.role === "user") {
         missingFields.push("The owner must be a lister to create a listing");
+    }
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;
         return res.render("pet-create-listing", {
@@ -295,9 +304,10 @@ exports.createPetListing = async (req, res) => {
     try {
         await listing.createPetData(newPet);
         successMsg = "Listing created successfully!";
-
+        redirectUrl = createdByAdmin ? "/admin/listings" : "/view-listings";
         // Clear form data on success
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: "",
             successMsg: successMsg,
             petPersonalities,
@@ -308,6 +318,7 @@ exports.createPetListing = async (req, res) => {
         console.error("Error creating pet listing:", error);
 
         return res.render("pet-create-listing", {
+            redirectUrl,
             errorMsg: errorMsg,
             successMsg: "",
             petPersonalities,
@@ -543,6 +554,7 @@ exports.deletePetProfile = async (req, res) => {
     return res.render("delete-pet-profile", { pet, errorMsg: "" });
 };
 exports.petDeleted = async (req, res) => {
+    let redirectUrl = "/view-listings";
     const pid = req.body.pid;
     let pet = await listing.findPetById(pid);
     console.log("pet", pet);
