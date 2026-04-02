@@ -139,7 +139,7 @@ async function addUser(user) {
 
 async function checkUserExist(username) {
     // checks if current user exists in database
-    if (await users.findOne({ userName })) {
+    if (await users.findOne({ userName: username })) {
         return true;
     }
     return false;

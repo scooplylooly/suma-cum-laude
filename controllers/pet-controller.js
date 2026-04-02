@@ -109,8 +109,9 @@ exports.searchPet = async (req, res) => {
 
 exports.showPetListingForm = async (req, res) => {
     const user = req.session.user;
-    const appExist = await petModel.findApplicationbyUID(user._id);
+    
     return res.render("pet-create-listing", {
+        redirectUrl: null,
         errorMsg: "",
         successMsg: "",
         user,
@@ -233,15 +234,7 @@ exports.applyInterest = async (req, res) => {
     });
 };
 
-exports.showPetListingForm = async (req, res) => {
-    return res.render("pet-create-listing", {
-        redirectUrl: null,
-        errorMsg: "",
-        successMsg: "",
-        petPersonalities,
-        formData: null,
-    });
-};
+
 
 exports.createPetListing = async (req, res) => {
     let username = (req.body.ownerName ?? "").trim();

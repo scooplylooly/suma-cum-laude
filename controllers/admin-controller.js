@@ -266,7 +266,9 @@ exports.updateUser = async (req, res) => {
         return res.redirect("/admin/admin-page");
     } catch (error) {
         console.error("Failed to update user details, error:", error);
-    }
+        return res.render("admin-user-update", {
+            errors: ["Failed to update user details. Please try again."],
+    })};
 };
 
 exports.showListerApps = async (req, res) => {
