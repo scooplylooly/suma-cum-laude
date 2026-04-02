@@ -20,6 +20,7 @@ exports.showRegister = (req, res) => {
         password: "",
         password2: "",
         securityKey: "",
+        role:"",
         errors: [],
         success: false,
     });
@@ -83,6 +84,9 @@ exports.handleRegister = async (req, res) => {
                 role,
             );
             console.log("Registering user...");
+            if (role === 'lister'){
+                return res.redirect('/apply-lister');
+            }
             if (req.session.user && req.session.user.role === "admin") {
                 return res.redirect("/admin/users");
             }
@@ -98,6 +102,7 @@ exports.handleRegister = async (req, res) => {
         password,
         password2,
         securityKey,
+        role,
         errors,
         success: errors.length === 0,
     });
@@ -459,7 +464,6 @@ exports.showLister = (req, res) => {
         pets: "",
         experience: "",
         errors: [],
-        success: false,
     });
 };
 
@@ -503,7 +507,6 @@ exports.handleLister = async (req, res) => {
             pets,
             experience,
             errors,
-            success: false,
         });
     }
 
@@ -523,8 +526,7 @@ exports.handleLister = async (req, res) => {
                     reason,
                     pets,
                     experience,
-                    errors,
-                    success: false,
+                    errors
                 });
             }
         }
@@ -537,8 +539,7 @@ exports.handleLister = async (req, res) => {
                 reason: "",
                 pets: "",
                 experience: "",
-                errors,
-                success: false,
+                errors
             });
         }
         await accountModel.addLister({
@@ -551,7 +552,10 @@ exports.handleLister = async (req, res) => {
             experience,
             statusL: "pending",
         });
-        return res.redirect("/adopt");
+        if (req.session.user.role === 'admin') {
+            return res.redirect('/admin/lister-status');
+        }
+        res.redirect("/adopt");
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");
         return res.render("apply-lister", {
