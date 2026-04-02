@@ -158,6 +158,7 @@ exports.applyInterest = async (req, res) => {
     let pid = pet._id;
     let appForPet = await listing.findApplicationByPet(pid);
     let appExist = false;
+    
     if (appForPet) {
         for (app of appForPet) {
             if (app.uid == user._id) {
@@ -184,9 +185,8 @@ exports.applyInterest = async (req, res) => {
         !existingPets ||
         !petExperience ||
         !income ||
-        !contactNo ||
-        !activityLevel ||
-        !experienceLevel
+        !contactNo 
+        
     ) {
         errorMsg += "Please fill in all fields to apply for adoption.";
         return res.render("pet-profile", {
@@ -211,8 +211,7 @@ exports.applyInterest = async (req, res) => {
         petExperience: petExperience,
         income: income,
         contactNo: contactNo,
-        activityLevel: activityLevel,
-        experienceLevel: experienceLevel,
+        
     };
 
     try {
@@ -274,6 +273,9 @@ exports.createPetListing = async (req, res) => {
     let successMsg = "";
 
     let missingFields = [];
+    if (hdbApproved === undefined) missingFields.push("HDB Approved status");
+    if (vaccinated === undefined) missingFields.push("Vaccinated status");
+    if (sterilized === undefined) missingFields.push("Sterilized status");
     if (!type) missingFields.push("Type");
     if (!breed) missingFields.push("Breed");
     if (!name) missingFields.push("Name");
@@ -282,6 +284,9 @@ exports.createPetListing = async (req, res) => {
     if (!dob) missingFields.push("Date of Birth");
     if (activityLevel === undefined) missingFields.push("Activity Level");
     if (experienceLevel === undefined) missingFields.push("Experience Level");
+    if (dob && new Date(dob) > new Date()) {
+        missingFields.push("Date of birth cannot be in the future");
+    }
     console.log(user);
     if (!user) {
         missingFields.push("Valid owner / lister");
@@ -444,9 +449,11 @@ exports.petUpdated = async (req, res) => {
         (req.body.activityLevel ?? "").trim() || pet.activityLevel;
     let experienceLevel =
         (req.body.experienceLevel ?? "").trim() || pet.experienceLevel;
-    if (user.role) {
+    if (user.role == "admin") {
         redirectUrl = "/admin/listings";
-    }
+    } else {
+        redirectUrl = "/view-listings";
+    };
 
     let errorMsg = "";
     let successMsg = "";
@@ -458,6 +465,12 @@ exports.petUpdated = async (req, res) => {
     if (!gender) missingFields.push("Gender");
     if (!desc) missingFields.push("Description");
     if (!dob) missingFields.push("Date of Birth");
+    if (hdbApproved === undefined) missingFields.push("HDB Approved status");
+    if (vaccinated === undefined) missingFields.push("Vaccinated status");
+    if (sterilized === undefined) missingFields.push("Sterilized status");
+    if (dob && new Date(dob) > new Date()) {
+        missingFields.push("Date of birth cannot be in the future");
+    }
 
     if (missingFields.length > 0) {
         errorMsg = `Required fields missing: ${missingFields.join(", ")}`;

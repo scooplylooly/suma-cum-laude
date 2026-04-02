@@ -53,9 +53,14 @@
             Time to find your dream companion / BFF!
             </p>
             <script>
+                const userRole = "<%= role %>";
                 setTimeout(() => {
-                    window.location.href = "/admin/admin-page";
-                },1000)
+                    if (userRole === 'admin') {
+                        window.location.href = "/admin/admin-page";
+                    } else {
+                        window.location.href = "/adopt";
+                    }
+                }, 1000)
             </script>
         <% } %>
         </div>

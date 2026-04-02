@@ -158,18 +158,7 @@ const applicationSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        activityLevel: {
-            type: String,
-            enum: ["low", "medium", "high"],
-            default: "medium",
-            required: true,
-        },
-        experienceLevel: {
-            type: String,
-            enum: ["beginner", "intermediate", "experienced"],
-            default: "beginner",
-            required: true,
-        },
+        
     },
     {
         timestamps: true,

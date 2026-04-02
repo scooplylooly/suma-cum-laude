@@ -42,6 +42,9 @@ exports.handleRegister = async (req, res) => {
     const user = req.session.user ?? null;
     // checks for invalid inputs and records the error in an array
     let errors = [];
+    if (DOB && new Date(DOB) > new Date()) {
+        errors.push("Date of birth cannot be in the future");
+    }   
 
     if (!userName) {
         errors.push("User Name is required");
@@ -168,6 +171,7 @@ exports.handleLogin = async (req, res) => {
                 password,
                 errors,
                 success: true,
+                role: user.role,
             });
         }
     }
@@ -379,7 +383,11 @@ exports.processUpdate = async (req, res) => {
     const securityKey =
         (req.body.securityKey ?? "").trim() || originalDetails.securityKey;
     const role = originalDetails.role; // role cannot be updated by user; defaulted to original role in database
+    
     let errors = [];
+    if (DOB && new Date(DOB) > new Date()) {
+        errors.push("Date of birth cannot be in the future");
+    }
     // if username inputted is not same as original name, check if another user with same username exists
     if (
         userName !== originalDetails.userName &&

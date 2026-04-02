@@ -48,8 +48,7 @@
                 <a href="/logout" class="logout-button">Log out</a>
                 <a href="/delete-profile" class="delete-button">Delete Account</a>  
                 <%if(details.role == 'lister'){%>
-                    <%if(listerApplication.statusL == 'approved'){%>
-                    <h3 style="color: green;">You're a registered <b>Lister</b>!</h3>
+                    <%if(listerApplication && listerApplication.statusL == 'approved'){%>                    <h3 style="color: green;">You're a registered <b>Lister</b>!</h3>
                     <p>As a lister, you can create pet listings and manage them on your profile page.</p> 
                     <a href="/update-lister-profile" class="edit-button">Edit Lister details</a>
                     <a href="/delete-lister-profile" class="delete-button">Delete Lister profile</a>  
