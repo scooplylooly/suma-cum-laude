@@ -211,16 +211,26 @@ exports.showPetListingForm = async (req, res) => {
 };
 
 exports.createPetListing = async (req, res) => {
-    let user = req.body.ownerName
-        ? await account.findUserByName(req.body.ownerName)
-        : req.session.user;
-    console.log("user", user);
-    let type = req.body.type;
-    let breed = req.body.breed;
-    const imageFilename = req.file
-        ? req.file.filename.replace(".jpg", "")
-        : "default-pet";
-    console.log("Saved image as:", imageFilename); // Should be like "pet-1234567890.jpg
+    let user
+    let imageFilename
+
+    if (req.body.ownerName) {
+    user = await account.findUserByName(req.body.ownerName)
+    } else {
+    user = req.session.user
+    }
+
+    console.log("user", user)
+    let type = req.body.type
+    let breed = req.body.breed
+
+    if (req.file) {
+    imageFilename = req.file.filename.replace(".jpg", "");
+    } else {
+    imageFilename = "default-pet";
+    }
+    console.log("Saved image as:", imageFilename)
+
     let name = req.body.name;
     let gender = req.body.gender;
     let desc = req.body.desc;
@@ -643,8 +653,7 @@ exports.updateApplicationDetails = async (req, res) => {
     const petExperience = req.body.petExperience;
     const appID = req.body.appID;
     const uid = user._id;
-    if (
-        !houseType ||
+    if (!houseType ||
         !existingPets ||
         !reason ||
         !contactNo ||
