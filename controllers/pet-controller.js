@@ -155,8 +155,9 @@ exports.showPetProfile = async (req, res) => {
 exports.applyInterest = async (req, res) => {
     const user = req.session.user;
     let petName = req.body.petName;
-    let pet = await listing.findPet(petName).lean();
-    let pid = pet._id;
+    //let pet = await listing.findPet(petName).lean();
+    let pid = req.body.pid
+    pet = await listing.findPetById(pid).lean();
     let appForPet = await listing.findApplicationByPet(pid);
     let appExist = false;
     

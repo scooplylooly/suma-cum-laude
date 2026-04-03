@@ -460,6 +460,10 @@ exports.deleteProfile = async (req, res) => {
         let uid = req.session.user._id
         let pets = await petModel.getMyPets(uid);
         for (let pet of pets) {
+            let petApplications = await petModel.findApplicationByPet(pet._id);
+            for (let app of petApplications) {
+                await petModel.deleteApplication(app._id);
+            }
             await petModel.deletePetData(pet._id, pet.img);
         }
         let applications = await petModel.findApplicationbyUID(uid);
@@ -712,6 +716,10 @@ exports.deleteLister = async (req, res) => {
             await petModel.deleteApplication(app._id);
         }
         for (let pet of pets) {
+            let petApplications = await petModel.findApplicationByPet(pet._id)
+            for (let app of petApplications) {
+                await petModel.deleteApplication(app._id);
+            }
             await petModel.deletePetData(pet._id, pet.img);
         }
         req.session.user.role = "user";
