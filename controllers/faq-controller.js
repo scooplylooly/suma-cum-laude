@@ -1,5 +1,7 @@
 const FAQ = require('../models/faq-model')
 
+
+// List only all the published FAQs
 exports.listFaqs = async (req, res) => {
   try {
     const faqs = await FAQ.getPublishedFaqs()
@@ -9,6 +11,7 @@ exports.listFaqs = async (req, res) => {
   }
 }
 
+//Display all the FAQs for the admin side
 exports.adminFaqs = async (req, res) => {
   try {
     const faqs = await FAQ.getAllFaqs()
@@ -18,6 +21,7 @@ exports.adminFaqs = async (req, res) => {
   }
 }
 
+//Handle the GET Route for editting the FAQ
 exports.getFaq = async (req, res) => {
   try {
     const faqID = req.query.id
@@ -33,6 +37,7 @@ exports.getFaq = async (req, res) => {
   }
 }
 
+//Handle the POST Route for editting the FAQ and log onto the database
 exports.editFaqs = async (req, res) => {
   try {
     const {
@@ -62,6 +67,7 @@ exports.editFaqs = async (req, res) => {
   }
 }
 
+//Delete the FAQ
 exports.deleteFaq = async (req, res) => {
   const faqID = req.body.id
 
@@ -83,10 +89,12 @@ exports.deleteFaq = async (req, res) => {
   }
 }
 
+//Render the page to create the FAQ
 exports.showAddFaq = async (req, res) => {
   res.render('faq/createfaq', { faq: null, msg: '' })
 }
 
+//Handle the POST Route for the FAQ
 exports.newFaq = async (req, res) => {
   const user = req.session.user
 

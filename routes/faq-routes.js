@@ -14,8 +14,10 @@ router.get('/admin/faq', authMiddleware.isAdmin, faqController.adminFaqs)
 router.get('/admin/faq/edit', authMiddleware.isAdmin, faqController.getFaq)
 router.post('/admin/faq/edit', authMiddleware.isAdmin, faqController.editFaqs)
 
+//Admin Delete FAQs
 router.post('/admin/faq/delete', authMiddleware.isAdmin, faqController.deleteFaq)
 
+//Admin Create FAQs
 router.get('/admin/faq/new', authMiddleware.isAdmin, faqController.showAddFaq)
 router.post('/admin/faq/new', authMiddleware.isAdmin, faqController.newFaq)
 
