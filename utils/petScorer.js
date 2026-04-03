@@ -1,10 +1,11 @@
+// petScorer.js - calculates a compatibility score between user preferences and pet attributes
 const weights = {
     preferredAnimal: 0.4,
     preferredTraits: 0.3,
     activityLevel: 0.2,
     experienceLevel: 0.1
 };
-
+// Calculates a compatibility score between user preferences and pet attributes
 function calculateScore(preferences = {}, pet = {}) {
     if (preferences.housingType === "HDB" && !pet.hdbApproved) {
         return { score: 0 };
