@@ -33,6 +33,9 @@ const faqSchema = new mongoose.Schema(
 const FAQ = mongoose.model('FAQ', faqSchema, 'faq')
 
 //Methods
+exports.getPublishedFaqs = async () => {
+  return FAQ.find({ published: true }).lean()
+}
 
 exports.getAllFaqs = async () => {
   return FAQ.find().lean()
