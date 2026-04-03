@@ -25,10 +25,10 @@ We used AI to generate the CSS for our app. All CSS was AI generated.
 
 AI was also used in the debugging phase to comb through every single file and folder to try and identify mistakes. (after the app was already running and working. The mistakes were rectified on our own)
 
-AI was also used in the idea generation and came up with the suggestion for the 'top pet types', 'Adoption rate by Pet Type' and 'Aggregated Time Averages: Pet Remains Unadopted'
-
+AI was also used in the idea generation and came up with the suggestion for the 'top pet types' and 'Adoption rate by Pet Type'  
 AI suggested the use of the module multer to help us store images for our pets.
 
 ***
 In the event that you are using a vpn/have connection issues, please write these lines at the very top of server.js:
-
+const dns = require("node:dns").promises;
+dns.setServers(["1.1.1.1", "8.8.8.8"])
