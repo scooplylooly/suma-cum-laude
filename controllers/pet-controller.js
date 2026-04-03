@@ -1,7 +1,8 @@
-const listing = require("../models/pet-model");
+const listing = require("../models/pet-model");// to access pet-model
 const accountModel = require("../models/account-model");
 const petScorer = require("../utils/petScorer");
 
+// pets personalities avaliable
 const petPersonalities = [
     "affectionate",
     "independent",
@@ -33,7 +34,8 @@ const petPersonalities = [
     "active",
 ];
 petPersonalities.sort();
-// Query database to get all pets
+
+// Query database to get all pets and display on home
 exports.displayPets = async (req, res) => {
     let pets = await listing.getAllPets();
     const user = req.session.user;
@@ -60,7 +62,7 @@ exports.displayPets = async (req, res) => {
         pids,
     });
 };
-
+// search pets based on names or type or breed
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
@@ -106,7 +108,7 @@ exports.searchPet = async (req, res) => {
         pids,
     });
 };
-
+//renders the listing form on the pet creation page
 exports.showPetListingForm = async (req, res) => {
     const user = req.session.user;
     
@@ -119,13 +121,13 @@ exports.showPetListingForm = async (req, res) => {
         formData: null,
     });
 };
-
+//to render pet profile and application form
 exports.showPetProfile = async (req, res) => {
     const user = req.session.user;
 
     let pid = req.query.pid;
-    const appForPet = await listing.findApplicationByPet(pid);
-    let appExist = false;
+    const appForPet = await listing.findApplicationByPet(pid); 
+    let appExist = false;//check if application exist, if so, users can't apply for pet
     if (appForPet) {
         for (app of appForPet) {
             if (app.uid == user._id) {
@@ -151,7 +153,7 @@ exports.showPetProfile = async (req, res) => {
         });
     }
 };
-
+//post the the application form in pet profile and creates the application for a pet in the db
 exports.applyInterest = async (req, res) => {
     const user = req.session.user;
     let petName = req.body.petName;
@@ -236,7 +238,7 @@ exports.applyInterest = async (req, res) => {
 };
 
 
-
+//to post to pet listing form submited by user
 exports.createPetListing = async (req, res) => {
     let username = (req.body.ownerName ?? "").trim();
     console.log("Received username:", username);
@@ -283,7 +285,7 @@ exports.createPetListing = async (req, res) => {
     }
     console.log(user);
     if (!user) {
-        missingFields.push("Valid owner / lister");
+        missingFields.push("invalid owner / lister");
     } else if (user.role === "user") {
         missingFields.push("The owner must be a lister to create a listing");
     }
@@ -325,10 +327,9 @@ exports.createPetListing = async (req, res) => {
     };
 
     try {
-        await listing.createPetData(newPet);
+        await listing.createPetData(newPet);//creates new pet listing in DB
         successMsg = "Listing created successfully!";
-        redirectUrl = createdByAdmin ? "/admin/listings" : "/view-listings";
-        // Clear form data on success
+        redirectUrl = createdByAdmin ? "/admin/listings" : "/view-listings"; // changes redirect based on user.role
         return res.render("pet-create-listing", {
             redirectUrl,
             errorMsg: "",
@@ -349,12 +350,13 @@ exports.createPetListing = async (req, res) => {
         });
     }
 };
+// renders listings of listers
 exports.viewListings = async (req, res) => {
     const user = req.session.user;
     console.log("SESSION USER:", user);
 
     const uid = user._id;
-    const pets = await listing.getMyPets(uid).lean();
+    const pets = await listing.getMyPets(uid).lean();// gets pets owned by lister by their user id
     let petFound = [];
     for (let pet of pets) {
         if (pet.uid == uid) {
@@ -368,6 +370,7 @@ exports.viewListings = async (req, res) => {
         petFound,
     });
 };
+//lets user see the profile of thier own pet and then they have the option to edit or withdraw their listing
 exports.showPetlistingProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid).lean();
@@ -379,7 +382,7 @@ exports.showPetlistingProfile = async (req, res) => {
         errorMsg: "",
     });
 };
-
+//render the update listing form  
 exports.updatePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);
@@ -392,7 +395,7 @@ exports.updatePetProfile = async (req, res) => {
         formData: req.query, // Send back data to repopulate form
     });
 };
-
+//post the updated details of the listing into the DB
 exports.petUpdated = async (req, res) => {
     const pid = req.body.pid;
     console.log("PID RECEIVED:", pid);
@@ -499,7 +502,7 @@ exports.petUpdated = async (req, res) => {
         sterilized: sterilized === "true" ? true : false,
         personality: personality,
         uid: pet.uid || null,
-        approved: createdByAdmin ? true : false, // Reset approval status on update
+        approved: createdByAdmin ? true : false, // checks if user is admin, if not, will reset approval on update
         createdByAdmin: createdByAdmin, // set admin creation status on update
         activityLevel: activityLevel,
         experienceLevel: experienceLevel,
@@ -573,6 +576,7 @@ exports.petUpdated = async (req, res) => {
         });
     }
 };
+// lets lister view application for their pet 
 exports.viewApplications = async (req, res) => {
     let pid = req.query.pid;
     const user = req.session.user;
@@ -586,11 +590,13 @@ exports.viewApplications = async (req, res) => {
         petName,
     });
 };
+//get and render the some pet details and gives option for user to delete their listing
 exports.deletePetProfile = async (req, res) => {
     const pid = req.query.pid;
     let pet = await listing.findPetById(pid);
     return res.render("delete-pet-profile", { pet, errorMsg: "" });
 };
+//post and deletes pet listing base on the user
 exports.petDeleted = async (req, res) => {
     let redirectUrl = "/view-listings";
     let user = req.session.user;
@@ -646,6 +652,9 @@ exports.approveApp = async (req, res) => {
     applications = await listing.findApplicationByPet(petID);
     return res.render("view-applications", { applications, user, petName, pet });
 };
+
+// lets lister deny user applictions for thier pet listing
+
 exports.denyApp = async (req, res) => {
     const appID = req.query.application;
     const value = "denied";
@@ -662,12 +671,14 @@ exports.denyApp = async (req, res) => {
     const applications = await listing.findApplicationByPet(petID);
     return res.render("view-applications", { applications, user, petName , pet});
 };
+//lets user check application status for a pet
 exports.applicationStatus = async (req, res) => {
     const user = req.session.user;
     const uid = user._id;
     const applications = await listing.findApplicationbyUID(uid);
     return res.render("applications-status", { applications, user });
 };
+// lets user delete their appplication
 exports.deleteApplication = async (req, res) => {
     const appID = req.query.appID;
     const user = req.session.user;
@@ -681,6 +692,7 @@ exports.deleteApplication = async (req, res) => {
     const applications = await listing.findApplicationbyUID(uid);
     return res.render("applications-status", { applications, user });
 };
+//lets user update their application
 exports.updateApplication = async (req, res) => {
     const appID = req.query.appID;
     const user = req.session.user;
@@ -692,6 +704,7 @@ exports.updateApplication = async (req, res) => {
         successMsg: "",
     });
 };
+//post and handle update application form of user and the updates in the db
 exports.updateApplicationDetails = async (req, res) => {
     const appID = req.body.appID;
     console.log("APPID:", appID);

@@ -48,7 +48,7 @@ const usersSchema = new mongoose.Schema({
 });
 
 const users = mongoose.model("users", usersSchema, "users");
-
+//creates new user data in db
 async function registerUser(userName, email, DOB, password, securityKey, role) {
     // checks if inputted username exists in database; ensures that usernames are unique
     if (await users.findOne({ userName: userName })) {
@@ -73,7 +73,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
         await addUser(newUser);
     }
 }
-
+//check if user password is correct and authenticate user
 async function authenticateUser(userName, password) {
     // checks if user exists in DB
     const user = await users.findOne({ userName: userName });
@@ -108,7 +108,7 @@ function securePassword(password) {
     // returns array of errors back to caller
     return errors;
 }
-
+//get security key of user in the db
 async function checkSecurityKey(userName, securityKey) {
     // checks if securityKey matches; case insensitive
     const data = await users.findOne({ userName }).lean();
@@ -126,17 +126,17 @@ async function updatePassword(userName, hashedPassword) {
         { $set: { password: hashedPassword } },
     );
 }
-
+// retrieve the profile/details of the user in the db
 async function retrieveProfile(userId) {
     // retrieves profile of specified userId + returns record as object
     return await users.findOne({ _id: userId }).lean();
 }
-
+// creates new user details in the db
 async function addUser(user) {
     // creates a new record under user schema
     return await users.create(user);
 }
-
+//check if user data exits in the db
 async function checkUserExist(username) {
     // checks if current user exists in database
     if (await users.findOne({ userName: username })) {
@@ -144,7 +144,6 @@ async function checkUserExist(username) {
     }
     return false;
 }
-
 async function findUserByName(username) {
     // finds user in database and returns user record as object
     return await users.findOne({ userName: username }).lean();
@@ -177,7 +176,7 @@ async function updateDetails(
         { $set: updateData }
     );
 }
-
+//deletes the user in the db
 async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
