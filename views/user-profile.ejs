@@ -6,7 +6,7 @@
     <title><%= details.userName %>'s profile</title>
     <link rel="stylesheet" type="text/css" href="./style/user-profile.css" />
 </head>
-
+<!--renders user profile page with relevant details retrieved from database-->
 <body>
     <%- include('common/header') %>
     
@@ -41,7 +41,7 @@
             </div>
 
         </div>
-
+            <!--users can redirect to edit-profile details, preferences, logout or delete profile pages-->
             <div class="actions">
                 <a href="/edit-profile" class="edit-button">Edit details</a>
                 <a href="/preferences" class="edit-button">Set Preferences</a>   
@@ -53,15 +53,15 @@
                     <a href="/update-lister-profile" class="edit-button">Edit Lister details</a>
                     <a href="/delete-lister-profile" class="delete-button">Delete Lister profile</a>  
                     <%}%>
-                <%}else if (details.role == 'user'){%>
+                <%}else if (details.role == 'user'){%> <!--if user is not lister, will show tab for them to apply to be lister-->
                     <h3>Interested in listing pets?</h3>
                     <p>As a lister, you can create pet listings and manage them on your profile page.</p>
                     <%if(listerApplication){%>
-                        <%if(listerApplication.statusL == 'pending'){%>
+                        <%if(listerApplication.statusL == 'pending'){%> <!--if user has pending listing applications, status is shown and they can update their application too-->
                             <p>Check your application status down here & edit your details at any time.</p>
                             <a href="/update-lister-profile" class="edit-button">Edit Lister details</a>
                     
-                        <%}else if(listerApplication.statusL == 'rejected'){%>
+                        <%}else if(listerApplication.statusL == 'rejected'){%> <!--shows rejected status if user's application was rejected-->
                             <h3>Your lister application was rejected.</h3>
                             <p>You can reapply after some time.</p>
                         <%}%>

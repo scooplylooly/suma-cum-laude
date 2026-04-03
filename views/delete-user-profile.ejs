@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./style/delete-profile.css">
 
 </head>
+<!--renders form for delete user profile-->
 <body>
     <%- include('common/header') %>
 
@@ -25,6 +26,7 @@
                 <button type="button" onclick="showModal()">Confirm Deletion</button>
                 
             </form>
+            <!-- displays input errors identified-->
             <% if (error) { %>
             <div class="err-message">
                 <%- error %>

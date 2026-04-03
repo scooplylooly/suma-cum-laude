@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <!--renders login form-->
     <header>
         <h1>WeADopt!</h1>
         <nav>
@@ -39,7 +40,7 @@
                 Don't have an account?
                 <a href="/register" class="register-link">Create an account</a>
             </p>
-
+            <!--displays invalid inputs identified-->
             <% if (errors.length > 0){ %>
             <ul class="error-list">
                 <% errors.forEach(error => { %>
@@ -47,6 +48,8 @@
             <% }) %>
             </ul>
         <% }; %>
+            <!--if successful login, users are redirected to adoption homepage-->
+            <!--if user is admin, they will be redirected to admin dashboard instead-->
             <% if (success) { %>
             <p class="success-message">
             Successful login. <br>

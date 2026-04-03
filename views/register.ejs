@@ -9,7 +9,7 @@
 
 </head>
 <body>
-
+    <!--form for users to register a new account-->
     <header>
          <h1>WeADopt!</h1>
         <nav>
@@ -21,6 +21,7 @@
     <main class="register-page">
         <div id="form" class="register-card">
             <h2>User Registration</h2>
+            <!--form headers are displayed, dependent on user role in session-->
             <%if (user && user.role == 'admin'){%>
                 <p class="subtitle">As an admin, you can create accounts for users, listers, and other admins.</p>
             <%}else{%>
@@ -47,7 +48,7 @@
                 </div> <br><br>
                 
                  Security Question: <input type="text" name="securityKey" placeholder="What is your dream pet?" value="<%= securityKey %>">
-                 
+                 <!--if users are admins, there is an additional field for them to set new users' role-->
                 <%if (user && user.role == 'admin'){%>
                     <br>role:<br>
                     <select name="role" required>
@@ -61,7 +62,7 @@
         <%if (!user || user.role != 'admin'){%>
             <p>Already have an account? <a href="/login" class="login-link">Login here</a></p>
         <%}%>
-
+            <!--displays identified input errors-->
             <% if (errors.length > 0){ %>
                 <ul class="error-list">
                     <% errors.forEach(error => { %>
@@ -69,6 +70,7 @@
                 <% }); %>
                 </ul>
         <% } %>
+        <!--if success, redirected to login page-->
             <% if(success){ %>
                 <p class="success-message">
                     Thank you for your registration. <br>

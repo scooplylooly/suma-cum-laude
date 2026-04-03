@@ -56,7 +56,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
             "Username already exists. Please choose another username.",
         );
     }
-
+    // checks if inputted email exists in database; ensures that emails are unique
     if (await users.findOne({ email: email })) {
         throw new Error("Email already exists. Please use another email.");
     } else {
@@ -119,6 +119,7 @@ async function checkSecurityKey(userName, securityKey) {
     return data.securityKey.toLowerCase() === securityKey.toLowerCase();
 }
 
+// updates user's password in database
 async function updatePassword(userName, hashedPassword) {
     return await users.updateOne(
         { userName },
@@ -143,10 +144,13 @@ async function checkUserExist(username) {
     }
     return false;
 }
+
 async function findUserByName(username) {
+    // finds user in database and returns user record as object
     return await users.findOne({ userName: username }).lean();
 }
 
+// updates user details
 async function updateDetails(
     userId,
     userName,
@@ -179,9 +183,11 @@ async function deleteUser(userId) {
     return users.deleteOne({ _id: userId });
 }
 
+// returns all the users + their profile details
 async function getAllUsers() {
     return users.find().lean();
 }
+
 // Lister schema + functions
 const listerSchema = new mongoose.Schema({
     userName: {
