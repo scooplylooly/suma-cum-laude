@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-const { devNull, type } = require("os");
 const path = require("path");
 const fs = require("fs").promises;
-// const applyFilePath = "data/apply-for-pet-data.json";
-// const petFilePath = "data/pets-data.json";
+
 
 // pet-data schema
 const petSchema = new mongoose.Schema(
