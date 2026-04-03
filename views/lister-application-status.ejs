@@ -13,6 +13,7 @@
     <main>
 
         <h2>Lister Application Status for <%= userName %></h2>
+        <!-- checks if user has an existing lister application -->
         <%if (!hasApplication) {%>
             <p>You haven't applied yet. Do apply <a href="/apply-lister">here</a> if interested.</p>
         <%} else {%>

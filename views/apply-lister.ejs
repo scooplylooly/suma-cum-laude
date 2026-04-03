@@ -18,6 +18,7 @@
             <%}%>
             <form action="/apply-lister" method="post">
                 <%if(user.role === 'admin'){%>
+                    <!-- ensures that the user exists before making them lister -->
                     Enter username of the user to be a lister:
                     <input type="text" name="username" value= '<%= username ? username : "" %>' required><br><br>
                 <%}%>
