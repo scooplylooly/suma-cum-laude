@@ -28,7 +28,4 @@ AI was also used in the debugging phase to comb through every single file and fo
 AI was also used in the idea generation and came up with the suggestion for the 'top pet types' and 'Adoption rate by Pet Type'  
 AI suggested the use of the module multer to help us store images for our pets.
 
-***
-In the event that you are using a vpn/have connection issues, please write these lines at the very top of server.js:
-const dns = require("node:dns").promises;
-dns.setServers(["1.1.1.1", "8.8.8.8"])
+
