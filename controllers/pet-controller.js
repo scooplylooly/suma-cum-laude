@@ -62,7 +62,7 @@ exports.displayPets = async (req, res) => {
         pids,
     });
 };
-
+// search pets based on names or type or breed
 exports.searchPet = async (req, res) => {
     let nameSearched = req.query.nameSearched;
     let allPets = await listing.getAllPets();
@@ -153,7 +153,7 @@ exports.showPetProfile = async (req, res) => {
         });
     }
 };
-
+//post the the application form in pet profile and creates the application for a pet in the db
 exports.applyInterest = async (req, res) => {
     const user = req.session.user;
     let petName = req.body.petName;
@@ -575,6 +575,7 @@ exports.petUpdated = async (req, res) => {
         });
     }
 };
+// lets lister view application for their pet 
 exports.viewApplications = async (req, res) => {
     let pid = req.query.pid;
     const user = req.session.user;
@@ -650,6 +651,9 @@ exports.approveApp = async (req, res) => {
     applications = await listing.findApplicationByPet(petID);
     return res.render("view-applications", { applications, user, petName, pet });
 };
+
+// lets lister deny user applictions for thier pet listing
+
 exports.denyApp = async (req, res) => {
     const appID = req.query.application;
     const value = "denied";
@@ -666,12 +670,14 @@ exports.denyApp = async (req, res) => {
     const applications = await listing.findApplicationByPet(petID);
     return res.render("view-applications", { applications, user, petName , pet});
 };
+//lets user check application status for a pet
 exports.applicationStatus = async (req, res) => {
     const user = req.session.user;
     const uid = user._id;
     const applications = await listing.findApplicationbyUID(uid);
     return res.render("applications-status", { applications, user });
 };
+// lets user delete their appplication
 exports.deleteApplication = async (req, res) => {
     const appID = req.query.appID;
     const user = req.session.user;
@@ -685,6 +691,7 @@ exports.deleteApplication = async (req, res) => {
     const applications = await listing.findApplicationbyUID(uid);
     return res.render("applications-status", { applications, user });
 };
+//lets user update their application
 exports.updateApplication = async (req, res) => {
     const appID = req.query.appID;
     const user = req.session.user;
@@ -696,6 +703,7 @@ exports.updateApplication = async (req, res) => {
         successMsg: "",
     });
 };
+//post and handle update application form of user and the updates in the db
 exports.updateApplicationDetails = async (req, res) => {
     const appID = req.body.appID;
     console.log("APPID:", appID);
