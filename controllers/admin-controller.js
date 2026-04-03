@@ -2,6 +2,7 @@ const accountModel = require("../models/account-model");
 const petModel = require("../models/pet-model");
 const faqModel = require("../models/faq-model");
 
+//Displays admin dashboard together with simple statistics
 exports.showAdminPage = async (req, res) => {
     const user = req.session.user;
     const allApplications = await petModel.checkExistingApplications();
@@ -56,12 +57,14 @@ exports.showAdminPage = async (req, res) => {
     }
 };
 
+//Displays all incoming listings
 exports.showIncomingListings = async (req, res) => {
     const pets = (await petModel.getAllPets()).reverse();
     let selectedStatus = "";
     res.render("admin-listings", { pets, selectedStatus });
 };
 
+//Filters listings based on status
 exports.filterListings = async (req, res) => {
     let status = req.body.status;
     let selectedStatus = "";
@@ -87,6 +90,7 @@ exports.filterListings = async (req, res) => {
     });
 };
 
+//Shows confirmation page for listings status
 exports.confirmListingStatus = async (req, res) => {
     let pid = req.query.pid;
     let petFound = await petModel.findPetById(pid);
@@ -95,6 +99,8 @@ exports.confirmListingStatus = async (req, res) => {
     petFound.ownerName = ownerInfo.userName;
     return res.render("admin-listing-status", { petFound });
 };
+
+//Update listing approval status
 exports.updateListingStatus = async (req, res) => {
     let action = req.body.action;
     let pid = req.body.pid;
@@ -110,12 +116,14 @@ exports.updateListingStatus = async (req, res) => {
     return res.redirect("/admin/listings");
 };
 
+//Displays all users for admin overview
 exports.showUsers = async (req, res) => {
     let adminUserId = req.session.user._id;
     let users = await accountModel.getAllUsers();
     return res.render("admin-users", { users, selectedType: "", adminUserId });
 };
 
+//Filters users based on roles
 exports.filterUsers = async (req, res) => {
     let userType = req.body.userType;
     let adminUserId = req.session.user._id;
@@ -138,12 +146,16 @@ exports.filterUsers = async (req, res) => {
         adminUserId,
     });
 };
+
+//Display confirmation page before deletion
 exports.displayDeleteUser = async (req, res) => {
     let uid = req.query.uid;
     console.log("UID FOUND:", uid);
     let userInfo = await accountModel.retrieveProfile(uid);
     return res.render("admin-delete-user", { userInfo, error: "" });
 };
+
+//Deletes users and all listings under users from the system
 exports.deleteUser = async (req, res) => {
     let uid = req.body.uid;
     console.log("UID FOUND:", uid);
@@ -170,6 +182,7 @@ exports.deleteUser = async (req, res) => {
     return res.render("admin-delete-user", { userInfo, error });
 };
 
+//Display form for admin to edit user details
 exports.displayUpdateUser = async (req, res) => {
     // shows update details form for user
     // retrieves profile details for user from database
@@ -194,6 +207,8 @@ exports.displayUpdateUser = async (req, res) => {
         uid,
     });
 };
+
+//Admin edit user detail function
 exports.updateUser = async (req, res) => {
     const uid = req.body.uid;
     const originalDetails = await accountModel.retrieveProfile(uid);
@@ -269,12 +284,13 @@ exports.updateUser = async (req, res) => {
     })};
 };
 
-// shows only users with pending lister applications
+// Shows only users with pending lister applications
 exports.showListerApps = async (req, res) => {
     const pending = await accountModel.getPendingListers();
     res.render("admin-lister-status", { pending });
 };
 
+//Allows admin to approve listers and give them listing rights
 exports.approveLister = async (req, res) => {
     const lid = req.query.lid;
     try {
@@ -288,12 +304,15 @@ exports.approveLister = async (req, res) => {
         return res.redirect("/admin/lister-status");
     }
 };
+
+//Allows admin to reject listers
 exports.rejectLister = async (req, res) => {
     const uid = req.query.uid;
     await accountModel.rejectLister(uid);
     res.redirect("/admin/lister-status");
 };
 
+//Displays pending lister applications
 exports.confirmListerStatus = async (req, res) => {
     const pending = await accountModel.getPendingListers();
     res.render("admin-lister-status", { pending });
@@ -320,7 +339,7 @@ exports.updateListerStatus = async (req, res) => {
     }
 };
 
-// show all listers
+//Displays listings for each lister
 exports.showListerListings = async (req, res) => {
     try {
         const listers = await accountModel.getAllListers();
@@ -339,7 +358,7 @@ exports.showListerListings = async (req, res) => {
     }
 };
 
-// shows info of lister that admin wants to delete
+//Displays form for admin to delete a lister
 exports.displayDeleteLister = async (req, res) => {
     let lid = req.query.lid;
     console.log("LID FOUND:", lid);
@@ -350,7 +369,8 @@ exports.displayDeleteLister = async (req, res) => {
     }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
-// when admin deletes lister everything related to lister's pet listing gets deleted 
+
+//Allows admin to delete lister
 exports.adminDeleteLister = async (req, res) => {
     const lid = req.query.lid;
     const uid = req.query.uid;
@@ -376,6 +396,7 @@ exports.adminDeleteLister = async (req, res) => {
     }
 };
 
+// Displays form to update lister details
 exports.displayUpdateLister = async (req, res) => {
     // shows update details form for user
     // retrieves profile details for user from database
@@ -406,6 +427,8 @@ exports.displayUpdateLister = async (req, res) => {
         lid,
     });
 };
+
+//Update lister profile details and update their role
 exports.updateLister = async (req, res) => {
     const lid = req.body.lid;
     const originalDetails = await accountModel.retrieveLister(lid);
@@ -436,6 +459,8 @@ exports.updateLister = async (req, res) => {
         console.error("Failed to update lister details, error:", error);
     }
 };
+
+//Allows the admin to view all applications submitted by each user
 exports.viewUserApplications = async (req, res) => {
     const uid = req.query.uid;
     const applications = await petModel.findApplicationbyUID(uid);
