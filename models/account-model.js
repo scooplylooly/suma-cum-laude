@@ -157,23 +157,21 @@ async function updateDetails(
     securityKey,
     role,
 ) {
-    // updates the profile details of specified user
-    const originalDetails = await retrieveProfile(userId);
+    const updateData = {
+        userName,
+        email,
+        DOB,
+        securityKey,
+        role,
+    }
+    // Only hash the password if there is a password entered to save it
+    if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+    }
+    // Only update fields that are entered
     return users.updateOne(
         { _id: userId },
-        {
-            $set: {
-                userName,
-                email,
-                DOB,
-                // if no password was inputted in form, value defaulted to original password
-                password: password
-                    ? await bcrypt.hash(password, 10)
-                    : originalDetails.password,
-                securityKey,
-                role,
-            },
-        },
+        { $set: updateData }
     );
 }
 

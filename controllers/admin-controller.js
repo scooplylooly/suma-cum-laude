@@ -207,9 +207,9 @@ exports.updateUser = async (req, res) => {
     // note that password fields could be left empty if user does not key in values
     // passwords are not shown for security in update page
     const password =
-        (req.body.password ?? "").trim() || originalDetails.password;
+        (req.body.password ?? "").trim()
     const password2 =
-        (req.body.password2 ?? "").trim() || originalDetails.password;
+        (req.body.password2 ?? "").trim()
     const DOB = req.body.dob;
     const role = req.body.role;
     const securityKey =
@@ -225,13 +225,15 @@ exports.updateUser = async (req, res) => {
         errors.push("Username already exists");
     }
 
-    if (password !== password2) {
-        errors.push("Passwords do not match");
-    } else {
-        const checkSecure = accountModel.securePassword(password);
-        if (checkSecure !== true) {
-            for (let error of checkSecure) {
-                errors.push(error);
+    if (password || password2) {
+        if (password !== password2) {
+            errors.push("Passwords do not match");
+        } else {
+            const checkSecure = accountModel.securePassword(password);
+            if (checkSecure !== true) {
+                for (let error of checkSecure) {
+                    errors.push(error);
+                }
             }
         }
     }
@@ -257,7 +259,7 @@ exports.updateUser = async (req, res) => {
             userName,
             email,
             DOB,
-            password,
+            password ? password : undefined,
             securityKey,
             role,
         );
