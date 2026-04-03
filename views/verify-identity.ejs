@@ -17,6 +17,7 @@
     </header>
 
 <body>
+    <!--renders form for users to verify identity-->
     <main class="reset-page">
         <div class="reset-card">
             <h3>Key in your details to reset your password</h3>
@@ -25,7 +26,7 @@
                 Please answer the security question: <input type="text" name="securityKey" placeholder="What is your dream pet?" value="<%= securityKey %>">
                 <button type="submit">Verify</button>
             </form>
-
+            <!--re-renders form with input errors shown-->
             <% if (errors.length > 0){ %>
             <ul class="error-list" class="error-list">
                 <% errors.forEach(error => { %>
@@ -33,7 +34,7 @@
             <% }) %>
             </ul>
         <% }; %>
-
+            <!--shows success message if verification passes; redirects to reset password page-->
             <% if (success) { %>
             <p class="success-message">
                 Your identity has been verified. <br>

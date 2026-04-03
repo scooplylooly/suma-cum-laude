@@ -91,6 +91,7 @@ exports.handleRegister = async (req, res) => {
                 "you will be redirected to the admin user management page after registration",
             );
         }
+        // registers the user
         try {
             await accountModel.registerUser(
                 userName,
@@ -273,7 +274,6 @@ exports.showResetPassword = (req, res) => {
 
 // handle new password submission
 exports.handleResetPassword = async (req, res) => {
-    // this value is captured from prev verification page using hidden input
     const password = (req.body.password ?? "").trim();
     const password2 = (req.body.password2 ?? "").trim();
     let errors = [];
@@ -347,10 +347,11 @@ exports.showProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    // retrieves profile details for user from database + details put as default value for form fields when form is rendered
+    // retrieves profile details for user from database
     const originalDetails = await accountModel.retrieveProfile(
         req.session.user._id,
     );
+    // details put as default value for form fields when form is rendered
     const userName = originalDetails.userName;
     const email = originalDetails.email;
     const DOB = originalDetails.DOB;
@@ -368,14 +369,14 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.processUpdate = async (req, res) => {
-    // if inputs are not valid, field inputs are by default set to data recorded in user's orginal profile
+    // if inputs are not valid, field inputs are (by default) set to data recorded in user's orginal profile
     const originalDetails = await accountModel.retrieveProfile(
         req.session.user._id,
     );
     const userName =
         (req.body.userName ?? "").trim() || originalDetails.userName;
     const email = (req.body.email ?? "").trim() || originalDetails.email;
-    // note that password fields could be left empty if user does not key im values
+    // password fields can be left empty if user does not want to update password
     // passwords are not shown for security in update page
     const DOB = req.body.dob;
     const password = (req.body.password ?? "").trim();
@@ -385,6 +386,7 @@ exports.processUpdate = async (req, res) => {
     const role = originalDetails.role; // role cannot be updated by user; defaulted to original role in database
     
     let errors = [];
+    // ensures that user cannot select a DOB later than current day's date
     if (DOB && new Date(DOB) > new Date()) {
         errors.push("Date of birth cannot be in the future");
     }
@@ -458,6 +460,7 @@ exports.deleteProfile = async (req, res) => {
     );
     if (match) {
         let uid = req.session.user._id
+        // checks if user has listed pets; if so, pets profiles are deleted too
         let pets = await petModel.getMyPets(uid);
         for (let pet of pets) {
             let petApplications = await petModel.findApplicationByPet(pet._id);
@@ -466,14 +469,15 @@ exports.deleteProfile = async (req, res) => {
             }
             await petModel.deletePetData(pet._id, pet.img);
         }
+        // checks if user has applications; if so, applications are deleted as well
         let applications = await petModel.findApplicationbyUID(uid);
         for (let app of applications) {
             await petModel.deleteApplication(app._id);
         }
-        await accountModel.deleteListerByUid(uid);
-        await accountModel.deleteUser(uid); // deletes user
+        await accountModel.deleteListerByUid(uid); // deletes user from lister database
+        await accountModel.deleteUser(uid); // deletes user from user database
         console.log("Deleting user...");
-        console.log("Destroying the session");
+        console.log("Destroying the session"); // destroys session after deletion is completed
         req.session.destroy(() => {
             // session destroyed
             res.redirect("/index.html"); // redirected to introduction homepage
