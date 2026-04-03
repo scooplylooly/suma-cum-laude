@@ -269,6 +269,7 @@ exports.updateUser = async (req, res) => {
     })};
 };
 
+// shows only users with pending lister applications
 exports.showListerApps = async (req, res) => {
     const pending = await accountModel.getPendingListers();
     res.render("admin-lister-status", { pending });
@@ -298,6 +299,7 @@ exports.confirmListerStatus = async (req, res) => {
     res.render("admin-lister-status", { pending });
 };
 
+// changes role of user according to admin's approval
 exports.updateListerStatus = async (req, res) => {
     const listers = req.body.listers ?? [];
     try {
@@ -318,6 +320,7 @@ exports.updateListerStatus = async (req, res) => {
     }
 };
 
+// show all listers
 exports.showListerListings = async (req, res) => {
     try {
         const listers = await accountModel.getAllListers();
@@ -336,6 +339,7 @@ exports.showListerListings = async (req, res) => {
     }
 };
 
+// shows info of lister that admin wants to delete
 exports.displayDeleteLister = async (req, res) => {
     let lid = req.query.lid;
     console.log("LID FOUND:", lid);
@@ -346,6 +350,7 @@ exports.displayDeleteLister = async (req, res) => {
     }
     return res.render("admin-delete-lister", { listerInfo, error: "" });
 };
+// when admin deletes lister everything related to lister's pet listing gets deleted 
 exports.adminDeleteLister = async (req, res) => {
     const lid = req.query.lid;
     const uid = req.query.uid;
