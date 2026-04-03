@@ -187,7 +187,7 @@ exports.findPet = function (petName) {
 exports.findPetById = function (pid) {
     return Pet.findOne({ _id: pid }).lean();
 };
-
+//create pet in db
 exports.createPetData = async function (pet) {
     try {
         await Pet.create(pet);
@@ -196,7 +196,7 @@ exports.createPetData = async function (pet) {
         console.error("Error writing to db:", err);
     }
 };
-
+//helps delete img in image folder
 exports.deleteImage = async function (img) {
     try {
         const imagePath = path.join(
@@ -212,6 +212,7 @@ exports.deleteImage = async function (img) {
         console.error("Error deleting image:", err);
     }
 };
+//deletes pet data from db
 exports.deletePetData = async function (pid, img) {
     try {
         const result = await Pet.deleteOne({
@@ -225,7 +226,7 @@ exports.deletePetData = async function (pid, img) {
         console.error("Error deleting from db:", err);
     }
 };
-
+// updates pet data in db
 exports.updatePetData = async function (pid, pet) {
     try {
         const result = await Pet.updateOne(
@@ -242,6 +243,7 @@ exports.updatePetData = async function (pid, pet) {
         console.error("Error updating in db:", err);
     }
 };
+//updates the pet listing approval by admin
 exports.updatePetApproval = async function (pid, approved) {
     try {
         const result = await Pet.updateOne(
@@ -268,20 +270,23 @@ const Application = mongoose.model(
 exports.checkExistingApplications = function () {
     return Application.find().lean();
 };
-
+// creates new application in db
 exports.createNewApplication = async function (application) {
     return Application.create(application);
 };
-
+// find application of pet by pet id
 exports.findApplicationByPet = async function (petID) {
     return Application.find({ pid: new mongoose.Types.ObjectId(petID) }).lean();
 };
+// find the application of pet by the application id
 exports.findApplicationByID = async function (ID) {
     return Application.findOne({ _id: ID });
 };
+// find the application of pet by the user id
 exports.findApplicationbyUID = async function (UID) {
     return Application.find({ uid: new mongoose.Types.ObjectId(UID) }).lean();
 };
+//updates the application by the application id
 exports.updateApplicationbyID = async function (ID, value) {
     try {
         await Application.updateOne({ _id: ID }, { $set: { status: value } });
@@ -290,6 +295,7 @@ exports.updateApplicationbyID = async function (ID, value) {
         return error;
     }
 };
+//updates the pet adopted status by pet id
 exports.updatePetStatusbyID = async function (pid, value) {
     try {
         await Pet.updateOne({ _id: pid }, { $set: { adopted: value } });
@@ -298,6 +304,7 @@ exports.updatePetStatusbyID = async function (pid, value) {
         return error;
     }
 };
+//deletes the application in the db
 exports.deleteApplication = async function (appID) {
     try {
         await Application.deleteOne({ _id: appID });
@@ -306,6 +313,7 @@ exports.deleteApplication = async function (appID) {
         return error;
     }
 };
+//updates the applocation details in the db
 exports.updateApplicationDetails = async function (appID, updatedFields) {
     return Application.findOneAndUpdate(
         { _id: appID },
@@ -315,7 +323,7 @@ exports.updateApplicationDetails = async function (appID, updatedFields) {
 };
 
 //For Admin Dashboard
-
+// count the number of pets in the db
 exports.countPets = async function () {
     try {
         return Pet.countDocuments({});
@@ -323,7 +331,7 @@ exports.countPets = async function () {
         return error;
     }
 };
-
+//count the number of applications for all pets in the db
 exports.countTotalApplications = async function () {
     try {
         return Application.countDocuments({});
@@ -331,7 +339,7 @@ exports.countTotalApplications = async function () {
         return error;
     }
 };
-
+// count the total pending application for all pets in the db
 exports.countPendingApplications = async function () {
     try {
         return Application.countDocuments({ status: "pending" });
@@ -414,7 +422,7 @@ exports.avgDaysUnadoptedByType = async function () {
         console.error('Error calculating avg time unadopted by pet type:', error);
     }
 };
-
+// the rate of adoption of a pet by type
 exports.adoptionRateByType = async function () {
     try {
         const adoptedPets = await Pet.find({ approved: true }).lean();
