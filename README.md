@@ -1,4 +1,4 @@
-# suma-cum-laude
+# WeADopt
 
 Step by step instructions on how to set up our app:
 1. Unzip the folder 'suma-cum-laude'
