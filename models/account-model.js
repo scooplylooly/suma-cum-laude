@@ -227,6 +227,8 @@ const listerSchema = new mongoose.Schema({
 
 const lister = mongoose.model("lister", listerSchema, "lister");
 
+
+// only get the users whose lister application status are pending
 async function getPendingListers() {
     return await lister.find({ statusL: "pending" }).lean();
 }
@@ -239,6 +241,7 @@ async function rejectLister(userId) {
     return await lister.updateOne({ _id: userId }, { statusL: "rejected" });
 }
 
+// gets a user who applied for lister
 async function retrieveLister(id) {
     let found = await lister.findOne({ uid: id }).lean();
 
@@ -248,6 +251,7 @@ async function retrieveLister(id) {
     return found;
 }
 
+// gets all users who applied for lister no matter approved or rejected
 async function getAllListers() {
     const allListers = await lister.find().lean();
     return allListers.filter(
@@ -260,7 +264,7 @@ async function addLister(listerData) {
 }
 
 async function updateLister(userId, address, contactNo, pets, experience) {
-    // updates the profile details of speificied user
+    // updates the profile details of specified user
     return lister.updateOne(
         { _id: userId },
         { address, contactNo, pets, experience },
@@ -275,9 +279,12 @@ async function updateUserRole(userId, role) {
     return users.updateOne({ _id: userId }, { role });
 }
 
+// deleted by searching for lister id 
 async function deleteLister(listerID) {
     return lister.deleteOne({ _id: listerID });
 }
+
+// deletes by searching for user id
 async function deleteListerByUid(userId) {
     return lister.deleteOne({ uid: userId });
 }
