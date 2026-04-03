@@ -481,8 +481,11 @@ exports.deleteProfile = async (req, res) => {
     }
 };
 // lister related controllers below
+
+// shows a lister  
 exports.showLister = (req, res) => {
     const user = req.session.user;
+    // for ejs field form
     let username = req.query.username || "";
     res.render("apply-lister", {
         user,
@@ -496,6 +499,7 @@ exports.showLister = (req, res) => {
     });
 };
 
+// for users to apply as lister and whether their apps went through
 exports.handleLister = async (req, res) => {
     let userId = req.session.user._id;
     let userName = req.session.user.userName;
@@ -594,7 +598,7 @@ exports.handleLister = async (req, res) => {
             experience,
             statusL,
         });
-
+        // change user role to lister if admin approves
         if (statusL === "approved") {
             await accountModel.updateUserRole(userId, "lister");
         }
@@ -614,6 +618,7 @@ exports.handleLister = async (req, res) => {
     }
 };
 
+// updates lister details
 exports.updateLister = async (req, res) => {
     const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
@@ -625,6 +630,7 @@ exports.updateLister = async (req, res) => {
     return res.render("update-lister-profile", { originalDetails, error: "" });
 };
 
+// confirms the updating of user's lister profile
 exports.processLister = async (req, res) => {
     const userId = req.session.user._id.toString();
     const originalDetails = await accountModel.retrieveLister(userId);
@@ -657,6 +663,7 @@ exports.processLister = async (req, res) => {
     return res.redirect("/profile");
 };
 
+// shows the lister application status of user
 exports.showListerStatus = async (req, res) => {
     const userId = req.session.user._id.toString();
     const userName = req.session.user.userName;
@@ -691,6 +698,7 @@ exports.deleteConfirmationForLister = (req, res) => {
     res.render("delete-lister-profile", { error: "" });
 };
 
+// when user deletes their lister profile everything related to their pet listings get deleted
 exports.deleteLister = async (req, res) => {
     const password = req.body.password;
     // authenticates inputted password before processing deletion
