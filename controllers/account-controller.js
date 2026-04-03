@@ -547,9 +547,7 @@ exports.handleLister = async (req, res) => {
                 userId = newUser._id;
                 userName = newUser.userName;
             } catch (err) {
-                errors.push(
-                    "Username not found. Please enter a valid username.",
-                );
+                errors.push("Username not found. Please enter a valid username.");
                 return res.render("apply-lister", {
                     address,
                     contactNo,
@@ -567,8 +565,15 @@ exports.handleLister = async (req, res) => {
             statusL = "approved";
         }
         const exists = await accountModel.retrieveLister(userId);
-        if (exists && exists.statusL === "pending") {
-            errors.push("Your application is pending.");
+        if (exists) {
+            if (exists.statusL === "pending") {
+                errors.push("Your application is pending.");
+            } else if (exists.statusL === "approved") {
+                errors.push("This user is already an approved lister.");
+            } else {
+                errors.push("A lister application already exists for this user.");
+            }
+
             return res.render("apply-lister", {
                 address: "",
                 contactNo: "",
@@ -579,7 +584,6 @@ exports.handleLister = async (req, res) => {
                 username,
             });
         }
-        await accountModel.updateUserRole(userId, "lister");
         await accountModel.addLister({
             uid: userId.toString(),
             userName,
@@ -590,6 +594,10 @@ exports.handleLister = async (req, res) => {
             experience,
             statusL,
         });
+
+        if (statusL === "approved") {
+            await accountModel.updateUserRole(userId, "lister");
+        }
         return res.redirect(redirectUrl);
     } catch (err) {
         errors.push(err.message || "Failed to register as lister");

@@ -2,7 +2,7 @@ const FAQ = require('../models/faq-model')
 
 exports.listFaqs = async (req, res) => {
   try {
-    const faqs = await FAQ.getAllFaqs()
+    const faqs = await FAQ.getPublishedFaqs()
     res.render('faq/faqindex', { faqs })
   } catch (error) {
     res.send(error.message)
