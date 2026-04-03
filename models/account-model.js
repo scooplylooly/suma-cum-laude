@@ -1,7 +1,6 @@
 // const fs = require("node:fs/promises");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { type } = require("node:os");
 
 // create schema for user profiles
 const usersSchema = new mongoose.Schema({
@@ -57,7 +56,7 @@ async function registerUser(userName, email, DOB, password, securityKey, role) {
             "Username already exists. Please choose another username.",
         );
     }
-
+    // checks if inputted email exists in database; ensures that emails are unique
     if (await users.findOne({ email: email })) {
         throw new Error("Email already exists. Please use another email.");
     } else {
@@ -119,7 +118,8 @@ async function checkSecurityKey(userName, securityKey) {
     // authenticates security key: case insensitive
     return data.securityKey.toLowerCase() === securityKey.toLowerCase();
 }
-//updates the password of the user
+
+// updates user's password in database
 async function updatePassword(userName, hashedPassword) {
     return await users.updateOne(
         { userName },
@@ -144,11 +144,12 @@ async function checkUserExist(username) {
     }
     return false;
 }
-//find the user details in the db by using the username
 async function findUserByName(username) {
+    // finds user in database and returns user record as object
     return await users.findOne({ userName: username }).lean();
 }
 
+// updates user details
 async function updateDetails(
     userId,
     userName,
@@ -158,23 +159,21 @@ async function updateDetails(
     securityKey,
     role,
 ) {
-    // updates the profile details of specified user
-    const originalDetails = await retrieveProfile(userId);
+    const updateData = {
+        userName,
+        email,
+        DOB,
+        securityKey,
+        role,
+    }
+    // Only hash the password if there is a password entered to save it
+    if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+    }
+    // Only update fields that are entered
     return users.updateOne(
         { _id: userId },
-        {
-            $set: {
-                userName,
-                email,
-                DOB,
-                // if no password was inputted in form, value defaulted to original password
-                password: password
-                    ? await bcrypt.hash(password, 10)
-                    : originalDetails.password,
-                securityKey,
-                role,
-            },
-        },
+        { $set: updateData }
     );
 }
 //deletes the user in the db
@@ -182,10 +181,12 @@ async function deleteUser(userId) {
     // deletes specified user from user schema
     return users.deleteOne({ _id: userId });
 }
-//find  all users in the db
+
+// returns all the users + their profile details
 async function getAllUsers() {
     return users.find().lean();
 }
+
 // Lister schema + functions
 const listerSchema = new mongoose.Schema({
     userName: {

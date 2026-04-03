@@ -29,8 +29,6 @@ exports.showAdminPage = async (req, res) => {
     console.log("Total Users: " + totalUsers);
     const totalFaqs = await faqModel.countFaqs({});
     console.log("Total FAQs: " + totalFaqs);
-    const avgDaysUnadopted = await petModel.avgDaysUnadopted();
-    const avgDaysUnadoptedByType = await petModel.avgDaysUnadoptedByType();
     const adoptionRateByType = await petModel.adoptionRateByType();
     if (!user) {
         return res.send(`
@@ -51,9 +49,7 @@ exports.showAdminPage = async (req, res) => {
             totalFaqs,
             totalUsers,
             topPetTypes,
-            avgDaysUnadopted,
-            avgDaysUnadoptedByType,
-            adoptionRateByType,
+            adoptionRateByType
         });
     } else {
         return res.redirect("/adopt");
@@ -207,9 +203,9 @@ exports.updateUser = async (req, res) => {
     // note that password fields could be left empty if user does not key in values
     // passwords are not shown for security in update page
     const password =
-        (req.body.password ?? "").trim() || originalDetails.password;
+        (req.body.password ?? "").trim()
     const password2 =
-        (req.body.password2 ?? "").trim() || originalDetails.password;
+        (req.body.password2 ?? "").trim()
     const DOB = req.body.dob;
     const role = req.body.role;
     const securityKey =
@@ -225,13 +221,15 @@ exports.updateUser = async (req, res) => {
         errors.push("Username already exists");
     }
 
-    if (password !== password2) {
-        errors.push("Passwords do not match");
-    } else {
-        const checkSecure = accountModel.securePassword(password);
-        if (checkSecure !== true) {
-            for (let error of checkSecure) {
-                errors.push(error);
+    if (password || password2) {
+        if (password !== password2) {
+            errors.push("Passwords do not match");
+        } else {
+            const checkSecure = accountModel.securePassword(password);
+            if (checkSecure !== true) {
+                for (let error of checkSecure) {
+                    errors.push(error);
+                }
             }
         }
     }
@@ -257,7 +255,7 @@ exports.updateUser = async (req, res) => {
             userName,
             email,
             DOB,
-            password,
+            password ? password : undefined,
             securityKey,
             role,
         );

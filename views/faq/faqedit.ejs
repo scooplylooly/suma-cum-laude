@@ -32,9 +32,15 @@
                         <input type="text" name="category" value="<%= faq.category %>" class="faq-input" required>
                     </td>
                 </tr>
-
+                <tr>
+                    <th>Published :</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="published" value="true" <%= faq.published ? 'checked' : '' %>> Yes
+                        </label>
+                    </td>
+                </tr>
                 <input type="hidden" name="id" value="<%= faq._id %>">
-                <input type="hidden" name="published" value="<%= faq.published %>">
 
                 <tr>
                     <td colspan="2" class="submit-row">

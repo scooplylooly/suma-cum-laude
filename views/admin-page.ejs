@@ -64,8 +64,7 @@
                         <button>Manage FAQ</button>
                     </a>
                     <p>
-                        Review get questions from users, approve and answer them
-                        and it will be posted in FAQs
+                        Create and Edit the FAQs and decide what gets published to the users
                     </p>
                 </div>
                 <!-- will see all meet-ups that have been scheduled by users and can approve/reject them. can edit and delete them too-->
@@ -89,37 +88,7 @@
                     <td><%= totalUsers %></td>
                 </tr>
             </table>
-            <div class="pet-type-list">
-                <h3>Aggregated Time Averages: Pet remains Unadopted</h3>
-                <table border="1">
-                    <tr>
-                        <th>Average days a pet is unadopted</th>
-                        <th rowspan="2">Average days a pet is unadopted (by type)</th>
-                        <% if (avgDaysUnadoptedByType) { %>
-                            <% Object.keys(avgDaysUnadoptedByType).forEach(type => { %>
-                                <th><%= type %></th>
-                        <% }) %>
-                        <% } else { %>
-                            <th>No data available yet</th>
-                        <% } %>
-                    </tr>
-                    <tr>
-                        <% if (avgDaysUnadopted) { %>
-                            <td><%= avgDaysUnadopted %> days</td>
-                        <% } else { %>
-                            <td><i>no average data available yet</i></td>
-                        <% } %>
-
-                        <% if (avgDaysUnadoptedByType) { %>
-                            <% Object.values(avgDaysUnadoptedByType).forEach(data => { %>
-                                <td><%= data %> days</td>
-                            <% }) %>
-                        <% } else { %>
-                            <td><i>no average data available yet</i></td>
-                        <% } %>
-                    </tr>
-                </table>
-            </div>
+            
             <div class="pet-type-list">
                 <h3>Adoption Rate by Pet Type</h3>
                 <% if (adoptionRateByType && Object.keys(adoptionRateByType).length) { %>
